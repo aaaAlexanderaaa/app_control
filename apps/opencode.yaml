@@ -1,0 +1,39 @@
+id: opencode
+name: OpenCode
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+- tui
+severity: high
+priority_score: 87
+notes: Open-source coding agent focused on terminal/TUI with local execution. 122k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/sst/opencode/dev/README.md
+      evidence: The upstream README links the official homepage, docs, install script, and download page on opencode.ai, giving a dedicated first-party product domain for reviewed network detection
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: opencode.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: opencode
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/sst/opencode
+      evidence: The install script defaults to ~/.opencode/bin/opencode, packages/opencode/src/config/config.ts loads global config from ~/.config/opencode/opencode.json{,c}, and the desktop electron-builder config sets the production appId to ai.opencode.desktop
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/opencode
+    - ~/.opencode/bin/opencode
+    bundle_ids:
+    - ai.opencode.desktop
+    process_names:
+    - opencode

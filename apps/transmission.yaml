@@ -1,0 +1,53 @@
+id: transmission
+name: Transmission
+category: P2P_FILE_SHARING
+product_shape:
+- macos
+product_type:
+- torrent_client
+- p2p_file_sharing
+severity: high
+priority_score: 81
+notes: Torrent data plane is P2P and not domain-based; keep the network IOC set on the official product site and rely heavily on host and protocol detection.
+references:
+- url: https://transmissionbt.com/
+  kind: official_site
+  summary: Transmission's official site is served from transmissionbt.com and advertises the official BitTorrent client for macOS, Windows, and Linux.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/transmission.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask installs Transmission.app and zaps Transmission support, cache, cookie, preference, recent-document, and saved-state paths on macOS.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://transmissionbt.com/
+      evidence: Transmission's official site is served from `transmissionbt.com`, so the reviewed network IOC set keeps that exact product domain and avoids unrelated GitHub release infrastructure.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: transmissionbt.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: transmission
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/transmission.rb
+      evidence: The official Homebrew cask installs Transmission.app and zaps the Transmission Application Support, help-cache, cookies, preferences, recent-documents, and saved-state paths on macOS.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Transmission.app
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/org.m0k.transmission.sfl*
+    - ~/Library/Application Support/Transmission
+    - ~/Library/Caches/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/org.m0k.transmission.help
+    - ~/Library/Caches/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/Transmission Help*
+    - ~/Library/Caches/org.m0k.transmission
+    - ~/Library/Cookies/org.m0k.transmission.binarycookies
+    - ~/Library/Preferences/org.m0k.transmission.LSSharedFileList.plist
+    - ~/Library/Preferences/org.m0k.transmission.plist
+    - ~/Library/Saved Application State/org.m0k.transmission.savedState
+    process_names:
+    - Transmission

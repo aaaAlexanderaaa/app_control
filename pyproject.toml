@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "app-control"
+version = "0.1.0"
+description = "Internal governance tooling for enterprise risky application control catalogs"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["PyYAML>=6.0"]
+
+[project.scripts]
+app-control = "app_control.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["app_control", "tools", "generators"]

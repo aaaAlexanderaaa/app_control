@@ -1,0 +1,51 @@
+id: librechat
+name: LibreChat
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+- llm_client
+severity: medium
+priority_score: 61
+notes: Self-hosted/open-source multi-provider chat platform; IOC is restricted to LibreChat-owned hosts and official config artifacts instead of generic upstream model-provider domains.
+references:
+- url: https://www.librechat.ai/
+  kind: official_site
+  summary: Official LibreChat site is served from www.librechat.ai and links the hosted chat and status pages.
+  checked_at: '2026-03-21'
+- url: https://www.librechat.ai/docs/configuration/librechat_yaml
+  kind: official_docs
+  summary: Official configuration docs show the local librechat.yaml placement, CONFIG_PATH support, and the Docker mount target /app/librechat.yaml.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.librechat.ai/
+      evidence: LibreChat's official website is served from www.librechat.ai and links the hosted chat at chat.librechat.ai plus service status at status.librechat.ai, so the reviewed network IOC set keeps only those exact LibreChat-owned hosts and drops generic provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.librechat.ai
+      match: exact
+      role: app_brand
+    - pattern: chat.librechat.ai
+      match: exact
+      role: app_brand
+    - pattern: status.librechat.ai
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: librechat
+      match: substring
+    - pattern: librechat.ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.librechat.ai/docs/configuration/librechat_yaml
+      evidence: LibreChat's official configuration guide says to place librechat.yaml in the project root next to .env for local installs and shows the Docker mount target /app/librechat.yaml for containerized installs.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/librechat.yaml'
+    - /app/librechat.yaml

@@ -1,0 +1,54 @@
+id: discord
+name: Discord
+category: NON_WORK_IM
+product_shape:
+- web
+- macos
+product_type:
+- im
+- community
+severity: medium
+priority_score: 73
+notes: Prefer exact Discord-owned app and download hosts over broad legacy discordapp suffixes.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/discord.json
+      evidence: Homebrew cask exposes the Discord homepage on discord.com and the macOS desktop installer on dl.discordapp.net.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: discord.com
+      match: exact
+      role: app_brand
+    - pattern: dl.discordapp.net
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: discord
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/discord.json
+      evidence: Homebrew cask defines the Discord app bundle and Discord-specific support, cache, cookie, HTTP storage, preference, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Discord.app
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.hnc.discord.sfl*
+    - ~/Library/Application Support/discord
+    - ~/Library/Application%20Support/discord
+    - ~/Library/Caches/com.hnc.Discord
+    - ~/Library/Caches/com.hnc.Discord.ShipIt
+    - ~/Library/Cookies/com.hnc.Discord.binarycookies
+    - ~/Library/HTTPStorages/com.hnc.Discord
+    - ~/Library/HTTPStorages/com.hnc.Discord.binarycookies
+    - ~/Library/Preferences/com.hnc.Discord.helper.plist
+    - ~/Library/Preferences/com.hnc.Discord.plist
+    - ~/Library/Saved Application State/com.hnc.Discord.savedState
+    bundle_ids:
+    - com.hnc.Discord
+    - com.hnc.Discord.helper
+    - com.hnc.discord
+    process_names:
+    - Discord

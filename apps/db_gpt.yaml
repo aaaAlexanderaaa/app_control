@@ -1,0 +1,51 @@
+id: db_gpt
+name: DB-GPT
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: >-
+  Official DB-GPT materials expose precise product-owned website and docs hosts
+  and also show the default `~/.dbgpt` profile/config location alongside the
+  `dbgpt` CLI.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/eosphoros-ai/DB-GPT
+      evidence: >-
+        DB-GPT's official README links the product homepage at `dbgpt.cn` and
+        documentation on `docs.dbgpt.cn`; the reviewed network IOC set keeps
+        only those DB-GPT-owned exact hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: dbgpt.cn
+      match: exact
+      role: app_brand
+    - pattern: docs.dbgpt.cn
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: db-gpt
+      match: substring
+    - pattern: dbgpt
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/eosphoros-ai/DB-GPT
+      evidence: >-
+        The official README shows `cd ~/.dbgpt/DB-GPT && uv run dbgpt start
+        webserver --config ~/.dbgpt/configs/<profile>.toml`, which confirms both
+        the `~/.dbgpt` local profile root and the product-specific `dbgpt` CLI;
+        retained host IOC is limited to that exact local profile area and the
+        `dbgpt` process name.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.dbgpt
+    process_names:
+    - dbgpt

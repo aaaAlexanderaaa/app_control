@@ -1,0 +1,53 @@
+id: agent_zero
+name: Agent Zero
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Open-source agent platform; keep first-party Agent Zero domains and official config/data paths, avoid generic Docker or model-provider infrastructure.
+references:
+- url: https://www.agent-zero.ai/p/docs/get-started/
+  kind: official_docs
+  summary: Official Agent Zero docs publish the product-owned installation and getting-started guide on agent-zero.ai.
+  checked_at: '2026-03-21'
+- url: https://tryagentzero.com/config/reference/
+  kind: official_docs
+  summary: Official config reference defines the default ~/.agentzero data directory, agentzero.toml, and agentzero CLI commands.
+  checked_at: '2026-03-21'
+- url: https://tryagentzero.com/config/environment/
+  kind: official_docs
+  summary: Official environment docs define ~/.agentzero/.env, AGENTZERO_DATA_DIR, and AGENTZERO_CONFIG.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.agent-zero.ai/p/docs/get-started/
+      evidence: Official Agent Zero installation and documentation are served from the first-party host www.agent-zero.ai, and the project's official config/reference surface is hosted on tryagentzero.com; the reviewed network IOC set keeps only those exact Agent Zero-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.agent-zero.ai
+      match: exact
+      role: app_brand
+    - pattern: tryagentzero.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: agent zero
+      match: substring
+    - pattern: agentzero
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://tryagentzero.com/config/reference/
+      evidence: AgentZero's official config reference sets the default data directory to ~/.agentzero and the main config file to ~/.agentzero/agentzero.toml, while the environment docs add ~/.agentzero/.env and the CLI docs use the agentzero command.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.agentzero
+    process_names:
+    - agentzero

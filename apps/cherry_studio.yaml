@@ -1,0 +1,49 @@
+id: cherry_studio
+name: Cherry Studio
+category: GENAI_CHAT
+product_shape:
+- macos
+product_type:
+- llm_client
+- chatbot
+severity: medium
+priority_score: 60
+notes: Prefer Cherry Studio-owned domains and release hosts; avoid shared provider and GitHub domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/cherry-studio.json
+      evidence: Homebrew cask exposes the Cherry Studio homepage on cherry-ai.com and the macOS release archive on releases.cherry-ai.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: cherry-ai.com
+      match: suffix
+      role: app_brand
+    - pattern: releases.cherry-ai.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: cherry studio
+      match: substring
+    - pattern: cherry-ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/cherry-studio.json
+      evidence: Homebrew cask defines the Cherry Studio app bundle, binary, and Cherry Studio-specific support, updater cache, HTTP storage, log, preference, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Cherry Studio.app
+    - ~/Library/Application Support/CherryStudio
+    - ~/Library/Caches/cherrystudio-updater
+    - ~/Library/HTTPStorages/com.kangfenmao.CherryStudio
+    - ~/Library/Logs/CherryStudio
+    - ~/Library/Preferences/com.kangfenmao.CherryStudio.plist
+    - ~/Library/Saved Application State/com.kangfenmao.CherryStudio.savedState
+    bundle_ids:
+    - com.kangfenmao.CherryStudio
+    process_names:
+    - Cherry Studio
+    - cherry-studio

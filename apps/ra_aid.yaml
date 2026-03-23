@@ -1,0 +1,40 @@
+id: ra_aid
+name: RA.Aid
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Open-source autonomous software-development assistant; prefer exact RA.Aid-owned hosts and exact RA.Aid CLI/log artifacts over generic provider infrastructure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.ra-aid.ai/
+      evidence: The official RA.Aid site and documentation are hosted on the first-party hosts www.ra-aid.ai and docs.ra-aid.ai; the reviewed network IOC set keeps only those exact RA.Aid-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.ra-aid.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.ra-aid.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: ra.aid
+      match: substring
+    - pattern: ra-aid
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.ra-aid.ai/configuration/logging/
+      evidence: RA.Aid's official logging documentation shows the default .ra-aid/logs/ra_aid_YYYYMMDD_HHMMSS.log path and uses the ra-aid command throughout; retained host IOC is limited to that exact log-file naming pattern and the RA.Aid CLI process name.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/.ra-aid/logs/ra_aid_*.log'
+    process_names:
+    - ra-aid

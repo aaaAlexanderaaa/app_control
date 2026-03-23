@@ -1,0 +1,34 @@
+id: github_gist
+name: GitHub Gist
+category: PASTE_SHARING
+product_shape:
+- web
+product_type:
+- paste
+- code_sharing
+severity: medium
+priority_score: 72
+notes: Use gist subdomains for precision; generic github.com is not sufficient.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: gist.github.com
+      match: suffix
+      role: app_brand
+    - pattern: gist.githubusercontent.com
+      match: exact
+      role: app_brand
+    - pattern: github.com
+      match: suffix
+      role: platform_service
+    - pattern: githubusercontent.com
+      match: suffix
+      role: platform_service
+    keyword_patterns:
+    - pattern: gist
+      match: substring

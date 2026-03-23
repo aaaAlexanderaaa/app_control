@@ -1,0 +1,45 @@
+id: perplexity_agent
+name: Perplexity Personal Computer
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- hosted_agent
+- mac_mini
+- 24_7_agent
+severity: high
+priority_score: 93
+notes: Perplexity's official macOS surface; keep IOC on exact Perplexity-owned hosts and the reviewed Mac App Store bundle instead of generic Electron-style artifacts.
+references:
+- url: https://www.perplexity.ai/
+  kind: official_site
+  summary: Official Perplexity site identifies the product surface on perplexity.ai.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/us/app/perplexity-ask-anything/id6714467650
+  kind: app_store_listing
+  summary: "Apple Mac App Store metadata identifies Perplexity: Ask Anything with bundle ID ai.perplexity.mac and seller URL https://www.perplexity.ai/mac."
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.perplexity.ai/
+      evidence: Perplexity's official web surface is served from perplexity.ai, and the Mac App Store listing points back to https://www.perplexity.ai/mac, so the reviewed network IOC keeps the exact Perplexity-owned host family.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: perplexity.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: perplexity
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://apps.apple.com/us/app/perplexity-ask-anything/id6714467650
+      evidence: "Apple's official Mac App Store metadata for Perplexity: Ask Anything returns bundle ID ai.perplexity.mac and the seller URL https://www.perplexity.ai/mac, so the retained host IOC is limited to that exact Mac app bundle and process name."
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - ai.perplexity.mac
+    process_names:
+    - Perplexity

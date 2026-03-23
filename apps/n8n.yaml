@@ -1,0 +1,38 @@
+id: n8n
+name: n8n
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- workflow_automation
+severity: high
+priority_score: 84
+notes: Workflow automation platform with local ~/.n8n state for self-hosted runs and n8n-branded cloud/login hosts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/n8n-io/n8n/master/README.md
+      evidence: The official README directs users to n8n.io properties and the cloud login host app.n8n.cloud, so the reviewed network IOC set keeps n8n-branded hosts only
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: n8n.io
+      match: suffix
+      role: app_brand
+    - pattern: app.n8n.cloud
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: n8n
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.n8n.io/hosting/configuration/configuration-examples/user-folder/
+      evidence: The official docs state that n8n stores user data in a .n8n subfolder of the user who started n8n, which on macOS corresponds to ~/.n8n, and the upstream README shows local runs via npx n8n
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.n8n
+    process_names:
+    - n8n

@@ -1,0 +1,46 @@
+id: autogen
+name: AutoGen
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- multi_agent
+severity: high
+priority_score: 84
+notes: Official AutoGen Studio docs confirm a user-home .autogenstudio app directory and autogenstudio CLI surface; network IOC is limited to the product-owned AutoGen host.
+references:
+- url: https://www.getautogen.com/
+  kind: official_site
+  summary: Official AutoGen site is served from www.getautogen.com and anchors the product on its own branded host.
+  checked_at: '2026-03-21'
+- url: https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/installation.html
+  kind: official_docs
+  summary: AutoGen Studio installation docs show autogenstudio ui, --appdir, the default .autogenstudio directory in the user's home, and the default database.sqlite file.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.getautogen.com/
+      evidence: AutoGen's official product site is served from www.getautogen.com, so the reviewed network IOC set keeps only that exact AutoGen-owned host rather than broad Microsoft-owned infrastructure.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.getautogen.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: autogen
+      match: substring
+    - pattern: autogenstudio
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/installation.html
+      evidence: AutoGen Studio's official installation guide runs the autogenstudio ui command, states that --appdir defaults to .autogenstudio in the user's home directory, and says the default database URI uses a database.sqlite file inside that directory.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.autogenstudio
+    process_names:
+    - autogenstudio

@@ -1,0 +1,43 @@
+id: superset_ide
+name: Superset
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- ide
+- multi_agent
+severity: high
+priority_score: 78
+notes: Desktop IDE for orchestrating coding agents; keep IOC focused on Superset-owned artifacts, not shared GitHub release infrastructure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/s/superset.rb
+      evidence: The Homebrew cask sets the official homepage to https://superset.sh/ and pulls binaries from GitHub releases; the reviewed network IOC set keeps only the Superset-owned host and drops shared GitHub infrastructure.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: superset.sh
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: superset.sh
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/s/superset.rb
+      evidence: The Homebrew cask installs Superset.app and zaps its app-specific Application Support, cache, HTTP storage, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Superset.app
+    - ~/Library/Application Support/Superset
+    - ~/Library/Caches/com.superset.desktop
+    - ~/Library/HTTPStorages/com.superset.desktop
+    - ~/Library/Preferences/com.superset.desktop.plist
+    - ~/Library/Saved Application State/com.superset.desktop.savedState
+    bundle_ids:
+    - com.superset.desktop
+    process_names:
+    - Superset

@@ -1,0 +1,46 @@
+id: activepieces
+name: Activepieces
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- workflow_automation
+severity: high
+priority_score: 84
+notes: >-
+  Official docs confirm the default host data directory `~/.activepieces`;
+  reviewed network IOC is limited to Activepieces-owned web surfaces.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/activepieces/activepieces
+      evidence: >-
+        The official Activepieces README links the homepage at
+        `activepieces.com` and the documentation at `www.activepieces.com/docs`;
+        the reviewed network IOC set keeps only those product-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: activepieces.com
+      match: exact
+      role: app_brand
+    - pattern: www.activepieces.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: activepieces
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.activepieces.com/docs/install/options/docker
+      evidence: >-
+        Activepieces' official Docker install and update docs show the volume
+        mount `~/.activepieces:/root/.activepieces` and explicitly state that by
+        default Activepieces data is stored in `~/.activepieces` on the host
+        machine; retained host IOC is limited to that exact local data
+        directory.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.activepieces

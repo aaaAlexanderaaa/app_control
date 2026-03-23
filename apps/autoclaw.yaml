@@ -1,0 +1,47 @@
+id: autoclaw
+name: AutoClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- claw_gui_wrapper
+- automation
+severity: critical
+priority_score: 95
+notes: >-
+  Zhipu / AutoGLM ships AutoClaw as a one-click local OpenClaw desktop app for
+  macOS and Windows with preloaded skills, browser automation, and model
+  hot-swap. Reviewed host IOC is kept conservative and limited to the branded
+  macOS desktop app path.
+references:
+- url: https://autoclaws.org/zh/
+  kind: official_site
+  summary: Official AutoClaw product page describes a one-click macOS desktop application on autoclaws.org.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://autoclaws.org/zh/
+      evidence: >-
+        Official AutoClaw product copy describes a macOS desktop application
+        distributed on the `autoclaws.org` brand domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: autoclaws.org
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: autoclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://autoclaws.org/zh/
+      evidence: >-
+        Official AutoClaw product copy describes a native macOS desktop app,
+        so the reviewed host IOC is limited to the branded AutoClaw app path.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/AutoClaw.app

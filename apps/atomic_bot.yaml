@@ -1,0 +1,66 @@
+id: atomic_bot
+name: Atomic Bot
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- claw_gui_wrapper
+- personal_agent
+severity: critical
+priority_score: 94
+notes: >-
+  One-click OpenClaw macOS app; gets to a running local OpenClaw agent in
+  about a minute. Reviewed host IOC keeps only Atomic Bot-specific macOS app,
+  bundle, process, and user-data artifacts documented in upstream source.
+references:
+- url: https://atomicbot.ai/
+  kind: official_site
+  summary: Official Atomic Bot site establishes atomicbot.ai as the first-party host and links the current macOS download artifact.
+  checked_at: '2026-03-22'
+- url: https://api.github.com/repos/AtomicBot-ai/atomicbot/releases/latest
+  kind: github_release_api
+  summary: GitHub release metadata explicitly lists the current Atomic Bot macOS DMG asset name.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/AtomicBot-ai/atomicbot/main/apps/electron-desktop/package.json
+  kind: upstream_source
+  summary: Electron desktop package sets build.appId to ai.atomicbot.desktop and productName to Atomic Bot.
+  checked_at: '2026-03-23'
+- url: https://raw.githubusercontent.com/AtomicBot-ai/atomicbot/main/apps/electron-desktop/scripts/reset-local-state.mjs
+  kind: upstream_source
+  summary: Reset script resolves the macOS user-data directory under ~/Library/Application Support/atomicbot-desktop.
+  checked_at: '2026-03-23'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://atomicbot.ai/
+      evidence: >-
+        Official Atomic Bot site identifies the product as a macOS OpenClaw
+        desktop app on the `atomicbot.ai` brand domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: atomicbot.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: atomicbot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/AtomicBot-ai/atomicbot/main/apps/electron-desktop/package.json
+      evidence: >-
+        Atomic Bot's upstream Electron desktop source sets `build.appId` to
+        `ai.atomicbot.desktop`, `productName` to `Atomic Bot`, and its
+        reset-local-state script resolves the macOS user-data directory under
+        `~/Library/Application Support/atomicbot-desktop`, so the reviewed
+        host IOC keeps only those app-specific install and runtime artifacts.
+      checked_at: '2026-03-23'
+    paths:
+    - /Applications/Atomic Bot.app
+    - ~/Applications/Atomic Bot.app
+    - ~/Library/Application Support/atomicbot-desktop
+    bundle_ids:
+    - ai.atomicbot.desktop
+    process_names:
+    - Atomic Bot

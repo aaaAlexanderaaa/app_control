@@ -1,0 +1,48 @@
+id: cloudconvert
+name: CloudConvert
+category: DOC_CONVERSION_UPLOAD
+product_shape:
+- web
+product_type:
+- document_conversion
+- file_processing
+severity: low
+priority_score: 60
+notes: CloudConvert has an official browser extension and first-party API surface, so the reviewed IOC set keeps only exact CloudConvert hosts and the official extension ID.
+references:
+- url: https://cloudconvert.com/
+  kind: official_site
+  summary: Official CloudConvert site is served from cloudconvert.com and advertises its first-party API.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/cloudconvert/hfpmbfgodkfcebpgheiedaddoikmljkk
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID hfpmbfgodkfcebpgheiedaddoikmljkk and identifies cloudconvert.com as the website.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://cloudconvert.com/
+      evidence: The official CloudConvert site is served from cloudconvert.com and its page source exposes first-party service endpoints on api.cloudconvert.com and socketio.cloudconvert.com, so the reviewed network IOC keeps only those exact CloudConvert hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: cloudconvert.com
+      match: exact
+      role: app_brand
+    - pattern: api.cloudconvert.com
+      match: exact
+      role: platform_service
+    - pattern: socketio.cloudconvert.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: cloudconvert
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/cloudconvert/hfpmbfgodkfcebpgheiedaddoikmljkk
+      evidence: The official Chrome Web Store listing for CloudConvert uses the stable extension identifier hfpmbfgodkfcebpgheiedaddoikmljkk, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - hfpmbfgodkfcebpgheiedaddoikmljkk

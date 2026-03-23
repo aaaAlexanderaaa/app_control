@@ -1,0 +1,51 @@
+id: agno
+name: Agno
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: >-
+  Official Agno properties and repo metadata confirm the Agno-owned docs and
+  AgentOS control-plane hosts plus the product-specific `agno` CLI; many agent
+  runtimes are self-hosted, so local execution may not always reach Agno-owned
+  network infrastructure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/agno-agi/agno
+      evidence: >-
+        Agno's official README links the homepage at `agno.com`, the
+        documentation at `docs.agno.com`, and the AgentOS control plane at
+        `os.agno.com`; the reviewed network IOC set keeps only those Agno-owned
+        exact hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: agno.com
+      match: exact
+      role: app_brand
+    - pattern: docs.agno.com
+      match: exact
+      role: app_brand
+    - pattern: os.agno.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: agno
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/agno-agi/agno/blob/main/libs/agno_infra/pyproject.toml
+      evidence: >-
+        Agno's official repo defines the console entry point `[project.scripts]`
+        `agno = "agno.cli.entrypoint:agno_cli"` in
+        `libs/agno_infra/pyproject.toml`; retained host IOC is therefore limited
+        to the product-specific `agno` process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - agno

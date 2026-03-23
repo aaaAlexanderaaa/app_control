@@ -1,0 +1,63 @@
+id: chatgpt
+name: ChatGPT
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+- coding
+severity: medium
+priority_score: 71
+notes: Prefer exact ChatGPT web and desktop download hosts plus ChatGPT-specific macOS artifacts for detection.
+references:
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/chatgpt.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask sets ChatGPT desktop homepage to chatgpt.com, downloads the DMG from persistent.oaistatic.com, installs ChatGPT.app, and zaps ChatGPT-specific support, cache, HTTP storage, preference, and saved-state paths.
+  checked_at: '2026-03-22'
+- url: https://help.openai.com/en/articles/9247338-network-recommendations-for-chatgpt-errors-on-web-and-apps
+  kind: official_support
+  summary: OpenAI Help publishes ChatGPT-specific allowlisting guidance for managed networks.
+  checked_at: '2026-03-22'
+- url: https://help.openai.com/en/articles/9275200-downloading-the-chatgpt-macos-app
+  kind: official_support
+  summary: OpenAI Help documents the ChatGPT macOS app download and install flow for Mac users.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/chatgpt.rb
+      evidence: The official Homebrew cask sets the ChatGPT desktop homepage to `chatgpt.com` and downloads the macOS app from `persistent.oaistatic.com`, so the reviewed network IOC set keeps only those exact desktop entrypoints.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: chatgpt.com
+      match: suffix
+      role: app_brand
+    - pattern: persistent.oaistatic.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: chatgpt
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/chatgpt.rb
+      evidence: The official Homebrew cask installs ChatGPT.app, quits bundle identifier `com.openai.chat`, and zaps ChatGPT-specific support, cache, HTTP storage, preference, and saved-state paths.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/ChatGPT.app
+    - ~/Library/Application Support/ChatGPT
+    - ~/Library/Application Support/com.openai.chat
+    - ~/Library/Caches/com.openai.chat
+    - ~/Library/HTTPStorages/com.openai.chat
+    - ~/Library/Preferences/com.openai.chat.plist
+    - ~/Library/Saved Application State/com.openai.chat.savedState
+    - ~/Library/HTTPStorages/com.openai.chat.binarycookies
+    - ~/Library/Preferences/com.openai.chat.*.plist
+    bundle_ids:
+    - com.openai.chat
+    process_names:
+    - ChatGPT

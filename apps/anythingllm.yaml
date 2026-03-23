@@ -1,0 +1,40 @@
+id: anythingllm
+name: AnythingLLM
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- rag_platform
+- desktop_llm_app
+severity: medium
+priority_score: 82
+notes: Desktop and self-hosted variants may primarily talk to chosen model providers; reviewed IOC is limited to AnythingLLM-owned hosts rather than shared LLM provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/a/anythingllm.rb
+      evidence: The Homebrew cask sets the official homepage to https://anythingllm.com/ and downloads the desktop DMG from https://cdn.anythingllm.com/latest/...; the upstream README also links AnythingLLM documentation on docs.anythingllm.com, confirming this is a dedicated product domain family.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: anythingllm.com
+      match: suffix
+      role: app_brand
+    - pattern: cdn.anythingllm.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: anythingllm
+      match: substring
+    - pattern: anything-llm
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/a/anythingllm.rb
+      evidence: The Homebrew cask installs AnythingLLM.app and zaps ~/Library/Application Support/anythingllm-desktop on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/AnythingLLM.app
+    - ~/Library/Application Support/anythingllm-desktop

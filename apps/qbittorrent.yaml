@@ -1,0 +1,50 @@
+id: qbittorrent
+name: qBittorrent
+category: P2P_FILE_SHARING
+product_shape:
+- macos
+product_type:
+- torrent_client
+- p2p_file_sharing
+severity: high
+priority_score: 81
+notes: Torrent data plane is P2P and not domain-based; DNS/TLS is low-signal. Use host artifacts and protocol detection for reliable identification.
+references:
+- url: https://www.qbittorrent.org/
+  kind: official_site
+  summary: Official qBittorrent site is served from qbittorrent.org.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/cask/qbittorrent.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask metadata exposes the qBittorrent macOS app bundle and app-specific uninstall paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.qbittorrent.org/
+      evidence: qBittorrent's official site is served from qbittorrent.org, so the reviewed network IOC set keeps only that exact product-owned domain and avoids generic torrent infrastructure.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: qbittorrent.org
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: qbittorrent
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/qbittorrent.json
+      evidence: The Homebrew cask installs qBittorrent at /Applications/qBittorrent.app and tracks qBittorrent-specific config, Application Support, cache, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/qBittorrent.app
+    - ~/.config/qBittorrent
+    - ~/Library/Application Support/qBittorrent
+    - ~/Library/Caches/qBittorrent
+    - ~/Library/Preferences/org.qbittorrent.qBittorrent.plist
+    - ~/Library/Preferences/qBittorrent
+    - ~/Library/Saved Application State/org.qbittorrent.qBittorrent.savedState
+    process_names:
+    - qBittorrent

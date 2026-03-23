@@ -1,0 +1,45 @@
+id: you_com
+name: You.com
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- ai_search
+- chatbot
+severity: medium
+priority_score: 65
+notes: Reviewed IOC stays on the official You.com web surface and the vendor-backed Chrome extension referenced from You.com Support.
+references:
+- url: https://home.you.com/support/make-you.com-my-default
+  kind: official_support
+  summary: Official You.com support article recommends installing the Chrome extension to make You.com the default search engine.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/youcom-default-ai-search/fhplnehgjpmohhldfnjhibanpbiedofi
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID fhplnehgjpmohhldfnjhibanpbiedofi and identifies you.com as the website.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://home.you.com/support/make-you.com-my-default
+      evidence: The official You.com support article is hosted on home.you.com, routes users back to you.com, and recommends the official Chrome extension, so the reviewed network IOC keeps only those You.com-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: you.com
+      match: exact
+      role: app_brand
+    - pattern: home.you.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: you.com
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://home.you.com/support/make-you.com-my-default
+      evidence: The official You.com support article links Chrome users to the Web Store item that resolves to extension ID fhplnehgjpmohhldfnjhibanpbiedofi, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - fhplnehgjpmohhldfnjhibanpbiedofi

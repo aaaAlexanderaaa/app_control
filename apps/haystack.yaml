@@ -1,0 +1,47 @@
+id: haystack
+name: Haystack
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Official Hayhooks docs define a hayhooks CLI surface; network IOC is limited to Haystack-owned web properties instead of provider domains used by individual pipelines.
+references:
+- url: https://haystack.deepset.ai/overview/intro
+  kind: official_site
+  summary: Official Haystack overview is served from haystack.deepset.ai.
+  checked_at: '2026-03-21'
+- url: https://docs.haystack.deepset.ai/docs/hayhooks
+  kind: official_docs
+  summary: Hayhooks documentation shows the hayhooks CLI, environment-variable handling, and hayhooks run / hayhooks mcp run commands.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://haystack.deepset.ai/overview/intro
+      evidence: Haystack's official overview and Hayhooks documentation are served from haystack.deepset.ai and docs.haystack.deepset.ai, so the reviewed network IOC set keeps only those exact product-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: haystack.deepset.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.haystack.deepset.ai
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: haystack
+      match: substring
+    - pattern: hayhooks
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.haystack.deepset.ai/docs/hayhooks
+      evidence: The official Hayhooks docs install the hayhooks package and run it through hayhooks run and hayhooks mcp run, so the retained host IOC is the product-specific hayhooks process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - hayhooks

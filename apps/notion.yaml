@@ -1,0 +1,65 @@
+id: notion
+name: Notion
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- notes
+- docs
+- workspace
+severity: medium
+priority_score: 73
+notes: Official Notion allowlist guidance provides app-specific domains; retain Notion-owned hosts instead of broad third-party infrastructure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.notion.com/help/allowlist-ip
+      evidence: Notion allowlist guidance lists notion.so, notion.site, api.notion.com, notionusercontent.com, secure.notion-static.com, and audioprocessor.www.notion.so as official Notion service domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: notion.so
+      match: suffix
+      role: app_brand
+    - pattern: notion.site
+      match: suffix
+      role: file_share
+    - pattern: api.notion.com
+      match: exact
+      role: platform_service
+    - pattern: notionusercontent.com
+      match: suffix
+      role: file_share
+    - pattern: img.notionusercontent.com
+      match: exact
+      role: cdn_static
+    - pattern: secure.notion-static.com
+      match: exact
+      role: cdn_static
+    - pattern: audioprocessor.www.notion.so
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: notion
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/notion.json
+      evidence: Homebrew cask defines the Notion app bundle and macOS support, cache, log, preference, saved-state, and WebKit paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Notion.app
+    - ~/Library/Application Support/Notion
+    - ~/Library/Caches/notion.id
+    - ~/Library/Logs/Notion
+    - ~/Library/Preferences/notion.id.plist
+    - ~/Library/Saved Application State/notion.id.savedState
+    - ~/Library/WebKit/notion.id
+    - ~/Library/Application Support/Caches/notion-updater
+    - ~/Library/Preferences/ByHost/notion.id.*
+    bundle_ids:
+    - notion.id
+    process_names:
+    - Notion

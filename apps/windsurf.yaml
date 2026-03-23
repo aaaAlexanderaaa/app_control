@@ -1,0 +1,50 @@
+id: windsurf
+name: Windsurf
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- ide
+severity: high
+priority_score: 78
+notes: Official troubleshooting docs publish a Windsurf-specific firewall allowlist for restricted enterprise networks.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.windsurf.com/troubleshooting/windsurf-common-issues
+      evidence: Windsurf’s official troubleshooting docs tell administrators to whitelist *.codeium.com, *.windsurf.com, and *.codeiumdata.com for firewalls, VPNs, or proxies; the reviewed network IOC set keeps those Windsurf-owned domains and drops shared model-provider hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: windsurf.com
+      match: suffix
+      role: app_brand
+    - pattern: codeium.com
+      match: suffix
+      role: app_brand
+    - pattern: codeiumdata.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: windsurf
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/w/windsurf.rb
+      evidence: The Homebrew cask installs Windsurf.app, exposes the windsurf binary, and zaps the app-specific Windsurf configuration, cache, ShipIt, HTTP storage, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Windsurf.app
+    - ~/.windsurf
+    - ~/Library/Application Support/Windsurf
+    - ~/Library/Caches/com.exafunction.windsurf
+    - ~/Library/Caches/com.exafunction.windsurf.ShipIt
+    - ~/Library/HTTPStorages/com.exafunction.windsurf
+    - ~/Library/Preferences/com.exafunction.windsurf.plist
+    - ~/Library/Saved Application State/com.exafunction.windsurf.savedState
+    bundle_ids:
+    - com.exafunction.windsurf
+    process_names:
+    - windsurf

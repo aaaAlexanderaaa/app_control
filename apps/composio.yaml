@@ -1,0 +1,49 @@
+id: composio
+name: Composio
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- tooling_layer
+- integration_platform
+severity: high
+priority_score: 83
+notes: >-
+  Official Composio docs expose product-owned site, docs, and platform hosts;
+  the CLI documentation provides a strong local `composio` process signal.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.composio.dev/docs/cli
+      evidence: >-
+        Composio's official docs identify the organization site at
+        `composio.dev`, the docs host at `docs.composio.dev`, and the hosted
+        workspace at `platform.composio.dev`; the reviewed network IOC set keeps
+        those exact Composio-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: composio.dev
+      match: exact
+      role: app_brand
+    - pattern: docs.composio.dev
+      match: exact
+      role: app_brand
+    - pattern: platform.composio.dev
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: composio
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.composio.dev/docs/cli
+      evidence: >-
+        Composio's official CLI page documents product-specific commands such as
+        `composio login`, `composio whoami`, `composio init`, `composio
+        execute`, `composio manage toolkits`, and `composio upgrade`; retained
+        host IOC is therefore limited to the confirmed `composio` process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - composio

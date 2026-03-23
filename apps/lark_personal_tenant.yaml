@@ -1,0 +1,48 @@
+id: lark_personal_tenant
+name: Lark (Personal Tenant)
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+- collaboration
+severity: medium
+priority_score: 73
+notes: Use exact Lark download-page and package hosts rather than broad ByteDance infrastructure domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.larksuite.com/en_us/download
+      evidence: Official Lark download page identifies the desktop site on www.larksuite.com and references the current macOS package host lf-package-sg.larksuitecdn.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.larksuite.com
+      match: exact
+      role: app_brand
+    - pattern: lf-package-sg.larksuitecdn.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: lark
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/feishu.json
+      evidence: Homebrew cask defines the Feishu/Lark desktop app bundles plus Lark helper cache, preference, and saved-state paths used by the macOS client.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Lark.app
+    - /Applications/Feishu.app
+    - ~/Library/Caches/com.bytedance.lark.helper
+    - ~/Library/Caches/com.electron.lark
+    - ~/Library/Preferences/com.bytedance.lark.helper.plist
+    - ~/Library/Saved Application State/com.electron.lark.savedState
+    bundle_ids:
+    - com.bytedance.lark
+    - com.electron.lark
+    process_names:
+    - Lark
+    - Feishu

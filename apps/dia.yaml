@@ -1,0 +1,45 @@
+id: dia
+name: Dia
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+product_type:
+- browser
+- agent
+severity: medium
+priority_score: 82
+notes: Prefer Dia-owned product and release hosts; avoid broader The Browser Company corporate domains when the Dia-specific domain is available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.diabrowser.com/
+      evidence: Dia’s official product site is hosted on diabrowser.com, and the official Homebrew cask downloads the macOS app from the exact host releases.diabrowser.com; the reviewed IOC set removes the broader thebrowser.company parent domain.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: diabrowser.com
+      match: suffix
+      role: app_brand
+    - pattern: releases.diabrowser.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: dia browser
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/thebrowsercompany-dia.json
+      evidence: Homebrew cask installs Dia.app and removes Dia-specific Application Support, caches, HTTP storage, and preference files rooted at company.thebrowser.dia on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Dia.app
+    - ~/Library/Application Support/Dia
+    - ~/Library/Caches/company.thebrowser.dia
+    - ~/Library/HttpStorages/company.thebrowser.dia
+    - ~/Library/HttpStorages/company.thebrowser.dia.binarycookies
+    - ~/Library/Preferences/company.thebrowser.dia.plist
+    bundle_ids:
+    - company.thebrowser.dia
+    process_names:
+    - Dia

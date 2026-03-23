@@ -1,0 +1,46 @@
+id: whatsapp
+name: WhatsApp
+category: NON_WORK_IM
+product_shape:
+- web
+- macos
+product_type:
+- im
+severity: medium
+priority_score: 73
+notes: Web client traffic can coexist with personal mobile account sessions.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/whatsapp.json
+      evidence: Homebrew cask exposes the WhatsApp homepage on www.whatsapp.com and the desktop release download on web.whatsapp.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.whatsapp.com
+      match: exact
+      role: app_brand
+    - pattern: web.whatsapp.com
+      match: exact
+      role: file_transfer
+    keyword_patterns:
+    - pattern: whatsapp
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/whatsapp.json
+      evidence: Homebrew cask defines the WhatsApp app bundle and WhatsApp-specific application scripts, caches, containers, group containers, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/WhatsApp.app
+    - ~/Library/Application Scripts/net.whatsapp.WhatsApp*
+    - ~/Library/Caches/net.whatsapp.WhatsApp
+    - ~/Library/Containers/net.whatsapp.WhatsApp*
+    - ~/Library/Group Containers/group.com.facebook.family
+    - ~/Library/Group Containers/group.net.whatsapp*
+    - ~/Library/Saved Application State/net.whatsapp.WhatsApp.savedState
+    bundle_ids:
+    - com.facebook.family
+    process_names:
+    - WhatsApp

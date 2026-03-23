@@ -1,0 +1,42 @@
+id: mediafire
+name: MediaFire
+category: CLOUD_STORAGE
+product_shape:
+- web
+product_type:
+- cloud_storage
+- file_sharing
+severity: high
+priority_score: 73
+notes: MediaFire's reviewed IOC stays on exact MediaFire-owned web and mobile surfaces instead of generic download mirrors or third-party clients.
+references:
+- url: https://www.mediafire.com/
+  kind: official_site
+  summary: Official MediaFire site and branded web entrypoint are served from mediafire.com.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=555646196
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for MediaFire returns bundle ID com.mediafire.iphone from seller MediaFire, LLC and links back to mediafire.com/software/mobile/.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.mediafire.com/
+      evidence: MediaFire's official web and mobile entrypoints are served from the MediaFire-owned mediafire.com domain, so the reviewed network IOC set keeps only that exact brand domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: mediafire.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: mediafire
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=555646196
+      evidence: Apple's official lookup metadata for MediaFire returns bundle identifier com.mediafire.iphone from seller MediaFire, LLC, so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.mediafire.iphone

@@ -1,0 +1,50 @@
+id: jan
+name: Jan
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- llm_client
+severity: low
+priority_score: 60
+notes: Prefer Jan-owned domains and local app artifacts; remote provider egress varies by user configuration.
+references:
+- url: https://formulae.brew.sh/api/cask/jan.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask API exposes Jan's homepage on jan.ai plus the macOS app artifact and Jan-specific cleanup paths.
+  checked_at: '2026-03-22'
+- url: https://jan.ai
+  kind: official_site
+  summary: Official Jan site is served from jan.ai.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/jan.json
+      evidence: The Homebrew cask exposes Jan's homepage on jan.ai, and the official Jan site is served from the same host, so the reviewed network IOC keeps only the Jan-owned domain and excludes shared provider domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: jan.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: jan ai
+      match: substring
+    - pattern: jan
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/jan.json
+      evidence: The Homebrew cask defines the Jan app bundle and Jan-specific support, preference, and saved-state paths, so the retained host IOC is limited to those explicit macOS artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Jan.app
+    - ~/Library/Application Support/Jan
+    - ~/Library/Preferences/jan.ai.app.plist
+    - ~/Library/Saved Application State/jan.ai.app.savedState
+    bundle_ids:
+    - jan.ai.app
+    process_names:
+    - Jan

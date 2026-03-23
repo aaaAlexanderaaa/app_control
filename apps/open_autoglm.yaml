@@ -1,0 +1,46 @@
+id: open_autoglm
+name: Open-AutoGLM
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Open-source mobile agent; keep the product-specific AutoGLM host and repo-local entrypoint files rather than broad shared LLM API endpoints.
+references:
+- url: https://autoglm.zhipuai.cn/autotyper/
+  kind: official_site
+  summary: Official product page exposes the AutoGLM experience on the autoglm.zhipuai.cn host.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/zai-org/Open-AutoGLM/main/README.md
+  kind: upstream_readme
+  summary: README links the official AutoGLM product page and documents running pip install -r requirements.txt and python main.py.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/zai-org/Open-AutoGLM/main/main.py
+  kind: upstream_source
+  summary: Main entrypoint documents python main.py usage patterns for the Open-AutoGLM repository.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://autoglm.zhipuai.cn/autotyper/
+      evidence: The official product page serves AutoGLM directly from autoglm.zhipuai.cn, so the reviewed network IOC keeps only that exact product-owned host and omits broader shared API domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: autoglm.zhipuai.cn
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: autoglm
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/zai-org/Open-AutoGLM/main/README.md
+      evidence: The upstream README tells users to install dependencies from requirements.txt and run python main.py from the repository root, so the retained host IOC is limited to those exact repo-local Open-AutoGLM files.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/Open-AutoGLM/'

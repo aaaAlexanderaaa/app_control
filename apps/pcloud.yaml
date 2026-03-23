@@ -1,0 +1,37 @@
+id: pcloud
+name: pCloud
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer pCloud-owned service hosts and product naming; avoid unrelated CDN or third-party infrastructure where possible.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.pcloud.com/download-free-online-cloud-file-storage.html
+      evidence: pCloud’s official apps page is hosted on pcloud.com, and pCloud’s official help center routes account access through my.pcloud.com; the reviewed IOC set keeps the product domain plus the account portal host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: pcloud.com
+      match: suffix
+      role: app_brand
+    - pattern: my.pcloud.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: pcloud
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.pcloud.com/download-free-online-cloud-file-storage.html
+      evidence: Inference from pCloud’s official product naming for the desktop client as pCloud Drive and the published macOS release path /release/pCloudDrive-mac.dmg; retained host IOC is limited to the pCloud desktop app name implied by that naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/pCloud*.app

@@ -1,0 +1,47 @@
+id: anydesk
+name: AnyDesk
+category: REMOTE_ACCESS
+product_shape:
+- macos
+product_type:
+- remote_access
+severity: high
+priority_score: 81
+notes: Direct file transfer and clipboard features are common leakage vectors.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support.anydesk.com/firewall
+      evidence: AnyDesk support recommends allowlisting *.net.anydesk.com in firewall policy, while the Homebrew cask downloads the macOS app from https://download.anydesk.com/anydesk.dmg; the reviewed network IOC set keeps those narrower operational hosts instead of the broader anydesk.com parent domain.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: net.anydesk.com
+      match: suffix
+      role: app_brand
+    - pattern: download.anydesk.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: anydesk
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/a/anydesk.rb
+      evidence: The Homebrew cask installs AnyDesk.app, removes AnyDesk launch agents, launch daemons, and privileged helper tools on uninstall, and zaps ~/.anydesk plus the macOS preferences plist.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/AnyDesk.app
+    - ~/.anydesk
+    - ~/Library/Preferences/com.philandro.anydesk.plist
+    - /Library/LaunchAgents/com.philandro.anydesk.Frontend.plist
+    - /Library/LaunchAgents/com.philandro.anydesk.Hub.plist
+    - /Library/LaunchDaemons/com.philandro.anydesk.Helper.plist
+    - /Library/LaunchDaemons/com.philandro.anydesk.service.plist
+    - /Library/PrivilegedHelperTools/com.philandro.anydesk.Helper
+    bundle_ids:
+    - com.philandro.anydesk
+    - com.philandro.anydesk.Frontend
+    - com.philandro.anydesk.Helper
+    - com.philandro.anydesk.service

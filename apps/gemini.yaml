@@ -1,0 +1,43 @@
+id: gemini
+name: Gemini
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+- writing
+- coding
+severity: medium
+priority_score: 68
+notes: Keep Gemini IOC on the exact Gemini web surface and the official Google Gemini app bundle identifier; avoid broad Google-only rules.
+references:
+- url: https://gemini.google.com/
+  kind: official_site
+  summary: Official Gemini product site is served from gemini.google.com.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6477489729
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Google Gemini returns bundle ID com.google.gemini from seller Google LLC.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://gemini.google.com/
+      evidence: The official Gemini service is served from gemini.google.com, so the reviewed network IOC set keeps only that exact Gemini web host and drops broader Google infrastructure.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: gemini.google.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: gemini
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6477489729
+      evidence: Apple's official lookup metadata for Google Gemini returns bundle identifier com.google.gemini from seller Google LLC, so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.google.gemini

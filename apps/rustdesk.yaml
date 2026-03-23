@@ -1,0 +1,51 @@
+id: rustdesk
+name: RustDesk
+category: REMOTE_ACCESS
+product_shape:
+- macos
+product_type:
+- remote_access
+severity: medium
+priority_score: 77
+notes: Self-hosted deployments may use nonstandard domains; process telemetry is important.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/rustdesk/rustdesk/blob/master/src/common.rs
+      evidence: Official client source references RustDesk-owned endpoints including https://api.rustdesk.com/version/latest, defaults the public admin URL to https://admin.rustdesk.com, and tests RustDesk-owned hosts under rustdesk.com and www.rustdesk.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: rustdesk.com
+      match: exact
+      role: app_brand
+    - pattern: www.rustdesk.com
+      match: exact
+      role: app_brand
+    - pattern: api.rustdesk.com
+      match: exact
+      role: platform_service
+    - pattern: admin.rustdesk.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: rustdesk
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/rustdesk.json
+      evidence: Homebrew cask defines the RustDesk app bundle plus RustDesk-specific launch agents, launch daemons, logs, preferences, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/RustDesk.app
+    - ~/Library/Logs/RustDesk
+    - ~/Library/Preferences/com.carriez.RustDesk
+    - ~/Library/Saved Application State/com.carriez.rustdesk.savedState
+    - /Library/LaunchAgents/com.carriez.RustDesk_server.plist
+    - /Library/LaunchDaemons/com.carriez.RustDesk_service.plist
+    bundle_ids:
+    - com.carriez.rustdesk
+    process_names:
+    - RustDesk
+    - rustdesk

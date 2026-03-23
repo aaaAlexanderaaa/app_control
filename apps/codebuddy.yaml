@@ -1,0 +1,45 @@
+id: codebuddy
+name: CodeBuddy
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 78
+notes: Prefer exact CodeBuddy hosts and local CodeBuddy directories over broad Tencent
+  domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.codebuddy.ai/docs/cli/quickstart
+      evidence: CodeBuddy’s official quick-start documents the International Site
+        as codebuddy.ai for Tencent Cloud International authentication; the reviewed
+        network IOC set keeps the CodeBuddy-owned host and drops broad Tencent platform
+        domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: codebuddy.ai
+      match: exact
+      role: app_brand
+    - pattern: www.codebuddy.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: codebuddy
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.codebuddy.ai/docs/cli/installation
+      evidence: CodeBuddy’s official CLI installation and uninstall documentation
+        removes ~/.codebuddy and ~/.local/share/codebuddy and installs the @tencent-ai/codebuddy-code
+        package, which makes those local directories stable host-side artifacts for
+        CodeBuddy on macOS and Linux.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.codebuddy
+    - ~/.local/share/codebuddy

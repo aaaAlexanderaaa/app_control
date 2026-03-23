@@ -1,0 +1,50 @@
+id: gpt4all
+name: GPT4All
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- local_llm_client
+- model_download
+severity: low
+priority_score: 35
+notes: Local LLM client; reviewed IOC stays on exact GPT4All web/download surfaces and GPT4All-specific macOS artifacts rather than broad provider traffic.
+references:
+- url: https://gpt4all.io/
+  kind: official_site
+  summary: Official GPT4All site is served from gpt4all.io.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/cask/gpt4all.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask metadata exposes the GPT4All macOS app bundle and app-specific uninstall paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://gpt4all.io/
+      evidence: The official GPT4All site is served from gpt4all.io, so the reviewed network IOC set keeps only that exact GPT4All-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: gpt4all.io
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: gpt4all
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/gpt4all.json
+      evidence: Homebrew cask drives the GPT4All macOS installer and removes GPT4All-specific support paths including ~/Library/Application Support/nomic.ai/GPT4All on uninstall.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/GPT4All.app
+    - ~/Library/Application Support/GPT4All
+    - ~/Library/Preferences/com.nomic-ai.gpt4all.plist
+    - ~/Library/Saved Application State/gpt4all.savedState
+    - ~/Library/Application Support/nomic.ai/GPT4All
+    bundle_ids:
+    - com.nomic-ai.gpt4all
+    process_names:
+    - GPT4All

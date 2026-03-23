@@ -1,0 +1,44 @@
+id: pi
+name: Pi
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+severity: medium
+priority_score: 60
+notes: Direct Pi brand domains plus the official app bundle identifier are sufficient; avoid broader Inflection-owned infrastructure.
+references:
+- url: https://pi.ai/
+  kind: official_site
+  summary: Official Pi product site is served from pi.ai.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6445815935
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Pi, your personal AI returns bundle ID com.harrisonstreetlabs.ios.pi from seller Inflection AI, Inc.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://pi.ai/
+      evidence: The official Pi service is served from pi.ai, so the reviewed network IOC set keeps only that exact Pi-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: pi.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: pi ai
+      match: substring
+    - pattern: inflection
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6445815935
+      evidence: Apple's official lookup metadata for Pi, your personal AI returns bundle identifier com.harrisonstreetlabs.ios.pi from seller Inflection AI, Inc., so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.harrisonstreetlabs.ios.pi

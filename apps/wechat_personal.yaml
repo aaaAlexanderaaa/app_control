@@ -1,0 +1,57 @@
+id: wechat_personal
+name: WeChat (Personal)
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+- social
+severity: medium
+priority_score: 73
+notes: Prefer WeChat-owned product and download hosts; avoid broad qq.com and tencent.com domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://mac.weixin.qq.com/
+      evidence: WeChat’s official macOS page is hosted on mac.weixin.qq.com, references weixin.qq.com support links, publishes the current macOS release, and the Homebrew cask downloads the installer from dldir1.qq.com; the reviewed IOC set keeps only WeChat-specific hosts plus the file-transfer host file.wx.qq.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: mac.weixin.qq.com
+      match: exact
+      role: app_brand
+    - pattern: weixin.qq.com
+      match: suffix
+      role: app_brand
+    - pattern: web.wechat.com
+      match: exact
+      role: app_brand
+    - pattern: file.wx.qq.com
+      match: exact
+      role: file_transfer
+    - pattern: dldir1.qq.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: weixin
+      match: substring
+    - pattern: wechat
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/wechat.json
+      evidence: Homebrew cask installs WeChat.app, quits com.tencent.xinWeChat, and removes WeChat-specific Application Scripts, caches, containers, group containers, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/WeChat.app
+    - ~/Library/Caches/com.tencent.xinWeChat
+    - ~/Library/Containers/com.tencent.xinWeChat
+    - ~/Library/Group Containers/*com.tencent.xinWeChat
+    - ~/Library/Preferences/com.tencent.xinWeChat.plist
+    - ~/Library/Saved Application State/com.tencent.xinWeChat.savedState
+    bundle_ids:
+    - com.tencent.xinWeChat
+    process_names:
+    - WeChat

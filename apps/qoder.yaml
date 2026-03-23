@@ -1,0 +1,44 @@
+id: qoder
+name: Qoder
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- agentic_coding
+severity: high
+priority_score: 89
+notes: Use exact Qoder-owned hosts and macOS app artifacts; drop broad cloud-provider
+  domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://qoder.com/download
+      evidence: Qoder’s official download page is canonicalized at https://qoder.com/download
+        and describes downloads for Windows, macOS, Linux, JetBrains Plugin, and CLI;
+        the reviewed network IOC set keeps the exact Qoder-owned host and drops broader
+        Alibaba cloud domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: qoder.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: qoder
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.qoder.com/troubleshooting/common-issue
+      evidence: Qoder’s official troubleshooting guide lists the macOS application
+        path as /Applications/Qoder.app and tells users to gather verbose logs with
+        qoder --verbose, which yields stable macOS host-side artifacts for the Qoder
+        app and CLI.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Qoder.app
+    process_names:
+    - Qoder
+    - qoder

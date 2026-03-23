@@ -1,0 +1,36 @@
+id: plandex
+name: Plandex
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Terminal coding agent with project-local and user-home Plandex state directories.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/plandex-ai/plandex/main/README.md
+      evidence: The upstream README and docs publish the official site, docs, and install script on plandex.ai, giving a dedicated first-party Plandex domain for reviewed network detection
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: plandex.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: plandex
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/plandex-ai/plandex/main/app/cli/fs/fs.go
+      evidence: fs.go stores user state in ~/.plandex-home-v2, logs to ~/.plandex-home-v2/plandex.log, auth to ~/.plandex-home-v2/auth.json, and project state in .plandex-v2; install.sh installs the plandex binary to /usr/local/bin
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.plandex-home-v2
+    - /usr/local/bin/plandex
+    process_names:
+    - plandex

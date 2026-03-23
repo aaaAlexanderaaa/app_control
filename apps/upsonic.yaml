@@ -1,0 +1,48 @@
+id: upsonic
+name: Upsonic
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- framework
+- enterprise_agent
+severity: high
+priority_score: 82
+notes: >-
+  Official Upsonic docs use product-owned `upsonic.ai` and `docs.upsonic.ai`
+  hosts and document a local `upsonic` CLI workflow that creates an
+  `upsonic_config.json` project artifact.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.upsonic.ai/
+      evidence: >-
+        Upsonic's official documentation is served from `docs.upsonic.ai` and
+        describes the product under the `upsonic.ai` brand; the reviewed network
+        IOC set keeps those exact Upsonic-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: upsonic.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.upsonic.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: upsonic
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.upsonic.ai/
+      evidence: >-
+        Upsonic's official quickstart documentation instructs users to install
+        and run the `upsonic` CLI and notes that project initialization creates
+        an `upsonic_config.json` file; retained host IOC is limited to that
+        exact project artifact and the `upsonic` process name.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/upsonic_config.json'
+    process_names:
+    - upsonic

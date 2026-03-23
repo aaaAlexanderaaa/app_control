@@ -1,0 +1,41 @@
+id: read_ai
+name: Read AI
+category: MEETING_TRANSCRIPTION
+product_shape:
+- web
+- macos
+product_type:
+- meeting_assistant
+- analytics
+severity: medium
+priority_score: 71
+notes: Prefer Read AI-owned domains and the exact desktop update host; avoid generic read-only keywords because they collide with ordinary language.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.read.ai/desktop
+      evidence: Read AI’s official desktop page is hosted on read.ai/desktop and exposes direct macOS installers from the exact host readai-desktop-updates-production.s3.us-east-1.amazonaws.com; the reviewed IOC set keeps the vendor domain plus the exact installer host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: read.ai
+      match: suffix
+      role: app_brand
+    - pattern: readai-desktop-updates-production.s3.us-east-1.amazonaws.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: read.ai
+      match: substring
+    - pattern: read ai desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.read.ai/desktop
+      evidence: Read AI’s official desktop page identifies the product as the Read AI Desktop App and publishes macOS installer names Read AI_latest_aarch64.dmg and Read AI_latest_x64.dmg; retained host IOC is limited to the desktop app name implied by that installer naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Read AI.app
+    process_names:
+    - Read AI

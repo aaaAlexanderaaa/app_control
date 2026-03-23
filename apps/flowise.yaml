@@ -1,0 +1,51 @@
+id: flowise
+name: Flowise
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- workflow_builder
+- rag_platform
+- agent_builder
+severity: medium
+priority_score: 82
+notes: >-
+  Official docs confirm the default `~/.flowise` SQLite store; official-domain
+  network IOC is limited to Flowise-owned site and docs hosts because many
+  deployments are self-hosted and will not use a Flowise-owned runtime domain.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/FlowiseAI/Flowise
+      evidence: >-
+        The official Flowise README links the product site at `flowiseai.com`
+        and the documentation at `docs.flowiseai.com`; the reviewed network IOC
+        set keeps only those Flowise-owned hosts and removes broad provider
+        domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: flowiseai.com
+      match: exact
+      role: app_brand
+    - pattern: docs.flowiseai.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: flowise
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.flowiseai.com/configuration/databases.md
+      evidence: >-
+        Flowise's official database documentation says SQLite is the default,
+        shows `DATABASE_PATH=/root/.flowise`, and states that if
+        `DATABASE_PATH` is not specified the default store path is in the home
+        directory as `.flowise`; it also says `database.sqlite` is created in
+        that directory. Retained host IOC is therefore limited to the exact
+        local store directory and SQLite file.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.flowise

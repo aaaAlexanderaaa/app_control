@@ -1,0 +1,48 @@
+id: zeptoclaw
+name: ZeptoClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Security-focused Rust assistant; reviewed IOC keeps the exact zeptoclaw.com host and the explicit ~/.zeptoclaw config, cache, skills, and plugin artifacts documented by upstream install and CLI references.
+references:
+- url: https://raw.githubusercontent.com/qhkm/zeptoclaw/main/README.md
+  kind: upstream_readme
+  summary: Upstream README links zeptoclaw.com, documents ~/.zeptoclaw/config.json, skills, plugins, and uninstall paths, and shows Homebrew and direct install commands.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/qhkm/zeptoclaw/main/Cargo.toml
+  kind: upstream_source
+  summary: Cargo metadata defines the canonical zeptoclaw binary.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/qhkm/zeptoclaw/main/src/cache/response_cache.rs
+  kind: upstream_source
+  summary: Cache implementation persists responses under ~/.zeptoclaw/cache/responses.json.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/qhkm/zeptoclaw/main/README.md
+      evidence: The upstream README links zeptoclaw.com and zeptoclaw.com/docs as the official product and documentation surfaces, so the reviewed network IOC keeps only the exact ZeptoClaw-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: zeptoclaw.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: zeptoclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/qhkm/zeptoclaw/main/README.md
+      evidence: The upstream README documents ~/.zeptoclaw/config.json, ~/.zeptoclaw/skills/, ~/.zeptoclaw/plugins/, and direct installs in ~/.local/bin or /usr/local/bin, while cache code persists to ~/.zeptoclaw/cache/responses.json and Cargo metadata defines the zeptoclaw binary.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.zeptoclaw/
+    process_names:
+    - zeptoclaw

@@ -1,0 +1,42 @@
+id: langgraph
+name: LangGraph
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- workflow_automation
+severity: high
+priority_score: 84
+notes: Prefer the official LangGraph Studio host and app-specific local artifacts; avoid broad GitHub-wide indicators when the studio hostname is available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://studio.langchain.com/
+      evidence: LangGraph Studio’s official homepage is served from studio.langchain.com and redirects to the official LangGraph Studio documentation, while the official Homebrew cask packages the desktop app; the reviewed network IOC keeps the exact studio hostname rather than broad GitHub or LangChain-wide parent domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: studio.langchain.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: langgraph studio
+      match: substring
+    - pattern: langgraph
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/langgraph-studio.json
+      evidence: Homebrew cask installs LangGraph Studio.app and removes LangGraph Studio-specific Application Support, preferences, and saved-state files rooted at com.electron.langgraph-studio-desktop on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/LangGraph Studio.app
+    - ~/Library/Application Support/LangGraph Studio
+    - ~/Library/Preferences/com.electron.langgraph-studio-desktop.plist
+    - ~/Library/Saved Application State/com.electron.langgraph-studio-desktop.savedState
+    bundle_ids:
+    - com.electron.langgraph-studio-desktop
+    process_names:
+    - LangGraph Studio

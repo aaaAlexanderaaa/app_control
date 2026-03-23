@@ -1,0 +1,48 @@
+id: aider
+name: Aider
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 87
+notes: Prefer Aider-owned docs hosts and Aider-specific config/history files over generic model-provider endpoints.
+references:
+- url: https://raw.githubusercontent.com/Aider-AI/aider/main/README.md
+  kind: upstream_readme
+  summary: The official README identifies aider.chat as the official docs/homepage and shows the stable `aider` CLI workflow.
+  checked_at: '2026-03-22'
+- url: https://aider.chat/docs/config/aider_conf.html
+  kind: official_docs
+  summary: Aider's official configuration docs define the `.aider.conf.yml`, `.aider.model.settings.yml`, `.aider.model.metadata.json`, `.aider.input.history`, and `.aider.chat.history.md` files.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Aider-AI/aider/main/README.md
+      evidence: The official README links Aider's product docs and homepage on `aider.chat`, so the reviewed network IOC set keeps only that Aider-owned domain rather than generic provider endpoints.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: aider.chat
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: aider
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://aider.chat/docs/config/aider_conf.html
+      evidence: Aider's official configuration docs define the `.aider.conf.yml`, `.aider.model.settings.yml`, `.aider.model.metadata.json`, `.aider.input.history`, and `.aider.chat.history.md` files, while the upstream README keeps `aider` as the stable CLI command.
+      checked_at: '2026-03-22'
+    paths:
+    - .aider.conf.yml
+    - .aider.model.settings.yml
+    - .aider.model.metadata.json
+    - .aider.input.history
+    - .aider.chat.history.md
+    process_names:
+    - aider

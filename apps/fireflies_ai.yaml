@@ -1,0 +1,38 @@
+id: fireflies_ai
+name: Fireflies.ai
+category: MEETING_TRANSCRIPTION
+product_shape:
+- web
+- macos
+product_type:
+- meeting_assistant
+- transcription
+severity: medium
+priority_score: 73
+notes: Prefer Fireflies-owned domains and desktop-specific naming; avoid generic fireflies-only matching.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://fireflies.ai/desktop
+      evidence: Fireflies’ official desktop page is hosted on fireflies.ai/desktop, brands the product as the Fireflies.ai Desktop App, and explicitly states it is available for Mac and Windows; the reviewed network IOC set keeps only the vendor-owned fireflies.ai domain.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: fireflies.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: fireflies ai
+      match: substring
+    - pattern: fireflies desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://guide.fireflies.ai/articles/1208704416-getting-started-with-the-fireflies-desktop-app
+      evidence: Fireflies’ official guide refers to the Fireflies Desktop app and describes opening the desktop app to review meetings and live notes; retained host IOC is limited to the Fireflies desktop app name implied by that official guidance.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Fireflies*.app
+    process_names:
+    - Fireflies

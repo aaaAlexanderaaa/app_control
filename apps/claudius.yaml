@@ -1,0 +1,48 @@
+id: claudius
+name: Claudius
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+severity: medium
+priority_score: 74
+notes: Replace migrated Anthropic-wide IOC with Claudius-owned web and desktop signals only; keep host IOC on the production Claudius bundle identifier and binary name rather than shared OpenCode state directories.
+references:
+- url: https://claudius.to/
+  kind: official_site
+  summary: Official Claudius site presents the desktop product and links the GitHub project.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/crisogray/claudius/main/README.md
+  kind: upstream_readme
+  summary: README identifies Claudius as a desktop app for Claude Code and links the macOS DMG release assets.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/crisogray/claudius/main/packages/desktop/src-tauri/tauri.prod.conf.json
+  kind: upstream_source
+  summary: Production Tauri config sets productName Claudius, identifier to.claudius.desktop, and mainBinaryName Claudius.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://claudius.to/
+      evidence: Claudius's official product surface is served from https://claudius.to/, so the reviewed network IOC set keeps only that exact first-party host instead of broader Anthropic or Claude domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: claudius.to
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: claudius
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/crisogray/claudius/main/packages/desktop/src-tauri/tauri.prod.conf.json
+      evidence: Claudius's production Tauri config sets productName to Claudius, identifier to.claudius.desktop, and mainBinaryName Claudius, so the reviewed host IOC is limited to that exact desktop bundle identifier and process name.
+      checked_at: '2026-03-21'
+    bundle_ids:
+    - to.claudius.desktop
+    process_names:
+    - Claudius

@@ -1,0 +1,61 @@
+id: tencent_yuanbao
+name: Tencent Yuanbao
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+severity: medium
+priority_score: 63
+notes: Prefer exact Yuanbao product and download hosts plus Homebrew-cask-backed macOS artifacts; avoid broad Tencent parent domains that cover unrelated services.
+references:
+- url: https://formulae.brew.sh/api/cask/yuanbao.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask API exposes Yuanbao's official homepage, macOS download host, app artifact, and zap paths.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/y/yuanbao.rb
+  kind: homebrew_cask_formula
+  summary: Raw cask confirms the same Yuanbao download URL pattern, livecheck API endpoint, app artifact name 元宝.app, and cleanup paths.
+  checked_at: '2026-03-21'
+- url: https://yuanbao.tencent.com/
+  kind: official_site
+  summary: Official Tencent Yuanbao site anchors the product host on yuanbao.tencent.com.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/y/yuanbao.rb
+      evidence: The Homebrew cask sets Yuanbao's homepage to https://yuanbao.tencent.com/, downloads the macOS app from cdn-hybrid-prod.hunyuan.tencent.com, and livechecks against https://yuanbao.tencent.com/api/info/public/general; the reviewed network IOC set keeps only those exact Yuanbao-specific hosts instead of broad Tencent domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: yuanbao.tencent.com
+      match: exact
+      role: app_brand
+    - pattern: cdn-hybrid-prod.hunyuan.tencent.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: yuanbao
+      match: substring
+    - pattern: 元宝
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/yuanbao.json
+      evidence: The Homebrew cask installs 元宝.app and zaps Yuanbao-specific macOS data under com.tencent.yuanbao, so the retained host IOC is limited to those exact app and library paths plus the app process name.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/元宝.app
+    - ~/Library/Application Support/com.tencent.yuanbao
+    - ~/Library/Caches/com.tencent.yuanbao
+    - ~/Library/Containers/com.tencent.yuanbao
+    - ~/Library/HTTPStorages/com.tencent.yuanbao
+    - ~/Library/HTTPStorages/com.tencent.yuanbao.binarycookies
+    - ~/Library/Preferences/com.tencent.yuanbao.plist
+    - ~/Library/WebKit/com.tencent.yuanbao
+    process_names:
+    - 元宝

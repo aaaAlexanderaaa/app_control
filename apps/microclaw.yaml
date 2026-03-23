@@ -1,0 +1,48 @@
+id: microclaw
+name: Microclaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Microclaw's reviewed IOC stays on the exact microclaw.ai host and the source-backed ~/.microclaw data, working, and allowlist artifacts rather than loopback UI addresses or generic shell tooling.
+references:
+- url: https://raw.githubusercontent.com/microclaw/microclaw/main/README.md
+  kind: upstream_readme
+  summary: README installs Microclaw from microclaw.ai and documents the default ~/.microclaw data directory plus working_dir and allowlist files.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/microclaw/microclaw/main/src/config.rs
+  kind: upstream_source
+  summary: Config source defines Microclaw's default data paths and config search behavior.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/microclaw/microclaw/main/docs/clawhub/overview.md
+  kind: official_docs
+  summary: Clawhub docs reference the Microclaw clawhub lockfile under ~/.microclaw.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/microclaw/microclaw/main/README.md
+      evidence: Microclaw's upstream README installs the product from https://microclaw.ai/install.sh and uses microclaw.ai as the official product host, so the reviewed network IOC set keeps only that exact Microclaw-owned host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: microclaw.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: microclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/microclaw/microclaw/main/README.md
+      evidence: Microclaw's README documents ~/.microclaw as the default data directory, ~/.microclaw/working_dir as the working directory, and the sandbox allowlist files under ~/.microclaw, while the config source and docs also reference clawhub.lock.json there and the microclaw CLI command.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.microclaw
+    process_names:
+    - microclaw

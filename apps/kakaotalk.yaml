@@ -1,0 +1,52 @@
+id: kakaotalk
+name: KakaoTalk
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+severity: medium
+priority_score: 73
+notes: Keep IOC narrowed to KakaoTalk-specific hosts exposed by Kakao's official service page and Apple listing; avoid broad kakao.com or kakaocdn.net suffix matches.
+references:
+- url: https://www.kakaocorp.com/page/service/service/KakaoTalk?lang=en
+  kind: official_service_page
+  summary: Kakao's official service page publishes the KakaoTalk macOS App Store link and the Windows installer on lk.kakaocdn.net.
+  checked_at: '2026-03-21'
+- url: https://itunes.apple.com/lookup?id=869223134&country=us
+  kind: official_store_api
+  summary: Apple Lookup returns kind mac-software, trackName KakaoTalk, bundleId com.kakao.KakaoTalkMac, seller Kakao Corp., and sellerUrl https://www.kakaocorp.com.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.kakaocorp.com/page/service/service/KakaoTalk?lang=en
+      evidence: Kakao's official KakaoTalk service page publishes the macOS App Store entry for track 869223134 and the Windows installer on lk.kakaocdn.net, while the corresponding Apple listing points users to cs.kakao.com for support; the reviewed network IOC set keeps only those exact KakaoTalk-related hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.kakaocorp.com
+      match: exact
+      role: app_brand
+    - pattern: lk.kakaocdn.net
+      match: exact
+      role: file_download
+    - pattern: cs.kakao.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: kakaotalk
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=869223134&country=us
+      evidence: Apple Lookup for track 869223134 returns kind mac-software, trackName KakaoTalk, and bundleId com.kakao.KakaoTalkMac; retained host IOC is therefore limited to the exact bundle identifier, app path implied by the macOS listing, and KakaoTalk process name.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/KakaoTalk.app
+    bundle_ids:
+    - com.kakao.KakaoTalkMac
+    process_names:
+    - KakaoTalk

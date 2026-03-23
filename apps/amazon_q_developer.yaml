@@ -1,0 +1,52 @@
+id: amazon_q_developer
+name: Amazon Q Developer
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- assistant
+severity: high
+priority_score: 80
+notes: Prefer exact Amazon Q Developer service endpoints and extension identifiers
+  over broad AWS domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.aws.amazon.com/general/latest/gr/amazonqdev.html
+      evidence: AWS General Reference documents Amazon Q Developer service endpoints
+        including q.us-east-1.amazonaws.com, codewhisperer.us-east-1.amazonaws.com,
+        and aws-toolkit-language-servers.amazonaws.com; the reviewed network IOC set
+        keeps those exact Amazon Q-related hosts and drops broad aws.amazon.com or
+        amazonaws.com matches.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: q.us-east-1.amazonaws.com
+      match: exact
+      role: ai_service_provider
+    - pattern: codewhisperer.us-east-1.amazonaws.com
+      match: exact
+      role: ai_service_provider
+    - pattern: aws-toolkit-language-servers.amazonaws.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: amazon q
+      match: substring
+    - pattern: q developer
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/aws/aws-toolkit-vscode/master/packages/amazonq/package.json
+      evidence: The official AWS Toolkit for VS Code package declares publisher amazonwebservices
+        and name amazon-q-vscode, which maps to the stable macOS VS Code extension
+        artifact paths for Amazon Q Developer.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/amazonwebservices.amazon-q-vscode-*
+    - ~/.vscode-insiders/extensions/amazonwebservices.amazon-q-vscode-*
+    - ~/Library/Application Support/Code/User/globalStorage/amazonwebservices.amazon-q-vscode
+    - ~/Library/Application Support/Code - Insiders/User/globalStorage/amazonwebservices.amazon-q-vscode

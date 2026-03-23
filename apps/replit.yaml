@@ -1,0 +1,47 @@
+id: replit
+name: Replit
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- cloud_ide
+severity: high
+priority_score: 81
+notes: Support docs include firewalled domains guidance.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.replit.com/platforms/desktop-app
+      evidence: Replit’s official desktop-app docs document the native desktop client, the dedicated download page is hosted at https://ld.replit.com/desktop, and the Homebrew cask homepage is https://replit.com/; the reviewed network IOC set keeps those first-party Replit desktop/product hosts and removes unrelated shared platform domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: replit.com
+      match: suffix
+      role: app_brand
+    - pattern: ld.replit.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: replit
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/r/replit.rb
+      evidence: The Homebrew cask installs Replit.app and zaps the Replit Application Support, cache, ShipIt, HTTP storage, log, preferences, saved-state, and recent-documents paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Replit.app
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.electron.replit.*
+    - ~/Library/Application Support/Replit
+    - ~/Library/Caches/com.electron.replit
+    - ~/Library/Caches/com.electron.replit.ShipIt
+    - ~/Library/HTTPStorages/com.electron.replit
+    - ~/Library/Logs/Replit
+    - ~/Library/Preferences/com.electron.replit.plist
+    - ~/Library/Saved Application State/com.electron.replit.savedState
+    bundle_ids:
+    - com.electron.replit

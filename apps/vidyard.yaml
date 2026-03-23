@@ -1,0 +1,38 @@
+id: vidyard
+name: Vidyard
+category: SCREEN_RECORDING_SHARE
+product_shape:
+- web
+- macos
+product_type:
+- video_share
+- screen_recording
+severity: medium
+priority_score: 69
+notes: Prefer Vidyard-owned desktop pages and domains; the official Mac installer currently redirects through GitHub, which is too broad to keep as a reviewed network IOC.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.vidyard.com/desktop-app/
+      evidence: Vidyard’s official desktop page is hosted on www.vidyard.com/desktop-app and describes Vidyard for Desktop as the Mac desktop recorder; the reviewed network IOC set keeps the Vidyard-owned domain and excludes the broad GitHub download host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: vidyard.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: vidyard
+      match: substring
+    - pattern: vidyard desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.vidyard.com/desktop-app/
+      evidence: Vidyard’s official desktop page links the Mac installer as github.com/vidyard/desktopappreleases/releases/latest/download/Vidyard.dmg; retained host IOC is limited to the Vidyard desktop app name implied by that official installer filename.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Vidyard.app
+    process_names:
+    - Vidyard

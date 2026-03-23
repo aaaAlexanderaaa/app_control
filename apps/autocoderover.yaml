@@ -1,0 +1,42 @@
+id: autocoderover
+name: AutoCodeRover
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- agentic_coding
+severity: high
+priority_score: 85
+notes: Open-source coding agent; prefer the official AutoCodeRover host and repo-local execution artifacts instead of generic Python or GitHub infrastructure.
+references:
+- url: https://raw.githubusercontent.com/nus-apr/auto-code-rover/main/README.md
+  kind: upstream_readme
+  summary: README links the official autocoderover.dev site and documents the environment.yml, app/main.py, and output/applicable_patch workflow.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/nus-apr/auto-code-rover/main/Dockerfile.minimal
+  kind: upstream_source
+  summary: Minimal Dockerfile configures a project-owned autocoderover.dev contact address and reuses the same environment.yml setup.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/nus-apr/auto-code-rover/main/README.md
+      evidence: The upstream README links the official website at https://autocoderover.dev/, so the reviewed network IOC retains only that exact AutoCodeRover-owned host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: autocoderover.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: autocoderover
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/nus-apr/auto-code-rover/main/README.md
+      evidence: The README documents creating dependencies from environment.yml, running python app/main.py, and reading run outputs from output/applicable_patch, so the retained host IOC is limited to those exact repo-local paths.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/auto-code-rover/'

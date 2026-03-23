@@ -1,0 +1,40 @@
+id: chrome_remote_desktop
+name: Chrome Remote Desktop
+category: REMOTE_ACCESS
+product_shape:
+- web
+- macos
+product_type:
+- remote_access
+severity: medium
+priority_score: 78
+notes: Remote browser sessions can move data outside managed endpoint controls.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support.google.com/chrome/answer/1649523?hl=en&co=GENIE.Platform%3DDesktop
+      evidence: Google’s Chrome Remote Desktop help page directs users to remotedesktop.google.com/access
+        for remote access and remotedesktop.google.com/support for remote support;
+        the reviewed network IOC keeps the exact Chrome Remote Desktop product host
+        and drops broader Google domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: remotedesktop.google.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: chrome remote desktop
+      match: substring
+    - pattern: remotedesktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/chrome-remote-desktop/inomeogfingihgjfjlpeplalcfajhgai
+      evidence: The official Chrome Web Store listing for Chrome Remote Desktop uses
+        the extension identifier inomeogfingihgjfjlpeplalcfajhgai, which is the stable
+        host-side artifact for the extension on managed browsers.
+      checked_at: '2026-03-21'
+    chrome_extension_ids:
+    - inomeogfingihgjfjlpeplalcfajhgai

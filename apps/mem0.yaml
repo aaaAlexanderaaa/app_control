@@ -1,0 +1,53 @@
+id: mem0
+name: Mem0
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Official Mem0 quickstarts confirm a local SQLite history file plus a default local Qdrant data directory; network IOC is limited to Mem0-owned hosts.
+references:
+- url: https://mem0.ai/
+  kind: official_site
+  summary: Official Mem0 site is served from mem0.ai.
+  checked_at: '2026-03-21'
+- url: https://docs.mem0.ai/open-source/python-quickstart
+  kind: official_docs
+  summary: Open-source Python quickstart states the default SQLite history path and Qdrant on-disk storage path.
+  checked_at: '2026-03-21'
+- url: https://docs.mem0.ai/api-reference/organization/get-org
+  kind: api_reference
+  summary: API reference examples call the hosted Mem0 API on api.mem0.ai.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.mem0.ai/api-reference/organization/get-org
+      evidence: Mem0's official site is served from mem0.ai, its docs are served from docs.mem0.ai, and the official API reference uses requests to api.mem0.ai, so the reviewed network IOC set keeps only those exact Mem0-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: mem0.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.mem0.ai
+      match: exact
+      role: platform_service
+    - pattern: api.mem0.ai
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: mem0
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.mem0.ai/open-source/python-quickstart
+      evidence: The official Mem0 Python quickstart says the default setup uses SQLite history at ~/.mem0/history.db and a Qdrant vector store with on-disk data at /tmp/qdrant.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.mem0/history.db
+    - /tmp/qdrant

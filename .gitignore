@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.claude
+.codex
+.factory
+.DS_Store
+.venv/
+build/
+dist/
+*.egg-info/
+
+output/*
+!output/.gitkeep
+
+scratch/*
+!scratch/.gitkeep

@@ -1,0 +1,46 @@
+id: pickle_bot
+name: pickle-bot
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Personal AI assistant with pluggable skills; upstream lacks a dedicated product domain, so reviewed IOC stays on exact Pickle-Bot keywords plus the explicit ~/.pickle-bot configuration and workspace artifacts documented by upstream docs.
+references:
+- url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/README.md
+  kind: upstream_readme
+  summary: Upstream README documents pickle-bot init/chat/server and the official GitHub home.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/docs/configuration.md
+  kind: upstream_docs
+  summary: Configuration docs enumerate the ~/.pickle-bot directory, config.user.yaml, config.runtime.yaml, agents, skills, and crons.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/pyproject.toml
+  kind: upstream_source
+  summary: Project metadata defines the package name pickle-bot and the `pickle-bot` CLI entrypoint.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/pyproject.toml
+      evidence: Upstream materials consistently name the project pickle-bot but do not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to exact Pickle-Bot keywords rather than shared GitHub or package-registry infrastructure.
+      checked_at: '2026-03-22'
+    keyword_patterns:
+    - pattern: "pickle-bot"
+      match: substring
+    - pattern: "pickle bot"
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/docs/configuration.md
+      evidence: Upstream configuration docs enumerate ~/.pickle-bot/config.user.yaml, ~/.pickle-bot/config.runtime.yaml, ~/.pickle-bot/agents/, ~/.pickle-bot/skills/, and ~/.pickle-bot/crons/, while project metadata defines the `pickle-bot` CLI entrypoint.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.pickle-bot/
+    process_names:
+    - pickle-bot

@@ -1,0 +1,54 @@
+id: nullclaw
+name: NullClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- agent_runtime
+- cli
+severity: critical
+priority_score: 93
+notes: >-
+  Zig-based autonomous assistant infrastructure with Homebrew-supported macOS
+  install paths and onboard, agent, and gateway workflows.
+references:
+- url: https://nullclaw.io
+  kind: official_site
+  summary: Official NullClaw site establishes nullclaw.io as the first-party product host.
+  checked_at: '2026-03-22'
+- url: https://github.com/nullclaw/nullclaw
+  kind: official_repo
+  summary: Official README documents the nullclaw CLI and ~/.nullclaw runtime artifacts.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://nullclaw.io
+      evidence: >-
+        Official NullClaw site and repository establish `nullclaw.io` as the
+        first-party brand domain for the nullclaw runtime.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: nullclaw.io
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: nullclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/nullclaw/nullclaw
+      evidence: >-
+        The official NullClaw repository documents the `nullclaw` CLI plus
+        `~/.nullclaw/config.json` and `~/.nullclaw/workspace` on macOS
+        installations.
+      checked_at: '2026-03-22'
+    paths:
+    - /opt/homebrew/bin/nullclaw
+    - /usr/local/bin/nullclaw
+    - ~/.nullclaw/
+    process_names:
+    - nullclaw

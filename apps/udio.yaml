@@ -1,0 +1,45 @@
+id: udio
+name: Udio
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- audio_generation
+severity: medium
+priority_score: 59
+notes: Reviewed IOC stays on exact Udio-owned web and mobile surfaces rather than generic music-generation infrastructure.
+references:
+- url: https://www.udio.com/
+  kind: official_site
+  summary: Official Udio site is served from www.udio.com.
+  checked_at: '2026-03-22'
+- url: https://support.udio.com/hc/en-us/articles/32287920709395-The-Udio-Mobile-App
+  kind: official_help
+  summary: Official Udio help article documents the Udio mobile app from Udio's first-party support center.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6511211165
+  kind: apple_lookup_api
+  summary: 'Apple lookup metadata for Udio returns bundle ID com.udio.app from seller Uncharted Labs Inc. and seller URL https://www.udio.com.'
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.udio.com/
+      evidence: Udio's official web product is served from www.udio.com, and the official mobile app metadata links back to the same first-party seller URL, so the reviewed network IOC keeps only the exact Udio-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.udio.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: udio
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6511211165
+      evidence: 'Apple''s official lookup metadata for Udio: AI Music Maker & Studio returns bundle identifier com.udio.app from seller Uncharted Labs Inc., so the retained host IOC is the exact reviewed bundle ID.'
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.udio.app

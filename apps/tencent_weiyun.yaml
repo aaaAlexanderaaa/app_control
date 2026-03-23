@@ -1,0 +1,40 @@
+id: tencent_weiyun
+name: Tencent Weiyun
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: For precision, prioritize Weiyun-owned domains and local app artifacts over generic Tencent or QQ infrastructure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.weiyun.com/download.html
+      evidence: Tencent Weiyun’s official download page is hosted on www.weiyun.com and its related product pages remain under the weiyun.com domain; the reviewed network IOC set removes broader qq.com and tencent.com hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: weiyun.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: weiyun
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/weiyun.json
+      evidence: Homebrew cask installs Weiyun.app, quits com.tencent.MacWeiyun on uninstall, and removes the app’s preference and saved-state files on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Weiyun.app
+    - ~/Library/Preferences/com.tencent.MacWeiyun.plist
+    - ~/Library/Saved Application State/com.tencent.MacWeiyun.savedState
+    bundle_ids:
+    - com.tencent.MacWeiyun
+    process_names:
+    - Weiyun

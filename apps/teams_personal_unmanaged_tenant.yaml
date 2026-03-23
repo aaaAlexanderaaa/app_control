@@ -1,0 +1,56 @@
+id: teams_personal_unmanaged_tenant
+name: Teams (Personal/Unmanaged Tenant)
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+- collaboration
+severity: medium
+priority_score: 73
+notes: Consumer/unmanaged detection should rely on the exact Teams Free web host plus the shared desktop app artifacts; avoid broad microsoft.com and sharepoint.com parent domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://teams.live.com/free
+      evidence: Microsoft’s official Teams Free page is hosted on teams.live.com/free for personal use, loads consumer Teams assets from statics.teams.cdn.live.net, and advertises the Teams app download; the reviewed network IOC set removes broad Microsoft domains and keeps only consumer-specific Teams hosts plus the exact macOS package host from Homebrew.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: teams.live.com
+      match: exact
+      role: app_brand
+    - pattern: statics.teams.cdn.live.net
+      match: exact
+      role: platform_service
+    - pattern: statics.teams.cdn.office.net
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: teams free
+      match: substring
+    - pattern: teams personal
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/microsoft-teams.json
+      evidence: Homebrew cask installs Microsoft Teams.app and removes Teams-specific updater, application-support, cache, container, preference, and saved-state artifacts on macOS; host IOC identifies the shared Teams desktop binary, while the consumer distinction comes from the reviewed teams.live.com network IOC.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Microsoft Teams.app
+    - /Library/Application Support/Microsoft/TeamsUpdaterDaemon
+    - /Library/Logs/Microsoft/MSTeams
+    - /Library/Logs/Microsoft/Teams
+    - /Library/Preferences/com.microsoft.teams.plist
+    - ~/Library/Application Support/com.microsoft.teams
+    - ~/Library/Application Support/Microsoft/Teams
+    - ~/Library/Application Support/Teams
+    - ~/Library/Caches/com.microsoft.teams
+    - ~/Library/Containers/com.microsoft.teams*
+    - ~/Library/Group Containers/*.com.microsoft.teams
+    - ~/Library/Preferences/com.microsoft.teams*.plist
+    - ~/Library/Saved Application State/com.microsoft.teams*.savedState
+    process_names:
+    - Microsoft Teams

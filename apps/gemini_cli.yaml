@@ -1,0 +1,35 @@
+id: gemini_cli
+name: Gemini CLI
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 87
+notes: Open-source AI agent in terminal from Google. 96.6k GitHub stars. Separate from Gemini web chat.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://geminicli.com/docs/
+      evidence: The official Gemini CLI README points users to geminicli.com/docs as the product documentation host, so generic Google API domains were removed from the reviewed app IOC set
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: geminicli.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: gemini-cli
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/google-gemini/gemini-cli
+      evidence: docs/cli/settings.md stores user settings at ~/.gemini/settings.json and the Homebrew formula gemini-cli.rb installs the gemini executable by symlinking the package bin entry into Homebrew's bin directory
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.gemini
+    process_names:
+    - gemini

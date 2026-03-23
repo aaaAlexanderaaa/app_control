@@ -1,0 +1,36 @@
+id: automa
+name: Automa
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+product_type:
+- browser_automation
+- browser_extension
+severity: medium
+priority_score: 85
+notes: Popular open-source browser automation extension. 21.1k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/AutomaApp/automa/main/README.md
+      evidence: The upstream README links Automa’s workflow marketplace at https://extension.automa.site/marketplace and documentation at https://docs.extension.automa.site/extension-builder, so the reviewed network IOC set keeps those Automa-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: extension.automa.site
+      match: exact
+      role: app_brand
+    - pattern: docs.extension.automa.site
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: automa
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/automa/infppggnoaenmfagbfknfkancpbljcca
+      evidence: The official Chrome Web Store listing for Automa uses the extension identifier infppggnoaenmfagbfknfkancpbljcca, which is the stable host-side artifact for the browser extension.
+      checked_at: '2026-03-21'
+    chrome_extension_ids:
+    - infppggnoaenmfagbfknfkancpbljcca

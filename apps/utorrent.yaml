@@ -1,0 +1,34 @@
+id: utorrent
+name: uTorrent
+category: P2P_FILE_SHARING
+product_shape:
+- macos
+product_type:
+- torrent_client
+- p2p_file_sharing
+severity: high
+priority_score: 81
+notes: Current macOS distribution is uTorrent Web; combine these brand IOC with protocol telemetry for torrent activity.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://help.utorrent.com/en/support/solutions/articles/29000040342-installing-utorrent-web
+      evidence: The official uTorrent Web install guide directs users to download the macOS client from https://www.utorrent.com/web/compare/; the reviewed network IOC set keeps the uTorrent-owned web host and avoids overbroad torrent infrastructure domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.utorrent.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: utorrent web
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://help.utorrent.com/en/support/solutions/articles/29000034450--will-damage-your-computer-you-should-move-it-to-the-trash-
+      evidence: The official uTorrent Web Mac remediation article instructs users to delete ~/Library/Application Support/uTorrent Web/ and remove uTorrent Web from Applications before reinstalling, providing stable host-side artifacts for the macOS client.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/uTorrent Web.app
+    - ~/Library/Application Support/uTorrent Web

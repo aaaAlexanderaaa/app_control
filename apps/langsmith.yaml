@@ -1,0 +1,52 @@
+id: langsmith
+name: LangSmith
+category: AI_OBSERVABILITY
+product_shape:
+- web
+product_type:
+- prompt_tracing
+- llm_observability
+severity: medium
+priority_score: 73
+notes: Scope LangSmith IOC to LangSmith-owned app and API hosts plus the official langsmith CLI binary locations; avoid generic LangChain-wide hosts when a product-specific hostname exists.
+references:
+- url: https://smith.langchain.com/
+  kind: official_site
+  summary: Official LangSmith application is served from smith.langchain.com.
+  checked_at: '2026-03-21'
+- url: https://docs.smith.langchain.com/langsmith/langsmith-cli
+  kind: official_docs
+  summary: LangSmith CLI docs show the langsmith command and environment examples pointing to api.smith.langchain.com.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/langchain-ai/langsmith-cli/main/scripts/install.sh
+  kind: official_repo
+  summary: Official install script sets BINARY=langsmith and installs it to /usr/local/bin or ~/.local/bin.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.smith.langchain.com/langsmith/langsmith-cli
+      evidence: LangSmith's official application is served from smith.langchain.com and the official CLI docs use the hosted endpoint api.smith.langchain.com, so the reviewed network IOC set keeps those exact LangSmith hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: smith.langchain.com
+      match: exact
+      role: app_brand
+    - pattern: api.smith.langchain.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: langsmith
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/langchain-ai/langsmith-cli/main/scripts/install.sh
+      evidence: LangSmith's official install script sets BINARY=langsmith and installs it to /usr/local/bin if writable or otherwise to ~/.local/bin; the official CLI docs show langsmith as the command name.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.local/bin/langsmith
+    - /usr/local/bin/langsmith
+    process_names:
+    - langsmith

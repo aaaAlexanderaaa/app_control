@@ -1,0 +1,53 @@
+id: trae
+name: TRAE
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- ide
+severity: high
+priority_score: 78
+notes: Homebrew metadata confirms Trae-owned website, API, and download hosts for the macOS IDE.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/trae.rb
+      evidence: The Homebrew cask sets the official homepage to https://www.trae.ai/, downloads the macOS app from https://lf-cdn.trae.ai/..., and checks updates at https://api.trae.ai/...; the reviewed network IOC set keeps those Trae-owned hosts and drops unrelated provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.trae.ai
+      match: exact
+      role: app_brand
+    - pattern: lf-cdn.trae.ai
+      match: exact
+      role: file_download
+    - pattern: api.trae.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: trae
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/trae.rb
+      evidence: The Homebrew cask installs Trae.app and zaps the app-specific Trae configuration, cache, ShipIt, HTTP storage, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Trae.app
+    - ~/.trae
+    - ~/Library/Application Support/Trae
+    - ~/Library/Caches/com.trae.app
+    - ~/Library/Caches/com.trae.ShipIt
+    - ~/Library/HTTPStorages/com.trae.app
+    - ~/Library/Preferences/ByHost/com.trae.ShipIt.*.plist
+    - ~/Library/Preferences/com.trae.app.helper.plist
+    - ~/Library/Preferences/com.trae.app.plist
+    - ~/Library/Saved Application State/com.trae.app.savedState
+    bundle_ids:
+    - com.trae.app
+    process_names:
+    - Trae

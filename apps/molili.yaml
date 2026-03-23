@@ -1,0 +1,56 @@
+id: molili
+name: Molili
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- remote_control
+- automation
+severity: critical
+priority_score: 93
+notes: >-
+  Molili is a Chinese local-first desktop AI agent with macOS installers,
+  remote computer control, scheduling, and app automation. Reviewed host IOC
+  is not yet retained because current evidence only re-validates the transient
+  macOS download artifact names, not stable install or runtime indicators.
+references:
+- url: https://www.molili.com.cn/
+  kind: official_site
+  summary: Official Molili site establishes molili.com.cn as the first-party host and links the current macOS download artifacts.
+  checked_at: '2026-03-22'
+- url: https://molili.dangcdn.com/molili/updates/MoliliAI_aarch64.dmg
+  kind: official_download_asset
+  summary: Direct official download asset confirms the exact MoliliAI_aarch64.dmg macOS filename.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.molili.com.cn/
+      evidence: >-
+        Official Molili site and direct macOS DMG links establish
+        `molili.com.cn` and `molili.dangcdn.com` as first-party distribution
+        hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: molili.com.cn
+      match: suffix
+      role: app_brand
+    - pattern: molili.dangcdn.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: molili
+      match: substring
+  host:
+    status: draft
+    provenance:
+      url: https://www.molili.com.cn/
+      evidence: >-
+        Official Molili download links still only expose the transient
+        `MoliliAI_aarch64.dmg` and `MoliliAI_x64.dmg` artifact names. Because
+        no stable app-install path, bundle identifier, process name, or local
+        state location was confirmed, the reviewed host IOC was withdrawn
+        pending stronger validation.
+      checked_at: '2026-03-23'

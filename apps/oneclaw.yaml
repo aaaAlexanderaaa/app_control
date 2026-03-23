@@ -1,0 +1,80 @@
+id: oneclaw
+name: OneClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- claw_gui_wrapper
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: >-
+  OneClaw provides a one-click OpenClaw installer for macOS with browser,
+  file, and report automation workflows. Reviewed host IOC keeps only
+  OneClaw-specific macOS app, bundle, process, and local-state artifacts
+  documented in upstream source.
+references:
+- url: https://oneclaw.cn/
+  kind: official_site
+  summary: Official OneClaw site identifies the product as a one-click macOS OpenClaw installer.
+  checked_at: '2026-03-22'
+- url: https://api.github.com/repos/oneclaw/oneclaw/releases/latest
+  kind: github_release_api
+  summary: GitHub release metadata explicitly lists the current OneClaw arm64 and x64 macOS DMG asset names.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/oneclaw/oneclaw/main/electron-builder.yml
+  kind: upstream_source
+  summary: Electron builder config sets appId to com.oneclaw.app and productName to OneClaw.
+  checked_at: '2026-03-23'
+- url: https://raw.githubusercontent.com/oneclaw/oneclaw/main/scripts/clean.sh
+  kind: upstream_source
+  summary: Cleanup script removes the OneClaw process and app-specific preference, cache, HTTP storage, WebKit, and application-support paths.
+  checked_at: '2026-03-23'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://oneclaw.cn/
+      evidence: >-
+        Official OneClaw site identifies OneClaw as a one-click macOS
+        OpenClaw installer on the `oneclaw.cn` brand domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: oneclaw.cn
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: oneclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/oneclaw/oneclaw/main/scripts/clean.sh
+      evidence: >-
+        OneClaw's upstream Electron builder config sets `appId` to
+        `com.oneclaw.app` and `productName` to `OneClaw`, and its cleanup
+        script explicitly removes the `OneClaw` process plus
+        `~/Library/Preferences/com.oneclaw.app.plist`,
+        `~/Library/Caches/com.oneclaw.app`,
+        `~/Library/Saved Application State/com.oneclaw.app.savedState`,
+        `~/Library/HTTPStorages/com.oneclaw.app`,
+        `~/Library/HTTPStorages/com.oneclaw.app.binarycookies`,
+        `~/Library/WebKit/com.oneclaw.app`, and
+        `~/Library/Application Support/com.oneclaw.app`, so the reviewed host
+        IOC keeps only those OneClaw-specific install and runtime artifacts.
+      checked_at: '2026-03-23'
+    paths:
+    - /Applications/OneClaw.app
+    - ~/Applications/OneClaw.app
+    - ~/Library/Preferences/com.oneclaw.app.plist
+    - ~/Library/Caches/com.oneclaw.app
+    - ~/Library/Saved Application State/com.oneclaw.app.savedState
+    - ~/Library/HTTPStorages/com.oneclaw.app
+    - ~/Library/HTTPStorages/com.oneclaw.app.binarycookies
+    - ~/Library/WebKit/com.oneclaw.app
+    - ~/Library/Application Support/com.oneclaw.app
+    bundle_ids:
+    - com.oneclaw.app
+    process_names:
+    - OneClaw

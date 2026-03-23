@@ -1,0 +1,50 @@
+id: easyclaw
+name: EasyClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- claw_gui_wrapper
+- desktop_agent
+- automation
+severity: critical
+priority_score: 93
+notes: >-
+  DOCUAGILE markets EasyClaw as an OpenClaw-based desktop app for macOS and
+  Windows with local sandboxed execution and no-terminal setup. Reviewed host
+  IOC is kept conservative and limited to the branded macOS desktop app path.
+references:
+- url: https://easyclaw.com/zh-cn/
+  kind: official_site
+  summary: Official EasyClaw site identifies the product as a native macOS OpenClaw desktop app on easyclaw.com and easyclaw.cn.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://easyclaw.com/zh-cn/
+      evidence: >-
+        Official EasyClaw site identifies EasyClaw as a native macOS OpenClaw
+        desktop app on the `easyclaw.com` and `easyclaw.cn` brand domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: easyclaw.com
+      match: suffix
+      role: app_brand
+    - pattern: easyclaw.cn
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: easyclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://easyclaw.com/zh-cn/
+      evidence: >-
+        Official EasyClaw product copy describes a native macOS desktop app
+        and exposes a dedicated Mac download flow, so the reviewed host IOC is
+        limited to the branded EasyClaw app path.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/EasyClaw.app

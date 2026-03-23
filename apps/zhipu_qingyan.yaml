@@ -1,0 +1,68 @@
+id: zhipu_qingyan
+name: Zhipu Qingyan
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+- coding
+severity: medium
+priority_score: 63
+notes: Prefer exact ChatGLM/Zhipu product hosts and the Homebrew-backed macOS artifact; avoid broad provider domains when product-specific hosts are available.
+references:
+- url: https://formulae.brew.sh/api/cask/chatglm.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask API exposes Zhipu Qingyan's official homepage, exact macOS download host, app artifact name, and macOS cleanup paths.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/chatglm.rb
+  kind: homebrew_cask_formula
+  summary: Raw cask confirms the ChatGLM desktop DMG URL pattern on sfile.chatglm.cn and the installed app name 智谱清言.app.
+  checked_at: '2026-03-22'
+- url: https://chatglm.cn/
+  kind: official_site
+  summary: Official Zhipu Qingyan site anchors the product on the chatglm.cn brand domain.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6450893458&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 智谱清言 listing and bundleId com.zhipu.chatglm.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/chatglm.rb
+      evidence: The official Homebrew cask sets Zhipu Qingyan's homepage to https://chatglm.cn/ and downloads the macOS client from https://sfile.chatglm.cn/...; the reviewed network IOC set keeps only those exact product and download hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: chatglm.cn
+      match: exact
+      role: app_brand
+    - pattern: sfile.chatglm.cn
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: chatglm
+      match: substring
+    - pattern: qingyan
+      match: substring
+    - pattern: zhipu
+      match: substring
+    - pattern: 智谱清言
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/chatglm.json
+      evidence: The Homebrew cask installs 智谱清言.app and zaps ChatGLM-specific Application Support, logs, and preferences rooted at com.zhipu.chatglm; Apple's lookup API returns the same bundleId for the official listing.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/智谱清言.app
+    - ~/Library/Application Support/chatglm
+    - ~/Library/Logs/chatglm
+    - ~/Library/Preferences/com.zhipu.chatglm.plist
+    bundle_ids:
+    - com.zhipu.chatglm
+    process_names:
+    - 智谱清言

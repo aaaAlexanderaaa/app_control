@@ -1,0 +1,66 @@
+id: telegram
+name: Telegram
+category: NON_WORK_IM
+product_shape:
+- web
+- macos
+product_type:
+- im
+severity: medium
+priority_score: 73
+notes: CDN domains may vary by region.
+references:
+- url: https://telegram.org/faq
+  kind: official_faq
+  summary: Official Telegram FAQ is served from telegram.org and documents Telegram-owned web entrypoints.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/cask/telegram.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask metadata explicitly lists Telegram.app, the quit bundle ID, and Telegram-owned user paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://telegram.org/faq
+      evidence: >-
+        Telegram's official FAQ is served from telegram.org and documents
+        Telegram-owned `t.me`, `telegram.me`, and `telegram.org` entrypoints,
+        so the reviewed network IOC set keeps only those exact
+        Telegram-owned hosts plus the Telegram CDN domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: telegram-cdn.org
+      match: suffix
+      role: cdn_static
+    - pattern: t.me
+      match: suffix
+      role: app_brand
+    - pattern: telegram.me
+      match: suffix
+      role: app_brand
+    - pattern: telegram.org
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: telegram
+      match: substring
+    - pattern: t.me
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/telegram.json
+      evidence: >-
+        The Homebrew Telegram cask explicitly installs `Telegram.app`, lists
+        `ru.keepcoder.Telegram` in its uninstall stanza, and declares Telegram
+        user data paths in its zap stanza, so the reviewed host IOC keeps only
+        those explicit artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Telegram.app
+    - ~/Library/Application Support/ru.keepcoder.Telegram
+    - ~/Library/Containers/ru.keepcoder.Telegram
+    - ~/Library/Preferences/ru.keepcoder.Telegram.plist
+    bundle_ids:
+    - ru.keepcoder.Telegram

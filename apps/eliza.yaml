@@ -1,0 +1,47 @@
+id: eliza
+name: Eliza
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: >-
+  Official ElizaOS sources confirm the product-owned docs and website plus the
+  `elizaos` CLI used to create and run local agents.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/elizaOS/eliza
+      evidence: >-
+        Eliza's official README links documentation on `docs.elizaos.ai`, and
+        the official website `elizaos.ai` is live as the product homepage; the
+        reviewed network IOC set keeps those exact Eliza-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: elizaos.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.elizaos.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: elizaos
+      match: substring
+    - pattern: eliza
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/elizaOS/eliza
+      evidence: >-
+        The official README documents the CLI commands `elizaos --version`,
+        `elizaos create`, `elizaos start`, `elizaos dev`, and `elizaos test`;
+        retained host IOC is therefore limited to the product-specific
+        `elizaos` process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - elizaos

@@ -1,0 +1,54 @@
+id: autogpt
+name: AutoGPT
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 82
+notes: >-
+  Official AGPT domains are useful for hosted-platform, setup, and
+  documentation traffic; classic local usage is better detected via the
+  product-specific `autogpt` CLI process than by broad provider egress.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/Significant-Gravitas/AutoGPT
+      evidence: >-
+        The official AutoGPT README points users to the AGPT homepage at
+        `agpt.co`, documentation on `docs.agpt.co`, and setup scripts hosted on
+        `setup.agpt.co`; the reviewed network IOC set keeps only those AGPT-
+        owned hosts and removes generic model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: agpt.co
+      match: exact
+      role: app_brand
+    - pattern: docs.agpt.co
+      match: exact
+      role: app_brand
+    - pattern: setup.agpt.co
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: autogpt
+      match: substring
+    - pattern: auto-gpt
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/original_autogpt/pyproject.toml
+      evidence: >-
+        The official classic AutoGPT README shows the product being launched via
+        `python -m autogpt` and `./autogpt.sh run` or `serve`, while the classic
+        `pyproject.toml` defines the console entry point `autogpt =
+        "autogpt.app.cli:cli"`; retained host IOC is therefore limited to the
+        product-specific `autogpt` process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - autogpt

@@ -1,0 +1,43 @@
+id: tencent_translate
+name: Tencent Translate
+category: TRANSLATION
+product_shape:
+- web
+product_type:
+- translation
+severity: low
+priority_score: 55
+notes: Prefer the exact TranSmart host and official Chrome extension ID; remove broad qq.com and tencent.com parent domains.
+references:
+- url: https://transmart.qq.com/zh-CN/download
+  kind: official_site
+  summary: Tencent's official TranSmart download page is served from transmart.qq.com.
+  checked_at: '2026-03-22'
+- url: https://chrome.google.com/webstore/detail/%E8%85%BE%E8%AE%AF%E4%BA%A4%E4%BA%92%E7%BF%BB%E8%AF%91-transmart/lkjkfecdnfjopaeaibboihfkmhdjmanm?hl=zh-CN
+  kind: chrome_web_store
+  summary: Chrome Web Store URL for 腾讯交互翻译-Transmart exposes extension ID lkjkfecdnfjopaeaibboihfkmhdjmanm for the official Tencent translation extension.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://transmart.qq.com/zh-CN/download
+      evidence: Tencent's official TranSmart product and download page is served from transmart.qq.com, so the reviewed network IOC keeps only that exact product host and drops broad qq.com and tencent.com coverage.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: transmart.qq.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: transmart
+      match: substring
+    - pattern: 腾讯交互翻译
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chrome.google.com/webstore/detail/%E8%85%BE%E8%AE%AF%E4%BA%A4%E4%BA%92%E7%BF%BB%E8%AF%91-transmart/lkjkfecdnfjopaeaibboihfkmhdjmanm?hl=zh-CN
+      evidence: The Chrome Web Store item for 腾讯交互翻译-Transmart uses the stable extension identifier lkjkfecdnfjopaeaibboihfkmhdjmanm, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - lkjkfecdnfjopaeaibboihfkmhdjmanm

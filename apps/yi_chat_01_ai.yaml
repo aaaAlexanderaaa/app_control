@@ -1,0 +1,29 @@
+id: yi_chat_01_ai
+name: Yi Chat (01.AI)
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+severity: medium
+priority_score: 63
+notes: 'Avoid short token FP: prefer 01.ai, lingyiwanwu, and ''yi chat'' combined signals.'
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: 01.ai
+      match: suffix
+      role: app_brand
+    - pattern: lingyiwanwu.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: 01.ai
+      match: substring
+    - pattern: yi chat
+      match: substring

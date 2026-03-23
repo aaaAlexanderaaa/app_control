@@ -1,0 +1,47 @@
+id: typingmind
+name: TypingMind
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- llm_frontend
+- chatbot
+severity: medium
+priority_score: 61
+notes: Reviewed IOC stays on TypingMind-owned web/docs hosts and the exact TypingMind app name promoted by TypingMind's desktop install guide.
+references:
+- url: https://www.typingmind.com/
+  kind: official_site
+  summary: Official TypingMind site is served from www.typingmind.com.
+  checked_at: '2026-03-22'
+- url: https://docs.typingmind.com/getting-started/use-typingmind-as-a-desktop-or-mobile-app
+  kind: official_docs
+  summary: Official TypingMind docs explain how to install the TypingMind App on desktop or mobile from the first-party service.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.typingmind.com/getting-started/use-typingmind-as-a-desktop-or-mobile-app
+      evidence: TypingMind's official product and documentation surfaces are hosted on the first-party hosts www.typingmind.com and docs.typingmind.com, so the reviewed network IOC set keeps only those exact TypingMind-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.typingmind.com
+      match: exact
+      role: app_brand
+    - pattern: docs.typingmind.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: typingmind
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.typingmind.com/getting-started/use-typingmind-as-a-desktop-or-mobile-app
+      evidence: TypingMind's official install guide repeatedly refers to the installed desktop experience as the TypingMind App, so the retained host IOC is limited to the exact TypingMind app/process name.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/TypingMind.app'
+    process_names:
+    - TypingMind

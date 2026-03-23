@@ -1,0 +1,49 @@
+id: roo_code
+name: Roo Code
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- agentic_coding
+- ide_extension
+severity: high
+priority_score: 87
+notes: AI-powered autonomous coding agent / multi-agent dev team inside editor. 22.7k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/RooCodeInc/Roo-Code
+      evidence: The extension package metadata sets homepage to https://roocode.com, and apps/cli/package.json wires first-party service endpoints at app.roocode.com, cloud-api.roocode.com, and api.roocode.com/proxy for the CLI
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: roocode.com
+      match: suffix
+      role: app_brand
+    - pattern: app.roocode.com
+      match: exact
+      role: app_brand
+    - pattern: cloud-api.roocode.com
+      match: exact
+      role: app_brand
+    - pattern: api.roocode.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: roocode
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/RooCodeInc/Roo-Code
+      evidence: src/package.json identifies the VS Code extension as publisher RooVeterinaryInc plus name roo-cline, apps/cli/src/lib/storage/config-dir.ts sets ~/.roo, settings.ts stores cli-settings.json there, and apps/cli/package.json registers the roo binary
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.roo
+    - ~/.vscode/extensions/rooveterinaryinc.roo-cline-*
+    - ~/.vscode-insiders/extensions/rooveterinaryinc.roo-cline-*
+    - ~/Library/Application Support/Code/User/globalStorage/rooveterinaryinc.roo-cline
+    - ~/Library/Application Support/Code - Insiders/User/globalStorage/rooveterinaryinc.roo-cline
+    process_names:
+    - roo

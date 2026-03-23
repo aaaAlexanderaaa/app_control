@@ -1,0 +1,39 @@
+id: kimi_cli
+name: Kimi CLI
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Official Moonshot terminal coding agent; prefer the exact Kimi Code product host and documented ~/.kimi data directory over generic Moonshot infrastructure hosts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.kimi.com/code/
+      evidence: Kimi's official code page is served from www.kimi.com/code/ and titles the product Kimi Code, while the upstream README links that page as the official product surface for Kimi Code CLI; the reviewed network IOC set keeps only the exact Kimi product host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.kimi.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: kimi code cli
+      match: substring
+    - pattern: kimi-cli
+      match: substring
+    - pattern: kimi code
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://moonshotai.github.io/kimi-cli/en/configuration/data-locations.html
+      evidence: The official Kimi Code CLI data-locations documentation lists the ~/.kimi/ data root plus config.toml, mcp.json, sessions, and ~/.kimi/logs/kimi.log; retained host IOC is limited to those exact Kimi CLI data locations and the kimi command name used in the docs.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.kimi
+    process_names:
+    - kimi

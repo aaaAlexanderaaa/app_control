@@ -1,0 +1,49 @@
+id: mega
+name: MEGA
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer the official MEGA desktop page, exact mega.nz installer hosts, and MEGAsync app artifacts; avoid the unrelated Homebrew `mega` cask for phylogenetics software.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://mega.io/desktop
+      evidence: MEGA’s official desktop page links the macOS installers `https://mega.nz/MEGAsyncSetup.dmg` and `https://mega.nz/MEGAsyncSetupArm64.dmg`; the reviewed network IOC set keeps the exact MEGA product host and the exact installer host instead of broader or unrelated domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: mega.io
+      match: exact
+      role: app_brand
+    - pattern: mega.nz
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: megasync
+      match: substring
+    - pattern: mega
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/megasync.json
+      evidence: Homebrew’s official `megasync` cask installs `MEGAsync.app`, quits `mega.mac`, registers the `MEGAsync` login item, and removes MEGA-specific Application Scripts, caches, container, launch agent, and preference files on uninstall.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/MEGAsync.app
+    - ~/Library/Application Scripts/mega.mac.MEGAShellExtFinder
+    - ~/Library/Caches/mega.mac
+    - ~/Library/Containers/mega.mac.MEGAShellExtFinder
+    - ~/Library/LaunchAgents/mega.mac.megaupdater.plist
+    - ~/Library/Preferences/mega.mac.plist
+    bundle_ids:
+    - mega.mac
+    - mega.mac.MEGAShellExtFinder
+    process_names:
+    - MEGAsync

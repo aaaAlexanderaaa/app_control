@@ -1,0 +1,49 @@
+id: codex_app
+name: Codex (OpenAI)
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- agentic_coding
+- multi_agent
+severity: high
+priority_score: 89
+notes: Prefer the exact Codex app download host and app-local artifacts; avoid broad OpenAI parent-domain matching when a narrower Codex installer host is available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://openai.com/codex
+      evidence: OpenAI’s official Codex page is served from openai.com/codex, and the official Homebrew cask downloads the macOS app from the exact host persistent.oaistatic.com/codex-app-prod/...; the reviewed network IOC keeps the narrow installer host and Codex-specific keywords instead of broad openai.com matching.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: persistent.oaistatic.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: codex app
+      match: substring
+    - pattern: openai codex
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/codex-app.json
+      evidence: Homebrew cask installs Codex.app, quits com.openai.codex, and removes Codex-specific Application Support, caches, HTTP storage, logs, preferences, recent-documents entries, saved-state files, and the ~/.codex directory on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Codex.app
+    - ~/.codex
+    - ~/Library/Application Support/Codex
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.openai.codex.sfl*
+    - ~/Library/Caches/com.openai.codex
+    - ~/Library/HTTPStorages/com.openai.codex
+    - ~/Library/HTTPStorages/com.openai.codex.binarycookies
+    - ~/Library/Logs/com.openai.codex
+    - ~/Library/Preferences/com.openai.codex.plist
+    - ~/Library/Saved Application State/com.openai.codex.savedState
+    bundle_ids:
+    - com.openai.codex
+    process_names:
+    - Codex

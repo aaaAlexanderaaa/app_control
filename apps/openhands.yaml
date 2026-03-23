@@ -1,0 +1,41 @@
+id: openhands
+name: OpenHands
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- developer_agent
+- agentic_coding
+- self_hosted_platform
+severity: high
+priority_score: 89
+notes: Use all-hands.dev and openhands.dev as current high-confidence network identifiers; self-hosted deployments may use
+  custom domains so provider-only traffic is not app-specific.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://openhands.dev
+      evidence: The official site and upstream README use openhands.dev, docs.openhands.dev, and app.all-hands.dev as OpenHands-owned service hosts, so generic model-provider domains were removed from the reviewed app IOC set
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: openhands.dev
+      match: suffix
+      role: app_brand
+    - pattern: app.all-hands.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: openhands
+      match: substring
+    - pattern: all-hands
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/All-Hands-AI/OpenHands
+      evidence: openhands/core/config/openhands_config.py sets the default file_store_path to ~/.openhands and the file-backed settings, secrets, and conversation stores use config.file_store_path directly
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.openhands

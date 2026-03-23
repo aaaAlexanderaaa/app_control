@@ -1,0 +1,36 @@
+id: screenpipe
+name: Screenpipe
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Open-source desktop memory and automation app with explicit first-party API and local storage paths in upstream code.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/mediar-ai/screenpipe/main/apps/screenpipe-app-tauri/lib/hooks/use-team.ts
+      evidence: Upstream desktop code calls https://screenpi.pe/api/team, https://screenpi.pe/api/user, and https://screenpi.pe/api/sync, while the bundled skills/docs reference https://docs.screenpi.pe; the reviewed network IOC set keeps those first-party Screenpipe hosts only.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: screenpi.pe
+      match: exact
+      role: app_brand
+    - pattern: docs.screenpi.pe
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: screenpipe
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/mediar-ai/screenpipe/main/crates/screenpipe-core/src/paths.rs
+      evidence: Upstream code resolves the default data directory to ~/.screenpipe; the shared config persistence layer writes ~/.screenpipe/config.toml; the desktop app stores settings in ~/.screenpipe/store.bin and chat history under ~/.screenpipe/chats.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.screenpipe

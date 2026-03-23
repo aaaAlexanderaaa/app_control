@@ -1,0 +1,26 @@
+id: groqchat
+name: GroqChat
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+severity: medium
+priority_score: 63
+notes: Prefer chat.groq.com over generic groq mentions.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: groq.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: groqchat
+      match: substring
+    - pattern: groq
+      match: substring

@@ -1,0 +1,44 @@
+id: cowtransfer
+name: CowTransfer
+category: FILE_TRANSFER
+product_shape:
+- web
+- macos
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: Often used as a replacement for email attachments; link-based sharing is the main leakage vector.
+references:
+- url: https://cowtransfer.com/
+  kind: official_site
+  summary: Official CowTransfer site is served from cowtransfer.com.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/%E5%A5%B6%E7%89%9B%E5%BF%AB%E4%BC%A0-%E5%A4%A7%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/ldkbpbfhnihdjkpfnbmniafielecngcj
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID ldkbpbfhnihdjkpfnbmniafielecngcj and links the extension to the verified website cowtransfer.com.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://cowtransfer.com/
+      evidence: The official CowTransfer site is served from cowtransfer.com, and the official Chrome Web Store listing for the product links back to the same verified website, so the reviewed network IOC keeps only the CowTransfer-owned domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: cowtransfer.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: cowtransfer
+      match: substring
+    - pattern: 奶牛快传
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/%E5%A5%B6%E7%89%9B%E5%BF%AB%E4%BC%A0-%E5%A4%A7%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/ldkbpbfhnihdjkpfnbmniafielecngcj
+      evidence: The official Chrome Web Store listing for CowTransfer uses the stable extension identifier ldkbpbfhnihdjkpfnbmniafielecngcj, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - ldkbpbfhnihdjkpfnbmniafielecngcj

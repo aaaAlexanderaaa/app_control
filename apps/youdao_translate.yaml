@@ -1,0 +1,35 @@
+id: youdao_translate
+name: Youdao Translate
+category: TRANSLATION
+product_shape:
+- web
+- macos
+product_type:
+- translation
+severity: low
+priority_score: 57
+notes: Prefer the exact current Youdao Translate download host and the official macOS bundle identifier; avoid broad youdao.com parent-domain matching for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://fanyi.youdao.com/download/
+      evidence: The current official Youdao Translate desktop download page is served from fanyi.youdao.com/download/ and presents Youdao Translate as the desktop download experience; the reviewed network IOC set keeps only that exact product host instead of broader Youdao domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: fanyi.youdao.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: youdao translate
+      match: substring
+    - pattern: 有道翻译
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=491854842&country=us
+      evidence: Apple's official lookup API returns the macOS app Youdao Translate from Beijing NetEase Youdao Computer System Co.,Ltd with bundleId com.youdao.YoudaoDict, giving a reliable host-side identifier without adding speculative local paths.
+      checked_at: '2026-03-21'
+    bundle_ids:
+    - com.youdao.YoudaoDict

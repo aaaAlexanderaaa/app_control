@@ -1,0 +1,55 @@
+id: katclaw
+name: KatClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- claw_gui_wrapper
+- automation
+severity: critical
+priority_score: 94
+notes: >-
+  Native Mac installer that turns OpenClaw into a one-click setup and control
+  surface. Reviewed host IOC keeps only the KatClaw app-install location and
+  running process documented by the official macOS install flow.
+references:
+- url: https://katclaw.ai/
+  kind: official_site
+  summary: Official KatClaw site establishes katclaw.ai as the first-party product host.
+  checked_at: '2026-03-22'
+- url: https://katclaw.ai/download.html
+  kind: official_download_page
+  summary: Official download page links the current KatClaw.dmg macOS installer.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://katclaw.ai/
+      evidence: >-
+        Official KatClaw site identifies KatClaw as a native macOS OpenClaw
+        installer on the `katclaw.ai` brand domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: katclaw.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: katclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://katclaw.ai/download.html
+      evidence: >-
+        KatClaw's official download page instructs users to open
+        `KatClaw.dmg`, drag `KatClaw` into the Applications folder, and launch
+        `KatClaw` from Applications, so the reviewed host IOC keeps only those
+        stable app-install and process indicators instead of the transient
+        download artifact.
+      checked_at: '2026-03-23'
+    paths:
+    - /Applications/KatClaw.app
+    - ~/Applications/KatClaw.app
+    process_names:
+    - KatClaw

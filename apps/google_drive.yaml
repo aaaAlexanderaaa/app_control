@@ -1,0 +1,53 @@
+id: google_drive
+name: Google Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: high
+priority_score: 73
+notes: Use Google Drive-specific domains from the official firewall/proxy allowlist; avoid broad Google provider domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support.google.com/a/answer/16244319?hl=en
+      evidence: Google Workspace firewall and proxy settings list Google Drive-specific endpoints including drive.google.com, drive.usercontent.google.com, and googledrive.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: drive.google.com
+      match: suffix
+      role: file_sync
+    - pattern: drive.usercontent.google.com
+      match: exact
+      role: file_transfer
+    - pattern: googledrive.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: googledrive
+      match: substring
+    - pattern: drivefs
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/google-drive.json
+      evidence: Homebrew cask defines the Google Drive app bundle, DriveFS package identifiers, login item, Finder sync extension, and DriveFS support/container paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Google Drive.app
+    - ~/Library/Application Support/Google/DriveFS
+    - ~/Library/Application Support/FileProvider/com.google.drivefs.fpext
+    - ~/Library/Caches/com.google.drivefs
+    - ~/Library/Containers/com.google.drivefs
+    - ~/Library/Group Containers/group.com.google.drivefs
+    - ~/Library/Preferences/com.google.drivefs.plist
+    bundle_ids:
+    - com.google.drivefs
+    - com.google.drivefs.finderhelper.findersync
+    process_names:
+    - Google Drive

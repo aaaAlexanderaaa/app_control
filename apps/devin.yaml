@@ -1,0 +1,30 @@
+id: devin
+name: Devin
+category: GENAI_CODING
+product_shape:
+- web
+product_type:
+- coding
+- agentic_coding
+severity: high
+priority_score: 89
+notes: Cloud coding agent workflows can move complete repositories and secrets externally.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: cognition.ai
+      match: suffix
+      role: app_brand
+    - pattern: devin.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: devin
+      match: substring
+    - pattern: cognition
+      match: substring

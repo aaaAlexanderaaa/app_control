@@ -1,0 +1,41 @@
+id: sunlogin
+name: Sunlogin
+category: REMOTE_ACCESS
+product_shape:
+- macos
+product_type:
+- remote_access
+severity: medium
+priority_score: 79
+notes: Prefer the exact Sunlogin product site and the official macOS client name over
+  broad Oray domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://sunlogin.oray.com/download
+      evidence: Sunlogin’s official download center for the remote-control client
+        is hosted at sunlogin.oray.com and advertises downloads for macOS and other
+        platforms; the reviewed network IOC set keeps that exact Sunlogin-owned host
+        and drops broader Oray domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: sunlogin.oray.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: sunlogin
+      match: substring
+    - pattern: oray
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://sunlogin.oray.com/news/4280.html
+      evidence: Sunlogin’s official macOS installation guide is titled 如何安装macOS客户端
+        and refers users to the Sunlogin remote-control client by the product name
+        向日葵远程控制, which is the stable process name shown to macOS users during installation
+        and use.
+      checked_at: '2026-03-21'
+    process_names:
+    - 向日葵远程控制

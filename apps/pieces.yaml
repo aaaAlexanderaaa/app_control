@@ -1,0 +1,50 @@
+id: pieces
+name: Pieces
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- snippet_manager
+severity: medium
+priority_score: 74
+notes: Use Pieces-owned download and homepage hosts with official macOS app artifacts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/p/pieces.rb
+      evidence: The official Homebrew cask for Pieces declares homepage https://pieces.app/
+        and downloads the macOS app from https://builds.pieces.app/stages/production/pieces_for_x/macos.../download;
+        the reviewed network IOC set keeps those exact Pieces-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: pieces.app
+      match: exact
+      role: app_brand
+    - pattern: builds.pieces.app
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: pieces
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/p/pieces.rb
+      evidence: The official Homebrew cask installs Pieces.app and zaps the app-specific
+        Pieces application support, HTTP storage, preferences, saved-state, and com.pieces.pfd
+        paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Pieces.app
+    - ~/Library/Application Support/com.pieces.x
+    - ~/Library/HTTPStorages/com.pieces.x
+    - ~/Library/Preferences/com.pieces.x.plist
+    - ~/Library/Saved Application State/com.pieces.x.savedState
+    - ~/Library/com.pieces.pfd
+    bundle_ids:
+    - com.pieces.pfd
+    - com.pieces.x
+    process_names:
+    - Pieces

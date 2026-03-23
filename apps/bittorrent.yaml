@@ -1,0 +1,34 @@
+id: bittorrent
+name: BitTorrent
+category: P2P_FILE_SHARING
+product_shape:
+- macos
+product_type:
+- torrent_client
+- p2p_file_sharing
+severity: high
+priority_score: 81
+notes: Current macOS distribution is BitTorrent Web; torrent transfer activity itself remains protocol-based rather than domain-based.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://help.bittorrent.com/en/support/solutions/articles/29000041705-installing-bittorrent-web
+      evidence: The official BitTorrent Web install guide directs users to download the macOS client from https://www.bittorrent.com/products/win/bittorrent-web-compare/; the reviewed network IOC set therefore keeps the BitTorrent-owned web host and avoids generic torrent infrastructure.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.bittorrent.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: bittorrent web
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://help.bittorrent.com/en/support/solutions/articles/29000039177-how-to-restore-your-wallet
+      evidence: The official BitTorrent help article for restoring the wallet on macOS tells users to open ~/Library/Application Support/BitTorrent or ~/Library/Application Support/BitTorrent Web and remove the BitTorrent Helper folder from there, providing stable host-side artifacts for the Mac client.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/Library/Application Support/BitTorrent
+    - ~/Library/Application Support/BitTorrent Web

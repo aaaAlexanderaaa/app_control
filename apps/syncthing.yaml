@@ -1,0 +1,51 @@
+id: syncthing
+name: Syncthing
+category: P2P_FILE_SHARING
+product_shape:
+- macos
+product_type:
+- p2p_sync
+- file_sync
+severity: high
+priority_score: 81
+notes: P2P data plane is not domain-based; DNS and TLS mainly expose the official relay and upgrade infrastructure, while host artifacts remain the most useful enterprise signals.
+references:
+- url: https://docs.syncthing.net/users/config.html
+  kind: official_docs
+  summary: Syncthing's config docs define the default relay endpoint on relays.syncthing.net and the default releases URL on upgrades.syncthing.net.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/s/syncthing-app.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask installs Syncthing.app and zaps the Syncthing-macOS Application Support directory plus Syncthing-specific cache, cookie, and preference paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.syncthing.net/users/config.html
+      evidence: Syncthing's official configuration docs set the default relay endpoint to `https://relays.syncthing.net/endpoint` and the default releases URL to `https://upgrades.syncthing.net/meta.json`, so the reviewed network IOC set keeps those exact discovery and upgrade hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: relays.syncthing.net
+      match: exact
+      role: app_brand
+    - pattern: upgrades.syncthing.net
+      match: exact
+      role: cdn_static
+    keyword_patterns:
+    - pattern: syncthing
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/s/syncthing-app.rb
+      evidence: The official Homebrew cask installs Syncthing.app and zaps the Syncthing-macOS Application Support directory plus the app-specific cache, cookie, and preference paths.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Syncthing.app
+    - ~/Library/Application Support/Syncthing-macOS
+    - ~/Library/Caches/com.github.xor-gate.syncthing-macosx
+    - ~/Library/Cookies/com.github.xor-gate.syncthing-macosx.binarycookies
+    - ~/Library/Preferences/com.github.xor-gate.syncthing-macosx.plist
+    process_names:
+    - Syncthing

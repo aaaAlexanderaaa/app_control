@@ -1,0 +1,36 @@
+id: todesk
+name: ToDesk
+category: REMOTE_ACCESS
+product_shape:
+- macos
+product_type:
+- remote_access
+severity: medium
+priority_score: 79
+notes: Official download and macOS permissions docs provide precise ToDesk website, download, and process artifacts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.todesk.com/download
+      evidence: The official ToDesk download page links the macOS installer as https://dl.todesk.com/macos/ToDesk_4.8.7.2.pkg and uses www.todesk.com as the primary product site; the reviewed network IOC set keeps those ToDesk-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.todesk.com
+      match: exact
+      role: app_brand
+    - pattern: dl.todesk.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: todesk
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.todesk.com/faq/60.html
+      evidence: ToDesk’s official macOS permissions guide says the Screen Recording list contains ToDesk and ToDesk Desktop, and the same guide discusses opening ToDesk.pkg during installation; the reviewed host IOC therefore uses those Mac client process names.
+      checked_at: '2026-03-21'
+    process_names:
+    - ToDesk
+    - ToDesk Desktop

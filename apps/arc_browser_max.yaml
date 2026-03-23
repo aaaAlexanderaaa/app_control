@@ -1,0 +1,47 @@
+id: arc_browser_max
+name: Arc Browser (Max)
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+product_type:
+- browser
+- agent
+severity: medium
+priority_score: 82
+notes: AI browser features can transfer full page content and user text selections.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/a/arc.rb
+      evidence: The Homebrew cask sets the official homepage to https://arc.net/ and downloads/updates the macOS app from https://releases.arc.net/..., so the reviewed network IOC set keeps those dedicated Arc hosts and drops shared model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: arc.net
+      match: exact
+      role: app_brand
+    - pattern: releases.arc.net
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: arc browser
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/a/arc.rb
+      evidence: The Homebrew cask installs Arc.app, unregisters company.thebrowser.Browser on uninstall, and zaps Arc support, cache, HTTP storage, preferences, saved-state, and WebKit paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Arc.app
+    - ~/Library/Application Support/Arc
+    - ~/Library/Caches/Arc
+    - ~/Library/Caches/CloudKit/company.thebrowser.Browser
+    - ~/Library/Caches/company.thebrowser.Browser
+    - ~/Library/HTTPStorages/company.thebrowser.Browser
+    - ~/Library/HTTPStorages/company.thebrowser.Browser.binarycookies
+    - ~/Library/Preferences/company.thebrowser.Browser.plist
+    - ~/Library/Saved Application State/company.thebrowser.Browser.savedState
+    - ~/Library/WebKit/company.thebrowser.Browser
+    bundle_ids:
+    - company.thebrowser.Browser

@@ -1,0 +1,53 @@
+id: xunlei_drive
+name: Xunlei Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- file_hosting
+severity: medium
+priority_score: 73
+notes: Prefer Xunlei Drive-specific product and download hosts; avoid broad parent-only matching when narrower pan.xunlei.com and mac.xunlei.com indicators are available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://mac.xunlei.com/
+      evidence: Xunlei’s official Mac page identifies Mac迅雷 at mac.xunlei.com and links back to xunlei.com, while the official Homebrew cask downloads the macOS installer from down.sandai.net; the reviewed IOC set keeps the Mac page, the cloud-drive host pan.xunlei.com, and the exact installer host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: mac.xunlei.com
+      match: exact
+      role: app_brand
+    - pattern: pan.xunlei.com
+      match: exact
+      role: app_brand
+    - pattern: down.sandai.net
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: pan.xunlei
+      match: substring
+    - pattern: 迅雷云盘
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/thunder.json
+      evidence: Homebrew cask installs Thunder.app and removes Thunder-specific Application Support, caches, cookies, preferences, saved-state, and WebKit data rooted at com.xunlei.Thunder on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Thunder.app
+    - ~/Library/Application Support/Thunder
+    - ~/Library/Caches/com.xunlei.Thunder
+    - ~/Library/Cookies/com.xunlei.Thunder.binarycookies
+    - ~/Library/Preferences/com.xunlei.Thunder.loginSDK.plist
+    - ~/Library/Preferences/com.xunlei.Thunder.plist
+    - ~/Library/Saved Application State/com.xunlei.Thunder.savedState
+    - ~/Library/WebKit/com.xunlei.Thunder
+    bundle_ids:
+    - com.xunlei.Thunder
+    process_names:
+    - Thunder

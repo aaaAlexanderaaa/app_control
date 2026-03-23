@@ -1,0 +1,36 @@
+id: cline
+name: Cline
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- agentic_coding
+severity: critical
+priority_score: 89
+notes: Most high-risk egress may go directly to configured model providers, not only Cline domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://cline.bot
+      evidence: cline/cline package metadata sets homepage to https://cline.bot and the upstream README links docs.cline.bot as the product documentation host, so generic model-provider domains were removed from the reviewed app-brand IOC set
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: cline.bot
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: cline
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev
+      evidence: The VS Marketplace itemName and cline/cline package.json identify the extension as saoudrizwan.claude-dev, so the reviewed host IOCs retain only extension-ID-backed extension and globalStorage paths
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/saoudrizwan.claude-dev-*
+    - ~/.vscode-insiders/extensions/saoudrizwan.claude-dev-*
+    - ~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev
+    - ~/Library/Application Support/Code - Insiders/User/globalStorage/saoudrizwan.claude-dev

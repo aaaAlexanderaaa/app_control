@@ -1,0 +1,48 @@
+id: seafile
+name: Seafile
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_storage
+- file_sync
+- self_hosted_option
+severity: medium
+priority_score: 70
+notes: Seafile is often self-hosted; runtime network detection may depend on the tenant’s own instance domain, so official domains are mainly useful for download, docs, and product identification while host IOC is primary for the desktop client.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.seafile.com/en/download/
+      evidence: Seafile’s official download page is hosted on seafile.com and the official Homebrew cask downloads the macOS client from the exact host sos-ch-dk-2.exo.io; because Seafile is commonly self-hosted, the reviewed network IOC keeps the vendor domain for product identification and the exact official package host for installation telemetry.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: seafile.com
+      match: suffix
+      role: app_brand
+    - pattern: sos-ch-dk-2.exo.io
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: seafile
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/seafile-client.json
+      evidence: Homebrew cask installs Seafile Client.app and removes Seafile-specific Finder Sync application scripts, containers, group container data, preferences, and saved-state paths rooted at com.seafile.seafile-client on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Seafile Client.app
+    - ~/Library/Application Scripts/com.seafile.seafile-client.findersync
+    - ~/Library/Containers/com.seafile.seafile-client.findersync
+    - ~/Library/Group Containers/com.seafile.seafile-client.findersync
+    - ~/Library/Preferences/com.seafile.seafile-client.plist
+    - ~/Library/Saved Application State/com.seafile.seafile-client.savedState
+    bundle_ids:
+    - com.seafile.seafile-client
+    - com.seafile.seafile-client.findersync
+    process_names:
+    - Seafile Client

@@ -1,0 +1,52 @@
+id: helicone
+name: Helicone
+category: AI_OBSERVABILITY
+product_shape:
+- web
+product_type:
+- prompt_tracing
+- proxy
+severity: medium
+priority_score: 73
+notes: Proxy + logging increases exposure surface for both prompts and API keys; reviewed IOC is restricted to Helicone-owned web surfaces and the exact self-host helper path documented in the upstream repo.
+references:
+- url: https://www.helicone.ai/
+  kind: official_site
+  summary: Official Helicone site is served from www.helicone.ai and links the app login at us.helicone.ai.
+  checked_at: '2026-03-21'
+- url: https://docs.helicone.ai/getting-started/self-host/manual
+  kind: official_docs
+  summary: Manual self-host docs clone the helicone repo, run clickhouse/ch_hcone.py, export HELICONE_API_KEY, and log in at localhost:3000.
+  checked_at: '2026-03-21'
+- url: https://docs.helicone.ai/ai-gateway
+  kind: official_docs
+  summary: Official docs present the AI gateway on ai-gateway.helicone.ai.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.helicone.ai/
+      evidence: Helicone's official website is served from www.helicone.ai, links the app login on us.helicone.ai, and the official gateway docs use ai-gateway.helicone.ai, so the reviewed network IOC set keeps only those exact Helicone-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.helicone.ai
+      match: exact
+      role: app_brand
+    - pattern: us.helicone.ai
+      match: exact
+      role: app_brand
+    - pattern: ai-gateway.helicone.ai
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: helicone
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.helicone.ai/getting-started/self-host/manual
+      evidence: The official self-host manual clones the helicone repository and runs python3 clickhouse/ch_hcone.py during setup, so the retained host IOC is limited to that exact repo-local helper path.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/helicone/clickhouse/ch_hcone.py'

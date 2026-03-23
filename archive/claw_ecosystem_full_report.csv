@@ -1,0 +1,135 @@
+﻿序号,项目名称,GitHub仓库,Stars数,编程语言,许可证,分类,子分类,项目描述,macOS支持,Agent类型,是否开源,信息来源
+1,OpenClaw,openclaw/openclaw,"~280,000",TypeScript,MIT,A-Claw核心,原始项目,原始全功能AI助手，13729+技能，多agent路由，语音唤醒，15+消息频道,是(CLI/Docker),自主运行Agent,是,GitHub #1 starred repo
+2,NanoClaw,qwibitai/nanoclaw,"~21,500",TypeScript,MIT,A-Claw核心,安全优先,轻量级容器沙箱助手，700 LOC核心，Docker隔离，审计日志,是(Docker/CLI),自主运行Agent,是,Forbes/awesome-claws
+3,ZeroClaw,zeroclaw-labs/zeroclaw,"~26,200",Rust,MIT,A-Claw核心,性能优先,零开销AI基础设施，3.4MB二进制，<5MB RAM，<10ms启动,是(单二进制),自主运行Agent,是,awesome-claws
+4,Nanobot,HKUDS/nanobot,"~26,800",Python,MIT,A-Claw核心,学术/研究,超轻量级OpenClaw风格助手，4K LOC，MCP支持，agent社交网络,是(pip),自主运行Agent,是,知乎/awesome-claws
+5,PicoClaw,sipeed/picoclaw,"~13,300",Go,MIT,A-Claw核心,嵌入式,低成本硬件超高效助手，单二进制部署，支持旧Android,是(单二进制),自主运行Agent,是,awesome-claws
+6,Moltis,moltis-org/moltis,"~2,000",Rust,MIT,A-Claw核心,企业级,个人AI网关，150K LOC，多LLM支持，长期记忆，语音，MCP,是(单二进制),自主运行Agent,是,awesome-claws
+7,IronClaw,nearai/ironclaw,"~3,500",Rust,MIT,A-Claw核心,安全优先,隐私安全优先，WASM沙箱，密码学验证，本地加密数据,是(CLI),自主运行Agent,是,Product Hunt/awesome-claws
+8,TinyClaw,tinyclaw/tinyclaw,"~1,800",Shell/TypeScript,MIT,A-Claw核心,多agent,多agent多团队多频道助手，链式执行和扇出,是(CLI),自主运行Agent,是,awesome-claws
+9,ZeptoClaw,zeptoclaw/zeptoclaw,"~1,500",Rust,MIT,A-Claw核心,安全优先,~4MB二进制，7层安全，容器隔离，提示注入检测,是(单二进制),自主运行Agent,是,awesome-claws
+10,BabyClaw,babyclaw/babyclaw,"~1,200",JavaScript,MIT,A-Claw核心,极简,单文件Claude Agent SDK替代，Telegram控制，语音消息,是(Node.js),自主运行Agent,是,awesome-claws
+11,HermitClaw,hermitclaw/hermitclaw,"~1,100",Python,MIT,A-Claw核心,研究自动化,自主AI研究生物，持续研究并生成报告/脚本/笔记,是(pip),自主运行Agent,是,awesome-claws
+12,Clawlet,clawlet/clawlet,"~1,000",Python,MIT,A-Claw核心,极简,轻量级身份感知agent框架，2分钟启动,是(pip),自主运行Agent,是,awesome-claws
+13,OpenFang,RightNow-AI/openfang,"~2,500",Rust,MIT,A-Claw核心,Agent OS,Agent OS，137K LOC，14 crates，1767+测试，24/7自主运行,是(CLI),自主运行Agent,是,awesome-claws/GitHub
+14,Flowly AI,flowly-ai/flowly,"~1,200",TypeScript,MIT,A-Claw核心,工作流,流程导向AI助手框架，工具驱动任务执行,是(CLI),自主运行Agent,是,awesome-claws
+15,shrew,shrew-ai/shrew,"~1,100",Rust,MIT,A-Claw核心,性能优先,紧凑自主助手运行时，速度和最小资源使用,是(单二进制),自主运行Agent,是,awesome-claws
+16,moxxy,moxxy/moxxy,"~1,000",Rust,MIT,A-Claw核心,多agent,自托管多agent AI框架,是(CLI),自主运行Agent,是,awesome-claws
+17,troublemaker,troublemaker-ai/troublemaker,"~1,100",TypeScript,MIT,A-Claw核心,多平台,多平台AI agent运行时,是(CLI),自主运行Agent,是,awesome-claws
+18,LettaBot,lettabot/lettabot,"~1,000",TypeScript,MIT,A-Claw核心,记忆,持久记忆个人AI助手，跨Telegram/Slack/WhatsApp/Signal,是(CLI),自主运行Agent,是,awesome-claws
+19,Autobot,autobot-ai/autobot,"~1,000",Crystal,MIT,A-Claw核心,安全优先,内核强制沙箱，多LLM，语音，视觉，cron，MCP,是(CLI),自主运行Agent,是,awesome-claws
+20,SupaClaw,supaclaw/supaclaw,"~1,000",TypeScript,MIT,A-Claw核心,Supabase,完全基于Supabase内置功能构建,是(CLI),自主运行Agent,是,awesome-claws
+21,AngelClaw,angelclaw/angelclaw,"~1,000",Python,MIT,A-Claw核心,研究,研究概念实现的OpenClaw变体,是(pip),自主运行Agent,是,awesome-claws
+22,Microclaw,microclaw/microclaw,"~1,000",Rust,MIT,A-Claw核心,聊天,聊天表面agentic AI助手，14+平台适配器,是(CLI),自主运行Agent,是,awesome-claws
+23,safeclaw,safeclaw/safeclaw,"~1,000",Python,MIT,A-Claw核心,安全,安全文本和语音交互，不依赖LLM,是(pip),自主运行Agent,是,awesome-claws
+24,picobot,picobot/picobot,"~1,000",Go,MIT,A-Claw核心,极简,轻量级自托管单二进制bot,是(单二进制),自主运行Agent,是,awesome-claws
+25,pickle-bot,pickle-bot/pickle-bot,~800,Python,MIT,A-Claw核心,极简,轻量级自托管个人AI助手,是(pip),自主运行Agent,是,awesome-claws
+26,LangFlow,langflow-ai/langflow,"145,673",Python,MIT,B-Agent框架,可视化工作流,构建和部署AI agent和工作流的强大工具,是(pip/Docker),Agent工作流平台,是,GitHub Top100
+27,Dify,langgenius/dify,"132,828",TypeScript,Apache-2.0,B-Agent框架,应用开发平台,生产级agentic工作流开发平台,是(Docker),Agent工作流平台,是,GitHub Top100
+28,LangChain,langchain-ai/langchain,"129,496",Python,MIT,B-Agent框架,工程平台,Agent工程平台,是(pip),Agent框架,是,GitHub Top100
+29,browser-use,browser-use/browser-use,"80,785",Python,MIT,B-Agent框架,浏览器自动化,让AI agent自动化网页操作,是(pip),自主运行Agent,是,GitHub Top100
+30,LobeHub,lobehub/lobe-chat,"73,661",TypeScript,MIT,B-Agent框架,多agent协作,多agent协作平台,是(Docker/Desktop),Agent平台,是,GitHub Top100
+31,MetaGPT,geekan/MetaGPT,"65,175",Python,MIT,B-Agent框架,多agent,多Agent框架：第一个AI软件公司,是(pip),多Agent系统,是,GitHub Top100
+32,AutoGen,microsoft/autogen,"55,610",Python,MIT,B-Agent框架,多agent,Microsoft agentic AI编程框架,是(pip),多Agent系统,是,GitHub Top100
+33,Flowise,FlowiseAI/Flowise,"50,753",TypeScript,Apache-2.0,B-Agent框架,可视化构建,可视化构建AI Agents,是(npm/Docker),Agent工作流平台,是,GitHub Top100
+34,Mem0,mem0ai/mem0,"49,845",Python,Apache-2.0,B-Agent框架,记忆层,AI Agent通用记忆层,是(pip),Agent基础设施,是,GitHub Top100
+35,CrewAI,crewAIInc/crewAI,"46,089",Python,MIT,B-Agent框架,多agent编排,角色扮演自主AI agent编排框架,是(pip),多Agent系统,是,GitHub Top100
+36,LocalAI,mudler/LocalAI,"43,621",Go,MIT,B-Agent框架,本地AI,OpenAI/Claude的开源替代，本地运行,是(Docker/CLI),Agent基础设施,是,GitHub Top100
+37,Cherry Studio,kangfenmao/cherry-studio,"41,507",TypeScript,Apache-2.0,B-Agent框架,AI工作室,AI生产力工作室，自主agent，300+助手,是(Desktop App),Agent平台,是,GitHub Top100
+38,Agno,agno-agi/agno,"38,699",Python,MIT,B-Agent框架,规模化,构建/运行/管理agentic软件,是(pip),Agent框架,是,GitHub Top100
+39,AgentGPT,reworkd/AgentGPT,"35,821",TypeScript,GPL-3.0,B-Agent框架,浏览器Agent,在浏览器中组装和部署自主AI Agent,是(Web),自主运行Agent,是,GitHub Top100
+40,LibreChat,danny-avila/LibreChat,"34,647",TypeScript,MIT,B-Agent框架,ChatGPT替代,增强版ChatGPT克隆，支持Agent和MCP,是(Docker),Agent平台,是,GitHub Top100
+41,Khoj,khoj-ai/khoj,"33,398",Python,AGPL-3.0,B-Agent框架,AI第二大脑,自托管AI第二大脑，自主agent，深度研究,是(pip/Docker),自主运行Agent,是,GitHub Top100
+42,CopilotKit,CopilotKit/CopilotKit,"29,374",TypeScript,MIT,B-Agent框架,前端Agent,Agent前端栈，AG-UI协议,是(npm),Agent框架,是,GitHub Top100
+43,UI-TARS-desktop,bytedance/UI-TARS-desktop,"28,836",TypeScript,Apache-2.0,B-Agent框架,桌面Agent,ByteDance多模态AI Agent桌面应用,是(Desktop App),桌面自动化Agent,是,GitHub Top100
+44,Composio,composio-dev/composio,"27,378",TypeScript,MIT,B-Agent框架,工具集成,1000+工具集成，认证，沙箱,是(pip/npm),Agent基础设施,是,GitHub Top100
+45,LangGraph,langchain-ai/langgraph,"26,409",Python,MIT,B-Agent框架,图工作流,构建弹性语言agent图,是(pip),Agent框架,是,GitHub Top100
+46,GPT-Researcher,assafelovic/gpt-researcher,"25,736",Python,MIT,B-Agent框架,研究Agent,自主深度研究agent,是(pip),自主运行Agent,是,GitHub Top100
+47,AgenticSeek,Fosowl/agenticSeek,"25,507",Python,MIT,B-Agent框架,本地Agent,完全本地的Manus AI替代，无API,是(pip/Docker),自主运行Agent,是,GitHub Top100
+48,AstrBot,Soulter/AstrBot,"24,580",Python,MIT,B-Agent框架,IM Agent,Agentic IM聊天机器人基础设施，OpenClaw替代,是(pip/Docker),自主运行Agent,是,GitHub Top100
+49,Haystack,deepset-ai/haystack,"24,504",Python,Apache-2.0,B-Agent框架,编排框架,AI编排框架，模块化管道和agent工作流,是(pip),Agent框架,是,GitHub Top100
+50,Open-AutoGLM,THUDM/Open-AutoGLM,"24,324",Python,Apache-2.0,B-Agent框架,手机Agent,开放手机Agent模型和框架(智谱),是(pip),自主运行Agent,是,GitHub Top100
+51,Graphiti,getzep/graphiti,"23,723",Python,Apache-2.0,B-Agent框架,知识图谱,为AI Agent构建实时知识图谱,是(pip),Agent基础设施,是,GitHub Top100
+52,Letta,letta-ai/letta,"21,578",Python,Apache-2.0,B-Agent框架,状态Agent,构建有状态agent的平台(前MemGPT),是(pip),Agent框架,是,GitHub Top100
+53,Stagehand,browserbase/stagehand,"21,515",TypeScript,MIT,B-Agent框架,浏览器自动化,AI浏览器自动化框架,是(npm),浏览器Agent,是,GitHub Top100
+54,Activepieces,activepieces/activepieces,"21,214",TypeScript,MIT,B-Agent框架,工作流自动化,AI Agent和MCP工作流自动化,是(Docker),Agent工作流平台,是,GitHub Top100
+55,Coze Studio,coze-dev/coze-studio,"20,154",TypeScript,Apache-2.0,B-Agent框架,Agent开发,AI agent开发平台(字节跳动),是(Docker),Agent平台,是,GitHub Top100
+56,OpenAI Agents SDK,openai/openai-agents-python,"19,990",Python,MIT,B-Agent框架,多agent,轻量级多agent工作流框架(OpenAI),是(pip),Agent框架,是,GitHub Top100
+57,Suna,kortix-ai/suna,"19,511",TypeScript,Apache-2.0,B-Agent框架,Agent管理,构建/管理/训练AI Agent,是(Docker),Agent平台,是,GitHub Top100
+58,Google ADK,google/adk-python,"18,363",Python,Apache-2.0,B-Agent框架,Agent开发,Google Agent Development Kit,是(pip),Agent框架,是,GitHub Top100
+59,DB-GPT,eosphoros-ai/DB-GPT,"18,261",Python,MIT,B-Agent框架,数据Agent,AI原生数据应用开发框架,是(pip/Docker),Agent平台,是,GitHub Top100
+60,Eliza,elizaOS/eliza,"17,799",TypeScript,MIT,B-Agent框架,自主Agent,面向所有人的自主agent,是(npm),自主运行Agent,是,GitHub Top100
+61,SuperAGI,TransformerOptimus/SuperAGI,"17,272",Python,MIT,B-Agent框架,自主Agent,开发者优先的自主AI agent框架,是(Docker),自主运行Agent,是,GitHub Top100
+62,Screenpipe,mediar-ai/screenpipe,"17,222",Rust,MIT,B-Agent框架,屏幕Agent,个人AI，记录屏幕，搜索，自动化，全本地,是(Desktop App),桌面自动化Agent,是,GitHub Top100
+63,CAMEL,camel-ai/camel,"16,345",Python,Apache-2.0,B-Agent框架,多agent,第一个也是最好的多agent框架,是(pip),多Agent系统,是,GitHub Top100
+64,Agent Zero,frdel/agent-zero,"16,104",Python,MIT,B-Agent框架,通用Agent,Agent Zero AI框架,是(pip),自主运行Agent,是,GitHub Top100
+65,Pydantic AI,pydantic/pydantic-ai,"15,469",Python,MIT,B-Agent框架,Python Agent,GenAI Agent框架，Pydantic方式,是(pip),Agent框架,是,GitHub Top100
+66,CUA,trycua/cua,"~12,900",Python,MIT,B-Agent框架,Computer Use,Computer-Use Agents开源基础设施(macOS/Linux/Windows),是(pip/Desktop),桌面自动化Agent,是,GitHub
+67,n8n,n8n-io/n8n,"~65,000",TypeScript,Fair-code,B-Agent框架,工作流自动化,工作流自动化平台，支持AI agent,是(npm/Docker),Agent工作流平台,是,GitHub
+68,Parlant,parlant-ai/parlant,"17,827",Python,Apache-2.0,B-Agent框架,对话Agent,客户交互的对话控制层,是(pip),Agent框架,是,GitHub Top100
+69,Mastra,mastra-ai/mastra,"22,004",TypeScript,MIT,B-Agent框架,TypeScript Agent,TypeScript AI框架(Gatsby团队),是(npm),Agent框架,是,GitHub Top100
+70,OpenCode,opencode-ai/opencode,"122,000",TypeScript,MIT,C-Coding Agent,终端Agent,终端原生coding agent，75+提供商，LSP集成,是(CLI),Coding Agent,是,awesome-cli-coding-agents
+71,Gemini CLI,google-gemini/gemini-cli,"97,755",TypeScript,Apache-2.0,C-Coding Agent,终端Agent,Google终端agent，Gemini驱动,是(CLI),Coding Agent,是,GitHub Top100
+72,OpenHands,All-Hands-AI/OpenHands,"69,000",Python,MIT,C-Coding Agent,开发环境,开源agentic开发环境(前OpenDevin),是(CLI/Docker),Coding Agent,是,awesome-cli-coding-agents
+73,Codex CLI,openai/codex,"65,000",Rust,Apache-2.0,C-Coding Agent,终端Agent,OpenAI本地coding agent，Rust构建,是(CLI),Coding Agent,是,awesome-cli-coding-agents
+74,Open Interpreter,openinterpreter/open-interpreter,"63,000",Python,AGPL-3.0,C-Coding Agent,终端Agent,自然语言计算机接口，执行代码和操作,是(pip/CLI),自主运行Agent,是,awesome-cli-coding-agents
+75,Cline,cline/cline,"59,000",TypeScript,Apache-2.0,C-Coding Agent,VS Code/CLI,模型无关自主agent，规划/文件编辑/命令执行,是(CLI/VS Code),Coding Agent,是,awesome-cli-coding-agents
+76,Aider,Aider-AI/aider,"42,000",Python,Apache-2.0,C-Coding Agent,终端Agent,结对编程agent，diff/patch编辑，git工作流,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+77,Goose,block/goose,"33,027",Rust,MIT,C-Coding Agent,终端Agent,Block的可扩展AI agent，本地运行，MCP集成,是(CLI),自主运行Agent,是,GitHub Top100
+78,Continue,continuedev/continue,"32,000",TypeScript,Apache-2.0,C-Coding Agent,IDE/CLI,开源多模型coding扩展,是(CLI/VS Code),Coding Agent,是,awesome-cli-coding-agents
+79,Pi,pi-mono/pi,"23,849",TypeScript,MIT,C-Coding Agent,终端Agent,最小化终端coding工具包，统一LLM API,是(CLI),Coding Agent,是,GitHub Top100
+80,Roo Code,RooVetGit/Roo-Code,"22,669",TypeScript,Apache-2.0,C-Coding Agent,VS Code/CLI,多模式CLI agent(架构/代码/调试/编排),是(CLI/VS Code),Coding Agent,是,GitHub Top100
+81,Crush,charmbracelet/crush,"21,363",Go,MIT,C-Coding Agent,终端Agent,Charmbracelet的华丽agentic coding TUI,是(CLI),Coding Agent,是,GitHub Top100
+82,Qwen Code,QwenLM/qwen-code,"20,541",TypeScript,Apache-2.0,C-Coding Agent,终端Agent,阿里Qwen官方CLI agent,是(CLI),Coding Agent,是,GitHub Top100
+83,SWE-agent,SWE-agent/SWE-agent,"18,745",Python,MIT,C-Coding Agent,Issue修复,自动修复GitHub issues的agent,是(pip/CLI),自主运行Agent,是,GitHub Top100
+84,Kilo Code,kilocode/kilocode,"16,711",TypeScript,Apache-2.0,C-Coding Agent,工程平台,全能agentic工程平台，#1 OpenRouter coding agent,是(CLI/VS Code),Coding Agent,是,GitHub Top100
+85,Plandex,plandex-ai/plandex,"15,078",Go,AGPL-3.0,C-Coding Agent,终端Agent,计划优先CLI agent，2M token上下文,是(CLI),Coding Agent,是,GitHub Top100
+86,Smol Developer,smol-ai/developer,"12,000",Python,MIT,C-Coding Agent,代码生成,可嵌入开发者agent，从提示生成完整代码库,是(pip),Coding Agent,是,awesome-cli-coding-agents
+87,Claude Engineer,Doriandarko/claude-engineer,"11,000",Python,MIT,C-Coding Agent,终端Agent,社区驱动的Claude agentic CLI,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+88,Trae Agent,bytedance/trae-agent,"11,000",Python,MIT,C-Coding Agent,终端Agent,ByteDance研究友好CLI agent,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+89,Hermes Agent,NousResearch/hermes-agent,"6,600",Python,MIT,C-Coding Agent,自改进Agent,Nous Research自改进CLI agent，持久记忆，技能学习,是(pip/CLI),自主运行Agent,是,awesome-cli-coding-agents
+90,Kimi CLI,MoonshotAI/kimi-cli,"7,100",TypeScript,Apache-2.0,C-Coding Agent,终端Agent,月之暗面CLI coding agent,是(CLI),Coding Agent,是,awesome-cli-coding-agents
+91,ForgeCode,forgecode/forgecode,"4,800",Python,MIT,C-Coding Agent,终端Agent,AI结对编程，300+模型支持,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+92,Kode CLI,shareai/kode-cli,"4,500",Python,MIT,C-Coding Agent,终端Agent,ShareAI开源CLI agent,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+93,gptme,ErikBjare/gptme,"4,200",Python,MIT,C-Coding Agent,终端Agent,终端个人AI助手，运行代码/管理文件/浏览网页,是(pip/CLI),自主运行Agent,是,awesome-cli-coding-agents
+94,Devon,devon-ai/devon,"3,500",Python,MIT,C-Coding Agent,终端Agent,开源结对编程TUI，自主规划/执行/调试,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+95,Mistral Vibe,mistralai/mistral-vibe,"3,400",Python,Apache-2.0,C-Coding Agent,终端Agent,Mistral CLI coding助手,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+96,AutoCodeRover,nus-apr/auto-code-rover,"3,100",Python,GPL-3.0,C-Coding Agent,自主修复,自主程序改进agent,是(pip),自主运行Agent,是,awesome-cli-coding-agents
+97,RA.Aid,raid-ai/raid,"2,200",Python,MIT,C-Coding Agent,终端Agent,LangGraph自主coding agent,是(pip/CLI),自主运行Agent,是,awesome-cli-coding-agents
+98,Agentless,OpenAutoCoder/Agentless,"2,000",Python,MIT,C-Coding Agent,轻量修复,无持久agent循环的轻量级自主SE,是(pip),Coding Agent,是,awesome-cli-coding-agents
+99,Amazon Q CLI,aws/amazon-q-developer-cli,"1,900",TypeScript,Apache-2.0,C-Coding Agent,终端Agent,AWS agentic终端聊天,是(CLI),Coding Agent,是,awesome-cli-coding-agents
+100,Letta Code,letta-ai/letta-code,"1,800",Python,Apache-2.0,C-Coding Agent,记忆Agent,记忆优先CLI coding agent(前MemGPT),是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+101,Neovate Code,AntGroup/neovate-code,"1,500",Python,MIT,C-Coding Agent,终端Agent,蚂蚁集团CLI agent，插件系统,是(pip/CLI),Coding Agent,是,awesome-cli-coding-agents
+102,CountBot,countbot/countbot,"~5,000",TypeScript,MIT,D-中国变体,国产开源,纯国产开源，21K行代码，<50MB内存，智谱/千问适配,是(Desktop/CLI),自主运行Agent,是,腾讯云文章
+103,CoPaw,modelscope/CoPaw,"~8,000",Python,Apache-2.0,D-中国变体,个人助理,AgentScope团队，支持钉钉/飞书/QQ，MCP兼容,是(pip/Docker),自主运行Agent,是,GIGAZINE/腾讯云
+104,LangBot,langbot-app/LangBot,"~3,000",Python,MIT,D-中国变体,IM机器人,开源IM机器人平台，多LLM集成,是(pip/Docker),自主运行Agent,是,GitHub
+105,WorkBuddy,N/A(腾讯),N/A,N/A,闭源,D-中国变体,企业Agent,腾讯AI桌面智能体，兼容OpenClaw技能,是(Desktop App),桌面自动化Agent,否,腾讯云
+106,ArkClaw,N/A(字节跳动),N/A,N/A,闭源,D-中国变体,飞书集成,字节跳动/火山引擎，深度适配飞书,是(SaaS),自主运行Agent,否,腾讯云文章
+107,Kimi Claw,N/A(月之暗面),N/A,N/A,闭源,D-中国变体,零代码,月之暗面，零代码一键部署，K2.5模型,是(SaaS),自主运行Agent,否,腾讯云文章
+108,MaxClaw,N/A(MiniMax),N/A,N/A,闭源,D-中国变体,移动端,MiniMax，iOS/Android端，专家技能,否(移动端),自主运行Agent,否,腾讯云文章
+109,QoderWork,N/A(阿里),N/A,N/A,闭源,D-中国变体,办公协同,阿里桌面办公协同agent,是(Desktop),桌面自动化Agent,否,腾讯云文章
+110,MiClaw,N/A(小米),N/A,N/A,闭源,D-中国变体,手机Agent,小米手机端，MiMo模型，IoT联动,否(手机端),自主运行Agent,否,腾讯云文章
+111,QClaw,N/A(腾讯),N/A,N/A,闭源,D-中国变体,微信集成,腾讯微信集成AI agent,是(微信),自主运行Agent,否,腾讯云文章
+112,AutoGLM Claw,N/A(智谱AI),N/A,N/A,闭源,D-中国变体,预装技能,智谱AI，50+预装技能,是(SaaS),自主运行Agent,否,腾讯云文章
+113,LobsterAI,N/A(网易有道),N/A,N/A,闭源,D-中国变体,有道龙虾,网易有道，智能交互+自主执行,是(Desktop),自主运行Agent,否,腾讯云文章
+114,MeowClaw,N/A,N/A,N/A,闭源,D-中国变体,一键使用,日本报道的一键AI自律agent,是(SaaS),自主运行Agent,否,Infoseek日本
+115,Claude Code,anthropics/claude-code,"~15,000",TypeScript,Proprietary,E-macOS应用,Coding Agent,Anthropic终端agentic coding工具,是(CLI/macOS),Coding Agent,部分开源,GitHub
+116,Codex Desktop App,N/A(OpenAI),N/A,N/A,闭源,E-macOS应用,Coding Agent,OpenAI macOS桌面app，多agent并行管理,是(macOS App),Coding Agent,否,OpenAI
+117,Cursor,N/A(Anysphere),N/A,N/A,闭源,E-macOS应用,AI IDE,AI原生代码编辑器，Agent模式,是(macOS App),Coding Agent,否,Product Hunt
+118,Windsurf,N/A(Codeium),N/A,N/A,闭源,E-macOS应用,AI IDE,Codeium的AI IDE，Agent模式,是(macOS App),Coding Agent,否,Product Hunt
+119,Warp,warpdotdev/Warp,"26,123",N/A,闭源,E-macOS应用,终端Agent,Agentic开发环境，多AI agent,是(macOS App),Coding Agent,否,GitHub
+120,Perplexity Personal Computer,N/A(Perplexity),N/A,N/A,闭源,E-macOS应用,桌面Agent,Mac mini变身AI agent，本地硬件agent,是(macOS App),自主运行Agent,否,Axios/The Verge
+121,Perplexity Comet,N/A(Perplexity),N/A,N/A,闭源,E-macOS应用,AI浏览器,AI浏览器，agent模式，语音控制,是(macOS App),浏览器Agent,否,Product Hunt
+122,Raycast,N/A(Raycast),N/A,N/A,闭源,E-macOS应用,启动器+AI,macOS启动器，AI扩展，Glaze原生app构建,是(macOS App),Agent平台,否,Product Hunt
+123,ChatGPT macOS,N/A(OpenAI),N/A,N/A,闭源,E-macOS应用,AI助手,OpenAI macOS app，Atlas浏览器，agent模式,是(macOS App),自主运行Agent,否,OpenAI
+124,HappyCapy,N/A,N/A,N/A,闭源,E-macOS应用,Agent电脑,Agent原生电脑，开箱即用AI代理工作区,是(Web/Desktop),自主运行Agent,否,Product Hunt
+125,Scarlett,N/A,N/A,N/A,闭源,E-macOS应用,AI助手,新型AI助手，任务自动化,是(macOS App),自主运行Agent,否,Product Hunt
+126,ClawApp,N/A,N/A,N/A,闭源,E-macOS应用,OpenClaw GUI,macOS桌面app简化OpenClaw使用,是(macOS App),Agent管理,否,Product Hunt
+127,Fluent,N/A,N/A,N/A,闭源,E-macOS应用,AI伴侣,macOS AI伴侣和助手app,是(macOS App),AI助手,否,TheSweetBits
+128,Dia Browser,ArcCompany/dia,N/A,N/A,闭源,E-macOS应用,AI浏览器,AI原生浏览器，内置agent,是(macOS App),浏览器Agent,否,Product Hunt
+129,Augment Code,N/A(Augment),N/A,N/A,闭源,E-macOS应用,Coding Agent,AI coding agent，14+agent支持,是(macOS App),Coding Agent,否,augmentcode.com
+130,VivaClaw,N/A,N/A,N/A,闭源,E-macOS应用,OpenClaw部署,1分钟部署OpenClaw agent,是(SaaS),Agent管理,否,Product Hunt
+131,KiloClaw,N/A,N/A,N/A,闭源,E-macOS应用,托管OpenClaw,托管OpenClaw，无需Mac mini,是(SaaS),Agent管理,否,Product Hunt
+132,OctoClaw,N/A,N/A,N/A,闭源,E-macOS应用,AI专家,雇佣AI专家做营销/销售/支持,是(SaaS),自主运行Agent,否,Product Hunt
+133,EasyClaw,N/A,N/A,N/A,闭源,E-macOS应用,快速部署,最快最简单使用OpenClaw的方式,是(SaaS),Agent管理,否,Product Hunt
+134,Devin,N/A(Cognition),N/A,N/A,闭源,E-macOS应用,AI工程师,世界第一个AI软件工程师,是(Web),Coding Agent,否,cognition.ai

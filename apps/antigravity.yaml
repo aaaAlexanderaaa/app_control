@@ -1,0 +1,59 @@
+id: antigravity
+name: Antigravity
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- ide
+severity: high
+priority_score: 78
+notes: >-
+  Use antigravity token as primary key, not broad google-only matching.
+  Homebrew-backed host IOC is limited to explicit cask artifacts and does not
+  retain prior inferred process or team metadata.
+references:
+- url: https://antigravity.google/
+  kind: official_site
+  summary: Official Google Antigravity site establishes antigravity.google as the product host.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/cask/antigravity.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask metadata explicitly lists Antigravity.app, the agy shim, and user cleanup paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://antigravity.google/
+      evidence: >-
+        The official Google Antigravity site is served from
+        `antigravity.google` and labels the product as Google Antigravity, so
+        the reviewed network IOC keeps that exact app host and removes generic
+        Google platform domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: antigravity.google
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: antigravity
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/antigravity.json
+      evidence: >-
+        The Homebrew Antigravity cask explicitly installs `Antigravity.app`,
+        symlinks the `agy` wrapper, and lists Antigravity-owned user data
+        paths in its zap stanza, so the reviewed host IOC keeps only those
+        explicit artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Antigravity.app
+    - /opt/homebrew/bin/agy
+    - /usr/local/bin/agy
+    - ~/.antigravity/
+    - ~/Library/Application Support/Antigravity
+    - ~/Library/Preferences/com.google.antigravity.plist

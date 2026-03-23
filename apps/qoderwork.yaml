@@ -1,0 +1,49 @@
+id: qoderwork
+name: QoderWork
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Prefer the official QoderWork product/docs hosts and source-backed ~/.qoderwork skill storage rather than broader parent infrastructure domains.
+references:
+- url: https://qoder.com/qoderwork
+  kind: official_site
+  summary: Official QoderWork product page is served from qoder.com/qoderwork.
+  checked_at: '2026-03-22'
+- url: https://docs.qoder.com/zh/qoderwork/introduction
+  kind: official_docs
+  summary: QoderWork introduction documents the desktop assistant positioning and links the product into the Qoder documentation set.
+  checked_at: '2026-03-22'
+- url: https://docs.qoder.com/qoderwork/skills
+  kind: official_docs
+  summary: Skills documentation states that each skill lives in ~/.qoderwork/skills/ and contains a SKILL.md file.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://qoder.com/qoderwork
+      evidence: QoderWork's official product page is served from qoder.com/qoderwork and its official documentation is served from docs.qoder.com, so the reviewed network IOC keeps only those exact QoderWork-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: qoder.com
+      match: exact
+      role: app_brand
+    - pattern: docs.qoder.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: qoderwork
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.qoder.com/qoderwork/skills
+      evidence: Qoder's official Skills documentation states that each Skill is stored in ~/.qoderwork/skills/ and contains a SKILL.md file, so the retained host IOC is limited to those exact QoderWork skill-storage paths.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.qoderwork/skills/

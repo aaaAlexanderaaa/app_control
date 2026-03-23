@@ -1,0 +1,51 @@
+id: wormhole
+name: Wormhole
+category: FILE_TRANSFER
+product_shape:
+- web
+- macos
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: >-
+  Official Wormhole site and the Homebrew cask both confirm a macOS app
+  surface; reviewed host IOC is limited to explicit cask artifacts.
+references:
+- url: https://wormhole.app/
+  kind: official_site
+  summary: Official Wormhole site establishes wormhole.app as the canonical product host.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/cask/wormhole.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask metadata explicitly lists the Wormhole.app artifact and saved-state cleanup path.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://wormhole.app/
+      evidence: >-
+        Wormhole's official site is served from `wormhole.app` and describes
+        the product there as Wormhole, so the reviewed network IOC is limited
+        to that exact first-party host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: wormhole.app
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: wormhole.app
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/wormhole.json
+      evidence: >-
+        The Homebrew Wormhole cask explicitly installs `Wormhole.app` and zaps
+        `~/Library/Saved Application State/er.Wormhole.savedState`, so the
+        reviewed host IOC keeps only those explicit artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Wormhole.app
+    - ~/Library/Saved Application State/er.Wormhole.savedState

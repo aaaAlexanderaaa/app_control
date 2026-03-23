@@ -1,0 +1,55 @@
+id: sweep
+name: Sweep
+category: GENAI_CODING
+product_shape:
+- web
+product_type:
+- coding
+- agentic_coding
+severity: high
+priority_score: 87
+notes: Open-source AI coding agent; keep Sweep-owned docs and exact local CLI/repo config artifacts, and remove generic github.com from the network IOC set.
+references:
+- url: https://docs.sweep.dev/
+  kind: official_docs
+  summary: Official Sweep documentation is served from docs.sweep.dev.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/sweepai/sweep/main/docs/pages/cli.mdx
+  kind: upstream_docs
+  summary: Official CLI documentation defines pip installation plus the sweep init, run, and watch commands.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/sweepai/sweep/main/docs/pages/usage/config.mdx
+  kind: upstream_docs
+  summary: Official config documentation defines sweep.yaml as the root repository configuration file for Sweep.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/sweepai/sweep/main/docs/pages/deployment.mdx
+  kind: upstream_docs
+  summary: Official deployment documentation describes self-hosting the Sweep backend and GitHub App.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.sweep.dev/
+      evidence: Sweep's official product and documentation surface is hosted on docs.sweep.dev, while the official config examples point back to sweep.dev; the reviewed network IOC set removes the generic github.com domain and keeps only exact Sweep-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: sweep.dev
+      match: exact
+      role: app_brand
+    - pattern: docs.sweep.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: sweep ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/sweepai/sweep/main/docs/pages/cli.mdx
+      evidence: Sweep's official CLI docs install the local sweep command with pip and run sweep init, while the official config docs define sweep.yaml in the repository root as Sweep's primary local configuration artifact.
+      checked_at: '2026-03-21'
+    paths:
+    - sweep.yaml
+    process_names:
+    - sweep

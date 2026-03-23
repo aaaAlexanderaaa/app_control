@@ -1,0 +1,40 @@
+id: taskade_desktop
+name: Taskade Desktop
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_workspace
+- desktop_agent
+- automation
+severity: high
+priority_score: 83
+notes: Closed-source desktop workspace with downloadable macOS client plus AI agents and automation workflows that can run continuously.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/taskade.rb
+      evidence: The Homebrew cask points the macOS app homepage to https://www.taskade.com/ and the DMG update URL to https://apps.taskade.com/updates/..., so the reviewed network IOC set keeps those first-party Taskade hosts and avoids broader guesses.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.taskade.com
+      match: exact
+      role: app_brand
+    - pattern: apps.taskade.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: taskade
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/taskade.rb
+      evidence: The Homebrew cask installs Taskade.app and zaps the Taskade Application Support, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Taskade.app
+    - ~/Library/Application Support/taskade
+    - ~/Library/Preferences/com.taskade.plist
+    - ~/Library/Saved Application State/com.taskade.savedState

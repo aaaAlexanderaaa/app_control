@@ -1,0 +1,39 @@
+id: macaify
+name: Macaify
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- ai_overlay
+- writing
+- coding
+severity: medium
+priority_score: 74
+notes: Prefer Macaify-owned product and installer hosts over generic model-provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://macaify.com/
+      evidence: Macaify’s official homepage declares the application name `Macaify` and links the macOS installer from `https://cfr2.macaify.com/public/versions/Macaify-1.3.3.dmg`; the reviewed network IOC set keeps the product host plus the exact download host and drops unrelated provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: macaify.com
+      match: exact
+      role: app_brand
+    - pattern: cfr2.macaify.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: macaify
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://macaify.com/
+      evidence: Macaify’s official homepage exposes the macOS installer `Macaify-1.3.3.dmg` and sets the application name to `Macaify`; retained host IOC is limited to the app bundle and process name implied by the official installer naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Macaify.app
+    process_names:
+    - Macaify

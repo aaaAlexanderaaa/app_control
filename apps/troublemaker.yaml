@@ -1,0 +1,44 @@
+id: troublemaker
+name: troublemaker
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Multi-platform agent runtime; reviewed IOC keeps the exact tinyfat.com managed-service host from upstream docs and the documented troublemaker CLI plus default ./data workspace layout.
+references:
+- url: https://raw.githubusercontent.com/tinyfatco/troublemaker/main/README.md
+  kind: upstream_readme
+  summary: Upstream README documents the troublemaker CLI, the tinyfat.com managed service, and the default ./data memory, settings, events, and skills layout.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/tinyfatco/troublemaker/main/package.json
+  kind: upstream_source
+  summary: Package metadata defines the canonical `troublemaker` CLI entrypoint.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/tinyfatco/troublemaker/main/README.md
+      evidence: The upstream README states that tinyfat.com runs managed Troublemaker agents and uses https://tinyfat.com/api/email/send as the default email-send endpoint, so the reviewed network IOC keeps the exact tinyfat.com host and the exact product keyword.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: tinyfat.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: troublemaker
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/tinyfatco/troublemaker/main/README.md
+      evidence: The upstream README tells users to run the troublemaker CLI against a ./data working directory that contains MEMORY.md, settings.json, events/, and skills/, while package metadata defines the canonical troublemaker process name.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/troublemaker/'
+    process_names:
+    - troublemaker

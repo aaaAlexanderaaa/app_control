@@ -1,0 +1,45 @@
+id: devon
+name: Devon
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Open-source pair programmer; reviewed IOC stays on exact Devon CLI/UI names and exact Devon install/runtime artifacts from the upstream README.
+references:
+- url: https://raw.githubusercontent.com/entropy-research/Devon/main/README.md
+  kind: upstream_readme
+  summary: Upstream README documents pipx install devon_agent, npx devon-ui, npm install -g devon-tui, and use of the DEVON_TELEMETRY_DISABLED variable.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/entropy-research/Devon/main/.devon.config
+  kind: upstream_source
+  summary: Upstream repository root contains the exact .devon.config runtime artifact.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/entropy-research/Devon/main/README.md
+      evidence: The upstream README consistently uses the exact Devon runtime names devon-ui, devon-tui, and devon_agent, and references the DEVON_TELEMETRY_DISABLED flag for outbound telemetry control, so the reviewed network IOC is limited to those exact Devon identifiers.
+      checked_at: '2026-03-22'
+    keyword_patterns:
+    - pattern: devon-ui
+      match: substring
+    - pattern: devon-tui
+      match: substring
+    - pattern: devon_agent
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/entropy-research/Devon/main/README.md
+      evidence: The upstream README installs devon_agent, devon-ui, and devon-tui, while the repository root contains the exact .devon.config file, so the retained host IOC is limited to those explicit Devon artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/Devon/'
+    process_names:
+    - devon-ui
+    - devon-tui

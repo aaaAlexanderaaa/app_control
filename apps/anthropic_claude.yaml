@@ -1,0 +1,50 @@
+id: anthropic_claude
+name: Anthropic Claude API
+category: GENAI_CHAT
+product_shape:
+- macos
+- web
+product_type:
+- api_provider
+- llm_provider
+severity: medium
+priority_score: 73
+notes: Anthropic Claude API provider. Separate from claude.yaml (Claude chat web app) — this entry tracks the API and platform
+  surface used by other tools.
+references:
+- url: https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/src/anthropic/_client.py
+  kind: upstream_source
+  summary: Official Anthropic Python SDK sets its default base URL to https://api.anthropic.com.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/README.md
+  kind: upstream_readme
+  summary: Official Anthropic Python SDK README states that the SDK provides access to the Claude API.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/anthropics/anthropic-sdk-typescript/main/package.json
+  kind: upstream_source
+  summary: Anthropic TypeScript SDK package.json defines the anthropic-ai-sdk CLI entrypoint at bin/cli.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/src/anthropic/_client.py
+      evidence: Anthropic's official Python SDK sets its default base URL to https://api.anthropic.com, so the reviewed network IOC keeps that exact Anthropic API hostname for this API-provider entry.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: api.anthropic.com
+      match: exact
+      role: ai_service_provider
+    keyword_patterns:
+    - pattern: anthropic
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/anthropics/anthropic-sdk-typescript/main/package.json
+      evidence: Anthropic's official TypeScript SDK package.json defines the anthropic-ai-sdk CLI entrypoint at bin/cli, so the retained host IOC is limited to that explicit CLI name and repo-local bin/cli path.
+      checked_at: '2026-03-22'
+    paths:
+    - "*/anthropic-sdk-typescript/bin/cli"
+    process_names:
+    - anthropic-ai-sdk

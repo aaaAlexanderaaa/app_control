@@ -1,0 +1,160 @@
+schema_version: "1.0.0"
+description: >
+  Frozen schema for per-app YAML files in the app_control catalog.
+  Each file describes one application and its IOCs (network + host).
+
+required_fields:
+  - id
+  - name
+  - category
+  - product_shape
+  - product_type
+  - severity
+  - priority_score
+  - iocs
+
+field_definitions:
+  id:
+    type: string
+    description: Unique snake_case identifier for the app.
+
+  name:
+    type: string
+    description: Human-readable app name.
+
+  category:
+    type: string
+    enum:
+      - AI_AGENT_FRAMEWORK
+      - AI_BROWSER_AGENT
+      - AI_DESKTOP_ASSISTANT
+      - AI_OBSERVABILITY
+      - CLAW_FAMILY_APP
+      - CLOUD_STORAGE
+      - COLLAB_KNOWLEDGE
+      - DOC_CONVERSION_UPLOAD
+      - FILE_TRANSFER
+      - GENAI_CHAT
+      - GENAI_CODING
+      - GENAI_MEDIA
+      - MEETING_TRANSCRIPTION
+      - NON_WORK_IM
+      - P2P_FILE_SHARING
+      - PASTE_SHARING
+      - REMOTE_ACCESS
+      - SCREEN_RECORDING_SHARE
+      - TRANSLATION
+
+  product_shape:
+    type: list[string]
+    enum_items: [web, macos]
+
+  product_type:
+    type: list[string]
+    description: Free-form product type tags (e.g. personal_agent, ide_extension, cli).
+
+  severity:
+    type: string
+    enum: [critical, high, medium, low]
+
+  priority_score:
+    type: integer
+    range: [0, 100]
+
+  notes:
+    type: string
+    optional: true
+
+  iocs:
+    type: object
+    description: >
+      Two IOC groups: network and host. Each group has its own status
+      and provenance. Status tracks the group as a whole, not individual items.
+    fields:
+      network:
+        type: object
+        optional: true
+        fields:
+          status:
+            type: string
+            enum: [draft, reviewed, validated, stale]
+          provenance:
+            type: object
+            fields:
+              url:
+                type: string
+                description: Specific URL that supports the IOCs in this group.
+              evidence:
+                type: string
+                description: What the URL proves, in one sentence.
+              checked_at:
+                type: date
+                format: "YYYY-MM-DD"
+          hostname_patterns:
+            type: list[object]
+            item_fields:
+              pattern:
+                type: string
+              match:
+                type: string
+                enum: [exact, suffix]
+              role:
+                type: string
+                enum:
+                  - app_brand
+                  - ai_service_provider
+                  - platform_service
+                  - cdn_static
+                  - file_upload
+                  - file_download
+                  - file_share
+                  - file_sync
+                  - file_transfer
+          keyword_patterns:
+            type: list[object]
+            item_fields:
+              pattern:
+                type: string
+              match:
+                type: string
+                enum: [substring, regex]
+
+      host:
+        type: object
+        optional: true
+        fields:
+          status:
+            type: string
+            enum: [draft, reviewed, validated, stale]
+          provenance:
+            type: object
+            fields:
+              url:
+                type: string
+              evidence:
+                type: string
+              checked_at:
+                type: date
+                format: "YYYY-MM-DD"
+          paths:
+            type: list[string]
+            description: >
+              Filesystem paths. Use directory paths (trailing /) where
+              individual files under that dir are implementation detail.
+              Use ~ for user home prefix.
+          bundle_ids:
+            type: list[string]
+          process_names:
+            type: list[string]
+          team_ids:
+            type: list[string]
+          chrome_extension_ids:
+            type: list[string]
+          safari_extension_bundle_ids:
+            type: list[string]
+
+ioc_status_lifecycle:
+  draft: "AI-researched or migrated. Not usable for production rules."
+  reviewed: "Human checked provenance URL and it supports the claims."
+  validated: "Confirmed against source code, installer, or analytics."
+  stale: "Was validated but app has updated; needs recheck."

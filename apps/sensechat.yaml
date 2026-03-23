@@ -1,0 +1,51 @@
+id: sensechat
+name: SenseChat
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+severity: medium
+priority_score: 63
+notes: Prefer exact SenseChat product hosts and the official app bundle identifier; avoid broad Sensetime or SenseNova umbrella domains for enterprise detection.
+references:
+- url: https://chat.sensetime.com/
+  kind: official_site
+  summary: Official SenseChat site anchors the product on chat.sensetime.com and references SenseChat-specific web assets.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/cn/app/%E5%95%86%E9%87%8F-%E5%95%86%E6%B1%A4%E6%97%97%E4%B8%8Bai%E4%BA%A4%E4%BA%92%E5%BA%94%E7%94%A8/id6474664812
+  kind: app_store
+  summary: Apple App Store page for 商量 shows the official listing and macOS compatibility metadata for Apple Silicon Macs.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6474664812&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 商量 listing and bundleId com.sensetime.SenseChat.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://chat.sensetime.com/
+      evidence: SenseChat's official web entrypoint is hosted on https://chat.sensetime.com/, and the page loads product-specific assets from sensechatweb.oss-cn-shanghai.aliyuncs.com; the reviewed network IOC set keeps only those exact SenseChat hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: chat.sensetime.com
+      match: exact
+      role: app_brand
+    - pattern: sensechatweb.oss-cn-shanghai.aliyuncs.com
+      match: exact
+      role: cdn_static
+    keyword_patterns:
+    - pattern: sensechat
+      match: substring
+    - pattern: 商量
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6474664812&country=cn
+      evidence: Apple's lookup API returns the official 商量 listing with bundleId com.sensetime.SenseChat, and the App Store page for track 6474664812 marks the listing as Mac-compatible on Apple Silicon Macs.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.sensetime.SenseChat

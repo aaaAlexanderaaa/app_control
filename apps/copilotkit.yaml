@@ -1,0 +1,48 @@
+id: copilotkit
+name: CopilotKit
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Open-source frontend agent framework; keep CopilotKit-owned docs hosts plus explicit CLI and route artifacts instead of generic provider endpoints.
+references:
+- url: https://docs.copilotkit.ai/quickstart
+  kind: official_docs
+  summary: Official quickstart documents the create and init CopilotKit CLI entrypoints on the product-owned docs host.
+  checked_at: '2026-03-21'
+- url: https://docs.copilotkit.ai/integrations/built-in-agent/quickstart?agent=manual
+  kind: official_docs
+  summary: Manual quickstart creates the canonical app/api/copilotkit/route.ts runtime endpoint inside a project.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/CopilotKit/CopilotKit/main/packages/v1/cli/package.json
+  kind: upstream_source
+  summary: Official CLI package metadata exposes the copilotkit executable in the CopilotKit monorepo.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.copilotkit.ai/quickstart
+      evidence: CopilotKit's official quickstart and integration guides are served from docs.copilotkit.ai; the reviewed network IOC set keeps only that exact CopilotKit-owned documentation host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: docs.copilotkit.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: copilotkit
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/CopilotKit/CopilotKit/main/packages/v1/cli/package.json
+      evidence: The official CLI package registers the copilotkit binary, and the built-in-agent quickstart creates app/api/copilotkit/route.ts as the canonical CopilotKit runtime route inside a project.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/app/api/copilotkit/route.ts'
+    process_names:
+    - copilotkit

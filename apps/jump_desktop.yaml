@@ -1,0 +1,38 @@
+id: jump_desktop
+name: Jump Desktop
+category: REMOTE_ACCESS
+product_shape:
+- macos
+product_type:
+- remote_access
+severity: medium
+priority_score: 79
+notes: Remote desktop channels reduce visibility for data movement controls.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/j/jump-desktop.rb
+      evidence: The Homebrew cask sets the official homepage to https://jumpdesktop.com/#jdmac and downloads/updates the macOS viewer from https://mirror.jumpdesktop.com/..., so the reviewed network IOC set keeps those Jump Desktop hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: jumpdesktop.com
+      match: exact
+      role: app_brand
+    - pattern: mirror.jumpdesktop.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: jump desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/j/jump-desktop.rb
+      evidence: The Homebrew cask installs Jump Desktop.app and zaps its document folder plus the app-specific macOS cache and cookie paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Jump Desktop.app
+    - ~/Documents/JumpDesktop
+    - ~/Library/Caches/com.p5sys.jump.mac.viewer.web
+    - ~/Library/Cookies/com.p5sys.jump.mac.viewer.web.binarycookies

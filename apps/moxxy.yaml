@@ -1,0 +1,47 @@
+id: moxxy
+name: moxxy
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- multi_agent
+severity: critical
+priority_score: 93
+notes: Self-hosted multi-agent runtime; keep IOC on exact moxxy.ai hosts and the explicit ~/.moxxy agent workspace files documented by upstream install and architecture guides.
+references:
+- url: https://raw.githubusercontent.com/moxxy-ai/moxxy/main/README.md
+  kind: upstream_readme
+  summary: Upstream README links moxxy.ai and docs.moxxy.ai and documents ~/.moxxy plus per-agent persona, memory, workspace, and container files.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/moxxy-ai/moxxy/main/Cargo.toml
+  kind: upstream_source
+  summary: Cargo metadata defines the canonical moxxy binary name.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/moxxy-ai/moxxy/main/README.md
+      evidence: The upstream README links moxxy.ai as the official website and docs.moxxy.ai as the documentation host, so the reviewed network IOC keeps only those exact Moxxy-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: moxxy.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.moxxy.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: moxxy
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/moxxy-ai/moxxy/main/README.md
+      evidence: The upstream README documents the ~/.moxxy data directory and the per-agent persona.md, memory.db, workspace/, and container.toml files, while Cargo metadata defines the canonical moxxy binary name.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.moxxy/
+    process_names:
+    - moxxy

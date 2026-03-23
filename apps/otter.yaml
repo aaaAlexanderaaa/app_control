@@ -1,0 +1,41 @@
+id: otter
+name: Otter
+category: MEETING_TRANSCRIPTION
+product_shape:
+- web
+- macos
+product_type:
+- transcription
+- meeting_assistant
+severity: medium
+priority_score: 73
+notes: Prefer Otter-owned domains and the exact desktop package host; avoid generic otter-only matching where possible because it is also a common animal term.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://otter.ai/integrations/desktop
+      evidence: Otter’s official desktop page is hosted on otter.ai/integrations/desktop and links the macOS installer from the exact host assets.otter.ai/public-page/desktop/Otter-0.8.1.dmg; the reviewed IOC set keeps the product domain plus the exact package host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: otter.ai
+      match: suffix
+      role: app_brand
+    - pattern: assets.otter.ai
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: otter ai
+      match: substring
+    - pattern: otter desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://help.otter.ai/hc/en-us/articles/35973988280215-Otter-macOS-Desktop
+      evidence: Otter’s official macOS desktop help article instructs users to download the Mac app, remove the old app from the Applications folder if needed, and open the package; retained host IOC is limited to the Otter desktop app path implied by that official install guidance.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Otter.app
+    process_names:
+    - Otter

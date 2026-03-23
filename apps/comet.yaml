@@ -1,0 +1,43 @@
+id: comet
+name: Comet
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+- web
+product_type:
+- browser
+- agent
+severity: medium
+priority_score: 82
+notes: Prefer Comet-specific Perplexity hosts and app-specific bundle paths; avoid broader Perplexity-wide assumptions where an exact Comet host is available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.perplexity.ai/comet
+      evidence: Perplexity’s official Comet page is hosted at www.perplexity.ai/comet, and the official Homebrew cask downloads the macOS build from www.perplexity.ai/rest/browser/download; the reviewed IOC set keeps only the exact Perplexity-owned Comet page and download host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.perplexity.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: perplexity comet
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/comet.json
+      evidence: Homebrew cask installs Comet.app and removes Comet-specific Application Support, caches, preferences, saved-state, and WebKit data rooted at ai.perplexity.comet on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Comet.app
+    - ~/Library/Application Support/ai.perplexity.comet
+    - ~/Library/Caches/ai.perplexity.comet
+    - ~/Library/Preferences/ai.perplexity.comet.plist
+    - ~/Library/Saved Application State/ai.perplexity.comet.savedState
+    - ~/Library/WebKit/ai.perplexity.comet
+    bundle_ids:
+    - ai.perplexity.comet
+    process_names:
+    - Comet

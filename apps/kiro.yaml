@@ -1,0 +1,45 @@
+id: kiro
+name: Kiro
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- assistant
+severity: high
+priority_score: 80
+notes: Official docs domain provides strong app-level signal.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/k/kiro.rb
+      evidence: The Homebrew cask sets the official homepage to https://kiro.dev/ and downloads the macOS app from https://prod.download.desktop.kiro.dev/releases/stable/...; the reviewed network IOC set keeps those Kiro-owned hosts and drops broad AWS umbrella domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: kiro.dev
+      match: exact
+      role: app_brand
+    - pattern: prod.download.desktop.kiro.dev
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: kiro
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/k/kiro.rb
+      evidence: The Homebrew cask installs Kiro.app, exposes the kiro binary, and zaps the app-specific Application Support, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Kiro.app
+    - ~/Library/Application Support/Kiro
+    - ~/Library/Preferences/dev.kiro.desktop.plist
+    - ~/Library/Saved Application State/dev.kiro.desktop.savedState
+    bundle_ids:
+    - dev.kiro.desktop
+    process_names:
+    - Kiro
+    - kiro

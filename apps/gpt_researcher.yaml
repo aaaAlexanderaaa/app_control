@@ -1,0 +1,50 @@
+id: gpt_researcher
+name: GPT-Researcher
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: >-
+  Official GPT Researcher materials expose the product-owned website and docs;
+  the documented local CLI workflow uses a checked-out `gpt-researcher`
+  workspace with a project-root `.env` file and an `outputs` directory for
+  generated reports.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/assafelovic/gpt-researcher
+      evidence: >-
+        GPT Researcher's official README links the product website at `gptr.dev`
+        and documentation at `docs.gptr.dev`; the reviewed network IOC set
+        keeps only those exact GPT Researcher-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: gptr.dev
+      match: exact
+      role: app_brand
+    - pattern: docs.gptr.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: gpt researcher
+      match: substring
+    - pattern: gpt-researcher
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/assafelovic/gpt-researcher/master/docs/docs/gpt-researcher/getting-started/cli.md
+      evidence: >-
+        GPT Researcher's official CLI guide instructs users to clone the
+        `gpt-researcher` repository, create a `.env` file in the project root,
+        run `python cli.py`, and notes that generated reports are saved in the
+        `outputs` directory; retained host IOC is limited to those exact
+        product-specific workspace artifacts.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/gpt-researcher/'

@@ -1,0 +1,45 @@
+id: huawei_cloud_drive
+name: Huawei Cloud Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Reviewed IOC stays on Huawei's exact cloud-service host and the exact 华为云空间 PC client naming used on Huawei's official product page.
+references:
+- url: https://cloud.huawei.com/
+  kind: official_site
+  summary: Official Huawei cloud storage service is hosted on cloud.huawei.com.
+  checked_at: '2026-03-22'
+- url: https://consumer.huawei.com/cn/mobileservices/mobilecloud/
+  kind: official_product_page
+  summary: Official Huawei consumer page advertises 云空间PC客户端 with Windows and Mac support.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://cloud.huawei.com/
+      evidence: Huawei's official cloud storage service is hosted on cloud.huawei.com, and Huawei's official consumer page advertises the same 云空间 service and PC client, so the reviewed network IOC keeps only the exact cloud.huawei.com service host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: cloud.huawei.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: 华为云空间
+      match: substring
+    - pattern: huawei cloud
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://consumer.huawei.com/cn/mobileservices/mobilecloud/
+      evidence: Huawei's official 云空间 product page explicitly advertises the 云空间PC客户端 for Mac, so the retained host IOC is limited to the exact 华为云空间 client name.
+      checked_at: '2026-03-22'
+    process_names:
+    - 华为云空间

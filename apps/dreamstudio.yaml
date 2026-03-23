@@ -1,0 +1,27 @@
+id: dreamstudio
+name: DreamStudio
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- image_generation
+severity: medium
+priority_score: 59
+notes: Use dreamstudio marker rather than broad stability provider traffic.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: dreamstudio.ai
+      match: suffix
+      role: app_brand
+    - pattern: stability.ai
+      match: suffix
+      role: ai_service_provider
+    keyword_patterns:
+    - pattern: dreamstudio
+      match: substring

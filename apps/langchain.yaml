@@ -1,0 +1,53 @@
+id: langchain
+name: LangChain
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: For enterprise detection, scope LangChain IOC to its official Deep Agents CLI surfaces instead of generic model-provider traffic or broad package-index domains.
+references:
+- url: https://docs.langchain.com/oss/python/deepagents/overview
+  kind: official_docs
+  summary: Official LangChain docs present Deep Agents as the LangChain-built SDK and terminal CLI surface.
+  checked_at: '2026-03-21'
+- url: https://docs.langchain.com/oss/python/deepagents/cli/configuration
+  kind: official_docs
+  summary: Official Deep Agents CLI config page defines ~/.deepagents plus config.toml, hooks.json, and .mcp.json.
+  checked_at: '2026-03-21'
+- url: https://blog.langchain.com/introducing-deepagents-cli/
+  kind: official_blog
+  summary: Official LangChain blog announces deepagents CLI installation and invocation.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.langchain.com/oss/python/deepagents/overview
+      evidence: LangChain's official Deep Agents overview and launch blog are served from docs.langchain.com and blog.langchain.com; the reviewed network IOC set keeps only those exact LangChain-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: docs.langchain.com
+      match: exact
+      role: app_brand
+    - pattern: blog.langchain.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: deepagents
+      match: substring
+    - pattern: langchain
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.langchain.com/oss/python/deepagents/cli/configuration
+      evidence: The official Deep Agents CLI configuration guide states that the CLI stores its configuration under ~/.deepagents/ and names config.toml, hooks.json, and .mcp.json there; the same page shows deepagents as the CLI command.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.deepagents
+    process_names:
+    - deepagents

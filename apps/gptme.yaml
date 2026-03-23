@@ -1,0 +1,36 @@
+id: gptme
+name: gptme
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Terminal-first coding and agent platform with explicit XDG config and log locations.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/gptme/gptme/master/pyproject.toml
+      evidence: The project metadata sets homepage and documentation to gptme.org, giving a dedicated first-party product domain for reviewed network detection
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: gptme.org
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: gptme
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://gptme.org/docs/config.html
+      evidence: The official config docs place global config at ~/.config/gptme/config.toml, local overrides at ~/.config/gptme/config.local.toml, and chat logs under ~/.local/share/gptme/logs, while pyproject.toml registers the gptme CLI entrypoint
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/gptme
+    - ~/.local/share/gptme/logs
+    process_names:
+    - gptme

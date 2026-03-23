@@ -1,0 +1,344 @@
+id: obsidian_sync
+name: Obsidian Sync
+category: COLLAB_KNOWLEDGE
+product_shape:
+- macos
+product_type:
+- notes
+- sync
+severity: medium
+priority_score: 70
+notes: Official team security guidance names the Sync host family sync-xx.obsidian.md; avoid broader generic Obsidian domains when reviewing Sync-specific traffic.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://help.obsidian.md/teams/security
+      evidence: Obsidian’s official security guidance for teams identifies Obsidian Sync traffic on sync-xx.obsidian.md where xx ranges from 01-100; the reviewed IOC enumerates those exact hosts and retains status.obsidian.md as the service status host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: sync-01.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-02.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-03.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-04.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-05.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-06.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-07.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-08.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-09.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-10.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-11.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-12.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-13.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-14.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-15.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-16.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-17.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-18.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-19.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-20.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-21.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-22.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-23.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-24.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-25.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-26.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-27.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-28.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-29.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-30.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-31.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-32.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-33.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-34.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-35.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-36.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-37.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-38.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-39.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-40.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-41.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-42.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-43.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-44.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-45.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-46.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-47.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-48.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-49.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-50.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-51.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-52.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-53.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-54.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-55.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-56.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-57.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-58.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-59.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-60.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-61.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-62.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-63.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-64.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-65.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-66.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-67.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-68.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-69.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-70.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-71.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-72.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-73.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-74.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-75.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-76.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-77.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-78.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-79.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-80.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-81.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-82.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-83.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-84.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-85.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-86.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-87.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-88.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-89.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-90.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-91.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-92.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-93.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-94.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-95.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-96.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-97.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-98.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-99.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: sync-100.obsidian.md
+      match: exact
+      role: file_sync
+    - pattern: status.obsidian.md
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: obsidian sync
+      match: substring
+    - pattern: obsidian
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/obsidian.json
+      evidence: Homebrew cask defines the Obsidian app bundle, wrapper binary, and Obsidian-specific shared-file-list, support, preference, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Obsidian.app
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/md.obsidian.sfl*
+    - ~/Library/Application Support/obsidian
+    - ~/Library/Preferences/md.obsidian.plist
+    - ~/Library/Saved Application State/md.obsidian.savedState
+    process_names:
+    - Obsidian
+    - obsidian
+    bundle_ids:
+    - md.obsidian

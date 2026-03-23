@@ -1,0 +1,54 @@
+id: astrbot
+name: AstrBot
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Prefer official AstrBot hosts plus exact data and config paths documented by upstream docs; avoid inferring generic uv or Python artifacts.
+references:
+- url: https://raw.githubusercontent.com/AstrBotDevs/AstrBot/master/README.md
+  kind: upstream_readme
+  summary: README links the official site, docs, and blog, and documents the astrbot CLI install, init, and run commands.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/AstrBotDevs/AstrBot/master/docs/en/deploy/astrbot/sys-pm.md
+  kind: upstream_docs
+  summary: System package manager deployment guide fixes the AstrBot data directory at ~/.local/share/astrbot.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/AstrBotDevs/AstrBot/master/docs/en/dev/astrbot-config.md
+  kind: upstream_docs
+  summary: Configuration docs state that the default config is data/cmd_config.json and additional configs live in data/config.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/AstrBotDevs/AstrBot/master/README.md
+      evidence: The upstream README links the official site on astrbot.app, the docs host on docs.astrbot.app, and the official blog on blog.astrbot.app, so the reviewed network IOC keeps only those exact AstrBot-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: astrbot.app
+      match: exact
+      role: app_brand
+    - pattern: docs.astrbot.app
+      match: exact
+      role: app_brand
+    - pattern: blog.astrbot.app
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: astrbot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/AstrBotDevs/AstrBot/master/docs/en/deploy/astrbot/sys-pm.md
+      evidence: The official package-manager deployment guide fixes the AstrBot data directory at ~/.local/share/astrbot, and the official config docs place cmd_config.json and data/config beneath the AstrBot root, so the retained host IOC is limited to those exact paths plus the documented astrbot CLI name.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.local/share/astrbot
+    process_names:
+    - astrbot

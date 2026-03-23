@@ -1,0 +1,33 @@
+id: ruflo
+name: Ruflo
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_orchestration
+- cli_agent
+severity: high
+priority_score: 85
+notes: Agent orchestration for Claude-style agents with CLI interface. 21.1k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://ruflo.ai/
+      evidence: Ruflo's official site is hosted on the dedicated ruflo.ai domain, so the reviewed network IOC set keeps that Ruflo-owned hostname and avoids legacy Claude Flow hosts during the ongoing brand migration.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: ruflo.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: ruflo
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/ruvnet/ruflo/blob/main/README.md
+      evidence: The official README repeatedly documents invoking the tool as npx ruflo@latest ... or after npm install -g ruflo@latest, so the reviewed host IOC set keeps the Ruflo CLI process name and avoids unstable legacy config-path variants from the Claude Flow migration.
+      checked_at: '2026-03-21'
+    process_names:
+    - ruflo

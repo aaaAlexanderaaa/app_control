@@ -1,0 +1,54 @@
+id: heygen
+name: HeyGen
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- avatar_video_generation
+severity: medium
+priority_score: 59
+notes: HeyGen's official screen-recorder extension is promoted on HeyGen's own site, so the reviewed IOC set stays on exact HeyGen app/auth/API hosts and the official extension ID.
+references:
+- url: https://www.heygen.com/blog/free-screen-recorder
+  kind: official_blog
+  summary: Official HeyGen blog recommends the HeyGen Screen Recorder Chrome extension and links readers to HeyGen-owned auth flows.
+  checked_at: '2026-03-22'
+- url: https://www.heygen.com/use-cases/product-explainers
+  kind: official_site
+  summary: Official HeyGen site page is served from www.heygen.com and its page source exposes HeyGen-owned app, auth, and API hosts.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/heygen-screen-recorder-ca/ahoojfimakdgphmpnmkkajpcmmaphhao?pli=1
+  kind: chrome_web_store
+  summary: Chrome Web Store URL embedded by HeyGen's official page resolves to extension ID ahoojfimakdgphmpnmkkajpcmmaphhao.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.heygen.com/use-cases/product-explainers
+      evidence: HeyGen's official site pages are served from www.heygen.com and their HTML exposes first-party service hosts on app.heygen.com, auth.heygen.com, and api2.heygen.com, so the reviewed network IOC keeps only those exact HeyGen-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.heygen.com
+      match: exact
+      role: app_brand
+    - pattern: app.heygen.com
+      match: exact
+      role: platform_service
+    - pattern: auth.heygen.com
+      match: exact
+      role: platform_service
+    - pattern: api2.heygen.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: heygen
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.heygen.com/blog/free-screen-recorder
+      evidence: HeyGen's official blog links to the Chrome Web Store item for HeyGen Screen Recorder & Capture, and that URL resolves to extension ID ahoojfimakdgphmpnmkkajpcmmaphhao, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - ahoojfimakdgphmpnmkkajpcmmaphhao

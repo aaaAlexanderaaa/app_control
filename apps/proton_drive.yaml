@@ -1,0 +1,43 @@
+id: proton_drive
+name: Proton Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer Drive-specific Proton hosts and local Proton Drive containers; avoid broader Proton domains where a Drive-specific host exists.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://proton.me/support/proton-drive-macos-setup
+      evidence: Proton’s macOS setup guide directs users to download Proton Drive from proton.me/drive/download and the device-management path drive.proton.me/devices; Proton’s Drive support pages also route account access through account.proton.me.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: drive.proton.me
+      match: exact
+      role: app_brand
+    - pattern: account.proton.me
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: drive.proton
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/proton-drive.json
+      evidence: Homebrew cask installs Proton Drive.app and removes Proton Drive-specific Application Scripts, Containers, and Group Containers; Proton’s macOS guide also documents signed-out local data under ~/Library/Cloud Storage/ProtonDrive-*.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Proton Drive.app
+    - ~/Library/Application Scripts/ch.protonmail.drive*
+    - ~/Library/Containers/ch.protonmail.drive*
+    - ~/Library/Group Containers/group.ch.protonmail.protondrive
+    - ~/Library/Cloud Storage/ProtonDrive-*
+    process_names:
+    - Proton Drive

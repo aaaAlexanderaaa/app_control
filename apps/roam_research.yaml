@@ -1,0 +1,43 @@
+id: roam_research
+name: Roam Research
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- notes
+- knowledge_base
+severity: medium
+priority_score: 71
+notes: Prefer Roam-owned product domains and the exact official desktop package host; graph notes can aggregate highly sensitive cross-project context.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://roamresearch.com/
+      evidence: Roam Research’s official site is hosted on roamresearch.com, and the official Homebrew cask downloads the macOS desktop app from the exact host roam-electron-deploy.s3.amazonaws.com; the reviewed IOC set keeps the product domain plus the exact installer host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: roamresearch.com
+      match: suffix
+      role: app_brand
+    - pattern: roam-electron-deploy.s3.amazonaws.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: roam research
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/roam-research.json
+      evidence: Homebrew cask installs Roam Research.app and removes Roam-specific preference and saved-state files rooted at com.roam-research.desktop-app on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Roam Research.app
+    - ~/Library/Preferences/com.roam-research.desktop-app.plist
+    - ~/Library/Saved Application State/com.roam-research.desktop-app.savedState
+    bundle_ids:
+    - com.roam-research.desktop-app
+    process_names:
+    - Roam Research

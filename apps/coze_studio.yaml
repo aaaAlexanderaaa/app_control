@@ -1,0 +1,44 @@
+id: coze_studio
+name: Coze Studio
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Official Coze Studio materials support a repo-local Docker deployment; reviewed IOC is limited to Coze-owned web hosts and the exact repo-local Docker config files named in the README.
+references:
+- url: https://raw.githubusercontent.com/coze-dev/coze-studio/main/README.md
+  kind: official_repo
+  summary: Official README describes Coze Studio, links the official Coze site, and shows the Docker deployment flow using docker/.env and docker/docker-compose.yml.
+  checked_at: '2026-03-21'
+- url: https://www.coze.cn/home
+  kind: official_site
+  summary: Official Coze site for the product is served from www.coze.cn.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/coze-dev/coze-studio/main/README.md
+      evidence: The official Coze Studio README links the product site and docs on www.coze.cn, so the reviewed network IOC set keeps only that exact Coze-owned host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.coze.cn
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: coze
+      match: substring
+    - pattern: coze studio
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/coze-dev/coze-studio/main/README.md
+      evidence: The official README clones the coze-studio repository, copies ./docker/.env.example to ./docker/.env, and starts the stack with ./docker/docker-compose.yml, so the retained host IOC is limited to those repo-local Docker config files.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/coze-studio/'

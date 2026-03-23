@@ -1,0 +1,52 @@
+id: open_webui
+name: Open WebUI
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+product_type:
+- self_hosted_webui
+- llm_gateway
+severity: medium
+priority_score: 82
+notes: >-
+  Official docs confirm the exact Open WebUI-owned web surfaces and the default
+  `~/.open-webui` data directory; self-hosted deployments still require tenant
+  or instance-domain telemetry in addition to these first-party signals.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.openwebui.com/getting-started/quick-start/
+      evidence: >-
+        The official quick-start documentation links Open WebUI's first-party
+        properties at `openwebui.com` and `docs.openwebui.com`; the reviewed
+        network IOC set keeps only those Open WebUI-owned hosts and removes the
+        earlier GitHub migration leftovers.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: openwebui.com
+      match: exact
+      role: app_brand
+    - pattern: docs.openwebui.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: open webui
+      match: substring
+    - pattern: open-webui
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.openwebui.com/getting-started/quick-start/
+      evidence: >-
+        The official quick-start page shows `DATA_DIR=~/.open-webui ...
+        open-webui serve`, states that the default data directory is
+        `~/.open-webui`, and uses the `open-webui serve` command; retained host
+        IOC is limited to that exact local data directory and the product-
+        specific `open-webui` process name.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.open-webui
+    process_names:
+    - open-webui

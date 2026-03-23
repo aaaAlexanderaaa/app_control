@@ -1,0 +1,49 @@
+id: workbuddy
+name: WorkBuddy
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: WorkBuddy's reviewed IOC stays on the official CodeBuddy product/update hosts and the exact WorkBuddy.app bundle name exposed by the current macOS release archive.
+references:
+- url: https://www.codebuddy.cn/work/
+  kind: official_site
+  summary: Official WorkBuddy product page is served from CodeBuddy's first-party site.
+  checked_at: '2026-03-21'
+- url: https://www.codebuddy.cn/v2/update?platform=workbuddy-darwin-arm64
+  kind: update_manifest
+  summary: Official update API returns the current macOS arm64 WorkBuddy ZIP URL and hash.
+  checked_at: '2026-03-21'
+- url: https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/saas/darwin-arm64/WorkBuddy-darwin-arm64-4.6.2.23292806-5b37b6edf3-f8d8b84d.zip
+  kind: release_archive
+  summary: The reviewed macOS archive contains WorkBuddy.app and its bundled macOS resources.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.codebuddy.cn/v2/update?platform=workbuddy-darwin-arm64
+      evidence: The official WorkBuddy update API is hosted on www.codebuddy.cn and returns the current macOS ZIP on the exact CDN host acc-1258344699.cos.accelerate.myqcloud.com, so the reviewed network IOC set keeps only those exact hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.codebuddy.cn
+      match: exact
+      role: app_brand
+    - pattern: acc-1258344699.cos.accelerate.myqcloud.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: workbuddy
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/saas/darwin-arm64/WorkBuddy-darwin-arm64-4.6.2.23292806-5b37b6edf3-f8d8b84d.zip
+      evidence: The reviewed WorkBuddy macOS ZIP contains the exact bundle paths WorkBuddy.app/, WorkBuddy.app/Contents/MacOS/Electron, and WorkBuddy.app/Contents/Resources/app/, so the retained host IOC is the exact WorkBuddy.app bundle name rather than generic Electron helpers.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/WorkBuddy.app'

@@ -1,0 +1,37 @@
+id: mindclaw
+name: MindClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- desktop_agent
+- messaging_gateway
+severity: critical
+priority_score: 96
+notes: Elephas positions MindClaw as a secure native Mac agent that runs continuously on your Mac and can be messaged from Telegram.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://elephas.app/mindclaw
+      evidence: Official MindClaw page on elephas.app describes the product as a native Mac agent service with Telegram relay support
+      checked_at: '2026-03-20'
+    hostname_patterns:
+    - pattern: elephas.app
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: mindclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://elephas.app/mindclaw
+      evidence: Official MindClaw page describes a native Mac app that users drag into Applications, supporting the retained MindClaw bundle and process name
+      checked_at: '2026-03-20'
+    paths:
+    - /Applications/MindClaw.app
+    - ~/Applications/MindClaw.app
+    process_names:
+    - MindClaw

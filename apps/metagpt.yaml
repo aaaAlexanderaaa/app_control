@@ -1,0 +1,36 @@
+id: metagpt
+name: MetaGPT
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- multi_agent_orchestration
+severity: medium
+priority_score: 82
+notes: Official docs now live under docs.deepwisdom.ai; runtime traffic is still dominated by model providers and is not uniquely
+  attributable via DNS/SNI.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.deepwisdom.ai/main/en/guide/get_started/configuration.html
+      evidence: The official MetaGPT README links users to docs.deepwisdom.ai for installation and configuration, while the legacy metagpt-team.github.io host now returns 404, so the reviewed network IOC set keeps the live docs.deepwisdom.ai host and the MetaGPT keyword.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: docs.deepwisdom.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: metagpt
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/geekan/MetaGPT/blob/main/README.md
+      evidence: The official README tells users to pip install metagpt, run metagpt --init-config, and confirms that this command creates ~/.metagpt/config2.yaml, so the reviewed host IOC set keeps that user config file and the metagpt CLI process.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.metagpt/config2.yaml
+    process_names:
+    - metagpt

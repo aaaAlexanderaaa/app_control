@@ -1,0 +1,48 @@
+id: grok
+name: Grok
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+severity: medium
+priority_score: 65
+notes: Keep Grok IOC on the exact Grok and xAI hosts and the official app bundle identifier; drop broader x.com matching.
+references:
+- url: https://grok.com/
+  kind: official_site
+  summary: Official Grok product site is served from grok.com and ties the product to xAI.
+  checked_at: '2026-03-22'
+- url: https://x.ai/grok
+  kind: official_site
+  summary: xAI's official Grok page is served from x.ai/grok.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6670324846
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Grok - AI Chat & Video returns bundle ID ai.x.GrokApp from seller X.AI Corporation.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://x.ai/grok
+      evidence: Official Grok product pages are served from grok.com and x.ai/grok, so the reviewed network IOC set keeps only those exact Grok and xAI hosts and drops broader x.com matching.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: grok.com
+      match: exact
+      role: app_brand
+    - pattern: x.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: grok
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6670324846
+      evidence: Apple's official lookup metadata for Grok - AI Chat & Video returns bundle identifier ai.x.GrokApp from seller X.AI Corporation, so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - ai.x.GrokApp

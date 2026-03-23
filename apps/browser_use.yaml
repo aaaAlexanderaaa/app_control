@@ -1,0 +1,43 @@
+id: browser_use
+name: browser-use
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+product_type:
+- browser_automation
+- cli_agent
+- persistent_agent
+severity: high
+priority_score: 93
+notes: AI-agent-oriented browser automation with CLI that keeps browser running between commands. 80.8k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://browser-use.com
+      evidence: browser-use.com is the official project homepage; browser_use/config.py defaults BROWSER_USE_CLOUD_API_URL to https://api.browser-use.com and the upstream README links cloud.browser-use.com as the first-party Browser Use Cloud service
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: browser-use.com
+      match: suffix
+      role: app_brand
+    - pattern: api.browser-use.com
+      match: exact
+      role: app_brand
+    - pattern: cloud.browser-use.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: browser-use
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/browser-use/browser-use
+      evidence: browser_use/config.py defaults BROWSER_USE_CONFIG_DIR to ~/.config/browseruse and creates config.json, profiles, and extensions directories there; pyproject.toml exposes browser-use and browseruse CLI entry points
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/browseruse
+    process_names:
+    - browser-use
+    - browseruse

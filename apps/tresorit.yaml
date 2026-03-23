@@ -1,0 +1,43 @@
+id: tresorit
+name: Tresorit
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Encrypted enterprise-style storage can still enable unmanaged data exfiltration.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/tresorit.json
+      evidence: Homebrew cask exposes the Tresorit homepage on tresorit.com and the macOS installer on installer.tresorit.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: tresorit.com
+      match: exact
+      role: app_brand
+    - pattern: installer.tresorit.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: tresorit
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/tresorit.json
+      evidence: Homebrew cask defines the Tresorit app bundle, login item, and Tresorit-specific support and preference paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Tresorit.app
+    - ~/Library/Application Support/Tresorit
+    - ~/Library/Preferences/com.tresorit.mac.plist
+    bundle_ids:
+    - com.tresorit.mac
+    process_names:
+    - Tresorit

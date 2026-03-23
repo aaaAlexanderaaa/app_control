@@ -1,0 +1,55 @@
+id: xinghuo
+name: Xinghuo
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+severity: medium
+priority_score: 63
+notes: Prefer the exact Xinghuo host and official app bundle identifier; avoid broad iFlytek parent domains for enterprise detection.
+references:
+- url: https://xinghuo.xfyun.cn/spark
+  kind: official_site
+  summary: Official Xinghuo site anchors the product on xinghuo.xfyun.cn.
+  checked_at: '2026-03-22'
+- url: https://xinghuo.xfyun.cn/doc/spark-guide/spark.html
+  kind: official_docs
+  summary: Official Xinghuo documentation states the product already covers web, desktop, browser extension, iOS app, and Android app.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/cn/app/%E8%AE%AF%E9%A3%9E%E6%98%9F%E7%81%AB-%E6%87%82%E4%BD%A0%E7%9A%84ai%E5%8A%A9%E6%89%8B/id6449919551
+  kind: app_store
+  summary: Apple App Store page for 讯飞星火 shows the official listing and macOS compatibility metadata for Apple Silicon Macs.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6449919551&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 讯飞星火 listing and bundleId com.iFlytek.GPT.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://xinghuo.xfyun.cn/doc/spark-guide/spark.html
+      evidence: Xinghuo's official site and product guide are both hosted on xinghuo.xfyun.cn, and the guide states Xinghuo already covers web, desktop, browser extension, iOS app, and Android app; the reviewed network IOC set keeps only that exact product host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: xinghuo.xfyun.cn
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: xinghuo
+      match: substring
+    - pattern: spark
+      match: substring
+    - pattern: 星火
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6449919551&country=cn
+      evidence: Apple's lookup API returns the official 讯飞星火 listing with bundleId com.iFlytek.GPT, and the App Store page for track 6449919551 marks the listing as Mac-compatible on Apple Silicon Macs.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.iFlytek.GPT

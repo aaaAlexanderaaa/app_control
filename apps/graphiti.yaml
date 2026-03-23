@@ -1,0 +1,49 @@
+id: graphiti
+name: Graphiti
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Keep Graphiti network IOC on exact GetZep-owned documentation and product hosts, and keep host IOC on the explicit telemetry cache path rather than inferred package-install locations.
+references:
+- url: https://raw.githubusercontent.com/getzep/graphiti/main/README.md
+  kind: upstream_readme
+  summary: README links Graphiti's official docs on help.getzep.com, the Zep website, and the telemetry cache file path.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/getzep/graphiti/main/pyproject.toml
+  kind: upstream_metadata
+  summary: Project metadata sets Graphiti's homepage to the official GetZep documentation site.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/getzep/graphiti/main/graphiti_core/telemetry/telemetry.py
+  kind: upstream_source
+  summary: Telemetry source defines ~/.cache/graphiti and the telemetry_anon_id file used by Graphiti.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/getzep/graphiti/main/README.md
+      evidence: The upstream README links Graphiti's guides and API documentation at https://help.getzep.com/graphiti and the Zep product site at https://www.getzep.com/; the reviewed network IOC set keeps only those exact first-party hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: help.getzep.com
+      match: exact
+      role: app_brand
+    - pattern: www.getzep.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: graphiti
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/getzep/graphiti/main/graphiti_core/telemetry/telemetry.py
+      evidence: Graphiti's telemetry source sets CACHE_DIR to ~/.cache/graphiti and ANON_ID_FILE to ~/.cache/graphiti/telemetry_anon_id, so the reviewed host IOC is limited to those exact cache artifacts.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.cache/graphiti

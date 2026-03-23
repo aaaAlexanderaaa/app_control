@@ -1,0 +1,45 @@
+id: loom
+name: Loom
+category: SCREEN_RECORDING_SHARE
+product_shape:
+- web
+- macos
+product_type:
+- screen_recording
+- video_share
+severity: medium
+priority_score: 69
+notes: Prefer Loom-owned domains and the exact official package host; avoid relying on unconfirmed share-link infrastructure when primary product hosts are sufficient.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.loom.com/desktop
+      evidence: Loom’s official desktop page is hosted on www.loom.com/desktop, and the official Homebrew cask downloads the macOS app from the exact host packages.loom.com; the reviewed IOC set keeps only Loom-owned product and package hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: loom.com
+      match: suffix
+      role: app_brand
+    - pattern: packages.loom.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: loom
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/loom.json
+      evidence: Homebrew cask installs Loom.app and removes Loom-specific Application Support, logs, preferences, and saved-state data rooted at com.loom.desktop on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Loom.app
+    - ~/Library/Application Support/Loom
+    - ~/Library/Logs/Loom
+    - ~/Library/Preferences/com.loom.desktop.plist
+    - ~/Library/Saved Application State/com.loom.desktop.savedState
+    bundle_ids:
+    - com.loom.desktop
+    process_names:
+    - Loom

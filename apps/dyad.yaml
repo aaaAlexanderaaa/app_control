@@ -1,0 +1,53 @@
+id: dyad
+name: Dyad
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+severity: medium
+priority_score: 76
+notes: Use Dyad-owned update and homepage hosts with Homebrew cask artifacts for macOS
+  detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/d/dyad.rb
+      evidence: The official Homebrew cask for Dyad declares homepage https://dyad.sh/
+        and uses the exact update endpoint https://api.dyad.sh/v1/update/stable/...
+        for livecheck; the reviewed network IOC set keeps those Dyad-owned hosts and
+        avoids broader third-party domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: dyad.sh
+      match: exact
+      role: app_brand
+    - pattern: api.dyad.sh
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: dyad
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/d/dyad.rb
+      evidence: The official Homebrew cask installs dyad.app and zaps the app-specific
+        dyad support, cache, ShipIt, HTTP storage, logs, and preferences paths on
+        macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/dyad.app
+    - ~/Library/Application Support/dyad
+    - ~/Library/Caches/com.electron.dyad
+    - ~/Library/Caches/com.electron.dyad.ShipIt
+    - ~/Library/HTTPStorages/com.electron.dyad
+    - ~/Library/Logs/dyad
+    - ~/Library/Preferences/com.electron.dyad.plist
+    - ~/dyad-apps
+    bundle_ids:
+    - com.electron.dyad
+    process_names:
+    - dyad

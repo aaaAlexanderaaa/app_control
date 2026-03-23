@@ -1,0 +1,46 @@
+id: deer_flow
+name: deer-flow
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- superagent
+- research_agent
+- coding
+severity: medium
+priority_score: 82
+notes: Open-source ByteDance superagent harness; prefer the exact deerflow.tech host and repo-root config artifacts instead of broad bytedance.com or generic model-provider endpoints.
+references:
+- url: https://raw.githubusercontent.com/bytedance/deer-flow/main/README.md
+  kind: upstream_readme
+  summary: README links the official DeerFlow website and documents make config plus the local configuration workflow.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/bytedance/deer-flow/main/backend/docs/CONFIGURATION.md
+  kind: upstream_source
+  summary: Configuration guide defines project-root config.yaml, extensions_config.json, and .env usage for DeerFlow.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/bytedance/deer-flow/main/README.md
+      evidence: The upstream README identifies deerflow.tech as DeerFlow's official website; the reviewed network IOC set removes the generic bytedance.com domain and keeps only the exact DeerFlow-owned host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: deerflow.tech
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: deer-flow
+      match: substring
+    - pattern: deerflow
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/bytedance/deer-flow/main/backend/docs/CONFIGURATION.md
+      evidence: DeerFlow's configuration guide places config.yaml at the project root, documents extensions_config.json as the runtime-mutable extensions file, and uses .env for local secrets management in the same repo-root workflow.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/deer-flow/'

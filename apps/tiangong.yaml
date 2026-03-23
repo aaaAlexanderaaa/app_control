@@ -1,0 +1,48 @@
+id: tiangong
+name: Tiangong
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+severity: medium
+priority_score: 63
+notes: Prefer Tiangong-owned product hosts and the official app bundle identifier; avoid broader Kunlun parent infrastructure for enterprise detection.
+references:
+- url: https://www.tiangong.cn/
+  kind: official_site
+  summary: Official Tiangong site anchors the product on the tiangong.cn brand domain.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/cn/app/%E5%A4%A9%E5%B7%A5/id6447616432
+  kind: app_store
+  summary: Apple App Store page for 天工 shows the official listing and macOS compatibility metadata for Apple Silicon Macs.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6447616432&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 天工 listing and bundleId com.kunlun.tiangong.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.tiangong.cn/
+      evidence: Tiangong's official product site is hosted on https://www.tiangong.cn/, giving a precise product-owned domain without relying on broader Kunlun parent properties.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: tiangong.cn
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: tiangong
+      match: substring
+    - pattern: 天工
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6447616432&country=cn
+      evidence: Apple's lookup API returns the official 天工 listing with bundleId com.kunlun.tiangong, and the App Store page for track 6447616432 marks the listing as Mac-compatible on Apple Silicon Macs.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.kunlun.tiangong

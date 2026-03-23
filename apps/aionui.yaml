@@ -1,0 +1,42 @@
+id: aionui
+name: AionUi
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- desktop_agent
+- multi_agent
+- automation
+severity: high
+priority_score: 87
+notes: Free open-source desktop app with built-in agent engine; automated task execution; positions itself as OpenClaw/Cowork style multi-agent desktop.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.aionui.com
+      evidence: The upstream AionUi repository currently publishes https://www.aionui.com as its official homepage, giving a dedicated first-party app domain for reviewed network detection
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: aionui.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: aionui
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/iOfficeAI/AionUi
+      evidence: electron-builder.yml sets appId com.aionui.app and productName/executableName AionUi; homebrew/aionui.rb.example and src/process/utils/configureConsoleLog.ts define AionUi.app plus Application Support, preferences, saved-state, and log locations
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/AionUi.app
+    - ~/Library/Application Support/AionUi
+    - ~/Library/Preferences/com.aionui.app.plist
+    - ~/Library/Saved Application State/com.aionui.app.savedState
+    - ~/Library/Logs/AionUi
+    process_names:
+    - AionUi
+    bundle_ids:
+    - com.aionui.app

@@ -1,0 +1,41 @@
+id: marscode
+name: MarsCode
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 79
+notes: Prefer exact MarsCode-owned hosts and the exact VS Code extension identifier; avoid broader ByteDance or shared AI-provider domains. The official extension page currently carries Trae branding but still exposes MarsCode-specific extension artifacts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.marscode.com/extension
+      evidence: MarsCode’s official extension page is served from `www.marscode.com/extension`, links official documentation on `docs.marscode.com`, serves static assets from `lf-cdn.marscode.com`, and still describes the product as MarsCode even though the page title currently reads `Trae - Plugin`; the reviewed network IOC set keeps only those MarsCode-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.marscode.com
+      match: exact
+      role: app_brand
+    - pattern: docs.marscode.com
+      match: exact
+      role: app_brand
+    - pattern: lf-cdn.marscode.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: marscode
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.marscode.com/extension
+      evidence: MarsCode’s official extension page exposes the exact VS Code install URI `vscode:extension/MarsCode.marscode-extension`; paired with VS Code’s documented macOS extension directory, this yields the stable local artifact paths for the MarsCode extension.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/marscode.marscode-extension-*
+    - ~/.vscode-insiders/extensions/marscode.marscode-extension-*

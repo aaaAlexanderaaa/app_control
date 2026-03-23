@@ -1,0 +1,42 @@
+id: docsend
+name: DocSend
+category: DOC_CONVERSION_UPLOAD
+product_shape:
+- web
+product_type:
+- document_sharing
+- tracking
+severity: medium
+priority_score: 69
+notes: DocSend's official Chrome extension is documented by Dropbox Help and Chrome Web Store, so the reviewed IOC set stays on docsend-owned domains and the exact extension ID.
+references:
+- url: https://help.dropbox.com/integrations/dropbox-docsend-chrome-extension
+  kind: official_support
+  summary: Official Dropbox Help article documents the Dropbox DocSend Chrome extension and links users to the Chrome Web Store.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/docsend-extension/nmkphfcebcpicnakipcmgapcckkbhppd
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID nmkphfcebcpicnakipcmgapcckkbhppd and identifies docsend.com as the website.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/docsend-extension/nmkphfcebcpicnakipcmgapcckkbhppd
+      evidence: The official Chrome Web Store listing identifies docsend.com as the extension website, and Dropbox Help documents the extension as the official DocSend browser integration, so the reviewed network IOC keeps only the DocSend-owned domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: docsend.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: docsend
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://help.dropbox.com/integrations/dropbox-docsend-chrome-extension
+      evidence: Dropbox Help links users to the DocSend Chrome Web Store item that resolves to extension ID nmkphfcebcpicnakipcmgapcckkbhppd, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - nmkphfcebcpicnakipcmgapcckkbhppd

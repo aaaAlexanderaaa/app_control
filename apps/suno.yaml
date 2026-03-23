@@ -1,0 +1,41 @@
+id: suno
+name: Suno
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- audio_generation
+severity: medium
+priority_score: 59
+notes: Keep Suno IOC on the exact Suno web host and the official app bundle identifier.
+references:
+- url: https://suno.com/
+  kind: official_site
+  summary: Official Suno site is served from suno.com.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6480136315
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Suno - AI Songs & Music returns bundle ID ai.suno.ios from seller Suno Inc.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://suno.com/
+      evidence: The official Suno product site is served from suno.com, so the reviewed network IOC set keeps only that exact Suno-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: suno.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: suno
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6480136315
+      evidence: Apple's official lookup metadata for Suno - AI Songs & Music returns bundle identifier ai.suno.ios from seller Suno Inc., so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - ai.suno.ios

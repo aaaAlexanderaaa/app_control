@@ -1,0 +1,735 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./app_data_leak_risk_catalog.schema.json",
+  "title": "App Data Leakage Risk Catalog",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "scope",
+    "taxonomy",
+    "sources",
+    "apps"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "detection_principles": {
+      "type": "object",
+      "properties": {
+        "app_level_identification": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "provider_level_identification": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "f1_guidance": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "taxonomy": {
+      "type": "object",
+      "required": [
+        "categories",
+        "popularity",
+        "risks"
+      ],
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "mece_boundary"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "mece_boundary": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "popularity": {
+          "type": "object",
+          "required": [
+            "levels",
+            "regions"
+          ],
+          "properties": {
+            "levels": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "regions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "risks": {
+          "type": "object",
+          "required": [
+            "version",
+            "severity_scale",
+            "items"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "severity_scale": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/riskItem"
+              }
+            },
+            "legacy_mapping_notes": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "object",
+      "required": [
+        "public_catalogs",
+        "supporting"
+      ],
+      "properties": {
+        "public_catalogs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "supporting": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "apps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/app"
+      }
+    },
+    "changelog": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "version",
+          "date",
+          "changes"
+        ],
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "changes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "url",
+        "source_type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "legacy_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source_type": {
+          "type": "string"
+        },
+        "why_it_matters": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "riskItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "severity",
+        "title",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "hostnamePattern": {
+      "type": "object",
+      "required": [
+        "pattern",
+        "match",
+        "match_on",
+        "role",
+        "precision",
+        "weight",
+        "source_ids",
+        "last_verified_at",
+        "verification_status"
+      ],
+      "properties": {
+        "pattern": {
+          "type": "string"
+        },
+        "match": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "suffix"
+          ]
+        },
+        "match_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "app_brand",
+            "ai_service_provider",
+            "platform_service",
+            "cdn_static",
+            "file_upload",
+            "file_download",
+            "file_share",
+            "file_sync",
+            "file_transfer"
+          ]
+        },
+        "precision": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "unknown"
+          ]
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "last_verified_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "file_semantics": {
+          "type": "string",
+          "enum": [
+            "upload",
+            "download",
+            "share",
+            "sync",
+            "transfer",
+            "static",
+            "unknown"
+          ]
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "heuristic",
+            "unverified"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "keywordPattern": {
+      "type": "object",
+      "required": [
+        "pattern",
+        "match",
+        "weight",
+        "precision"
+      ],
+      "properties": {
+        "pattern": {
+          "type": "string"
+        },
+        "match": {
+          "type": "string",
+          "enum": [
+            "substring",
+            "regex"
+          ]
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "precision": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "hostArtifact": {
+      "type": "object",
+      "required": [
+        "value",
+        "match",
+        "precision",
+        "weight",
+        "source_ids",
+        "last_verified_at",
+        "verification_status"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "match": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "prefix",
+            "suffix",
+            "regex"
+          ]
+        },
+        "precision": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "unknown"
+          ]
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "last_verified_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "heuristic",
+            "unverified"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "pathHostArtifact": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/hostArtifact"
+        },
+        {
+          "type": "object",
+          "required": [
+            "path_type"
+          ],
+          "properties": {
+            "path_type": {
+              "type": "string",
+              "enum": [
+                "app_bundle",
+                "cli_binary",
+                "config_file",
+                "credential_dir",
+                "credential_file",
+                "database_file",
+                "env_file",
+                "install_dir",
+                "log_file",
+                "memory_file",
+                "model_dir",
+                "model_file",
+                "persona_file",
+                "secret_file",
+                "shell_completion",
+                "skins_dir",
+                "skills_dir",
+                "state_dir",
+                "workspace_dir"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "app": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "category",
+        "product_shape",
+        "product_type",
+        "popularity",
+        "fingerprints",
+        "risk_profile",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "product_shape": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "web",
+              "macos"
+            ]
+          }
+        },
+        "product_type": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "popularity": {
+          "type": "object",
+          "required": [
+            "level",
+            "region"
+          ],
+          "properties": {
+            "level": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string"
+            },
+            "raw": {}
+          },
+          "additionalProperties": false
+        },
+        "fingerprints": {
+          "type": "object",
+          "required": [
+            "network",
+            "host",
+            "scoring"
+          ],
+          "properties": {
+            "network": {
+              "type": "object",
+              "required": [
+                "hostname_patterns",
+                "keyword_patterns"
+              ],
+              "properties": {
+                "hostname_patterns": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/hostnamePattern"
+                  }
+                },
+                "keyword_patterns": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/keywordPattern"
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "host": {
+              "type": "object",
+              "required": [
+                "macos"
+              ],
+              "properties": {
+                "macos": {
+                  "type": "object",
+                  "required": [
+                    "bundle_ids",
+                    "process_names",
+                    "team_ids",
+                    "directory_paths",
+                    "chrome_extension_ids",
+                    "safari_extension_bundle_ids",
+                    "notes",
+                    "host_signal_status"
+                  ],
+                  "properties": {
+                    "bundle_ids": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/hostArtifact"
+                      }
+                    },
+                    "process_names": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/hostArtifact"
+                      }
+                    },
+                    "team_ids": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/hostArtifact"
+                      }
+                    },
+                    "directory_paths": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/pathHostArtifact"
+                      }
+                    },
+                    "chrome_extension_ids": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/hostArtifact"
+                      }
+                    },
+                    "safari_extension_bundle_ids": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/hostArtifact"
+                      }
+                    },
+                    "notes": {
+                      "type": "string"
+                    },
+                    "host_signal_status": {
+                      "type": "string",
+                      "enum": [
+                        "verified",
+                        "heuristic",
+                        "missing"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "scoring": {
+              "type": "object",
+              "required": [
+                "method",
+                "suggested_threshold",
+                "notes"
+              ],
+              "properties": {
+                "method": {
+                  "type": "string"
+                },
+                "suggested_threshold": {
+                  "type": "number"
+                },
+                "notes": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "risk_profile": {
+          "type": "object",
+          "required": [
+            "risks",
+            "severity",
+            "legacy_tags",
+            "priority_score"
+          ],
+          "properties": {
+            "risks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "severity": {
+              "type": "string"
+            },
+            "legacy_tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "priority_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          "additionalProperties": false
+        },
+        "evidence": {
+          "type": "object",
+          "required": [
+            "source_ids",
+            "last_reviewed_at",
+            "verification_status"
+          ],
+          "properties": {
+            "source_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "last_reviewed_at": {
+              "type": "string",
+              "format": "date"
+            },
+            "verification_status": {
+              "type": "string",
+              "enum": [
+                "verified",
+                "heuristic",
+                "unverified"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "notes": {
+          "type": "string"
+        },
+        "legacy": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,35 @@
+id: aihub
+name: AIHub
+category: GENAI_CHAT
+product_shape:
+- macos
+- web
+product_type:
+- llm_aggregator
+- chatbot
+severity: medium
+priority_score: 64
+notes: Name collision exists with AI navigation websites; rely on process metadata.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: aihub.cn
+      match: suffix
+      role: app_brand
+    - pattern: deepseek.com
+      match: suffix
+      role: ai_service_provider
+    - pattern: moonshot.cn
+      match: suffix
+      role: ai_service_provider
+    - pattern: openai.com
+      match: suffix
+      role: ai_service_provider
+    keyword_patterns:
+    - pattern: aihub
+      match: substring

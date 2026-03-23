@@ -1,0 +1,38 @@
+id: goose
+name: Goose
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+- desktop_agent
+severity: high
+priority_score: 87
+notes: Goose is local-first and provider endpoints vary by configuration; retain only Goose-owned official site IOC and local host artifacts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://block.github.io/goose/
+      evidence: Official Goose documentation is published on block.github.io/goose; the reviewed network IOC set keeps only that Goose-owned official host and excludes shared provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: block.github.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: goose
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/block-goose.json
+      evidence: Homebrew cask defines the Goose app bundle and Goose-specific Application Support path on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Goose.app
+    - ~/.config/goose
+    - ~/Library/Application Support/Goose
+    process_names:
+    - Goose

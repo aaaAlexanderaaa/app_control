@@ -1,0 +1,37 @@
+id: microsoft_copilot
+name: Microsoft Copilot
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+- assistant
+severity: medium
+priority_score: 67
+notes: Prefer Copilot-specific product hosts and the Mac app identity; avoid broad microsoft.com, live.com, and bing.com parent-domain matching.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support.microsoft.com/en-us/topic/welcome-to-the-copilot-app-on-macos-b8f126fe-117a-48c9-bfe2-d75fdb5e7cd7
+      evidence: Microsoft’s official support page for the Copilot app on macOS links users to the exact product host copilot.microsoft.com, and the reviewed network IOC set keeps only that Copilot-specific hostname instead of broader Microsoft properties.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: copilot.microsoft.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: microsoft copilot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://apps.apple.com/us/app/microsoft-copilot/id6738511300?mt=12
+      evidence: Apple’s official Mac App Store listing identifies Microsoft Copilot as available on Mac and names the product Microsoft Copilot; retained host IOC is limited to that app bundle name.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Microsoft Copilot.app
+    process_names:
+    - Microsoft Copilot

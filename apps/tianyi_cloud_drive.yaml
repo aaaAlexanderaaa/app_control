@@ -1,0 +1,52 @@
+id: tianyi_cloud_drive
+name: Tianyi Cloud Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer exact Tianyi Cloud Drive product and download hosts plus cask-backed host artifacts; avoid broad 189.cn matching outside the cloud-drive service.
+references:
+- url: https://formulae.brew.sh/api/cask/cloud189.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask exposes the official homepage, macOS download host, app artifact, and zap paths for Cloud189 / 天翼云盘.
+  checked_at: '2026-03-21'
+- url: https://cloud.189.cn/web/static/download-client/index.html
+  kind: official_download_page
+  summary: Official Tianyi Cloud Drive download page sits on cloud.189.cn.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/cloud189.json
+      evidence: The Homebrew cask exposes Tianyi Cloud Drive's official homepage on cloud.189.cn and downloads the macOS client from download.cloud.189.cn; the reviewed network IOC set keeps only those exact Tianyi Cloud Drive hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: cloud.189.cn
+      match: exact
+      role: app_brand
+    - pattern: download.cloud.189.cn
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: cloud189
+      match: substring
+    - pattern: 天翼云盘
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/cloud189.json
+      evidence: The Homebrew cask installs 天翼云盘.app and zaps the Tianyi Cloud Drive-specific Application Support and preference paths on macOS; retained host IOC is limited to those cask-backed artifacts and the app process name.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/天翼云盘.app
+    - ~/Library/Application Support/com.21cn.cloud-dist
+    - ~/Library/Preferences/21cn.cloud.dist.plist
+    process_names:
+    - 天翼云盘

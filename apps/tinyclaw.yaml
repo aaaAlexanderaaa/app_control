@@ -1,0 +1,60 @@
+id: tinyclaw
+name: TinyClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- multi_agent
+- daemon
+severity: critical
+priority_score: 96
+notes: >-
+  TinyClaw is now distributed from the TinyAGI repository and
+  tinyagicompany.com. Reviewed IOC is limited to the official TinyOffice host,
+  TinyAGI/TinyClaw keywords, and documented `~/.tinyagi` runtime paths.
+references:
+- url: https://github.com/TinyAGI/tinyagi
+  kind: official_repo
+  summary: Official TinyAGI repository identifies TinyClaw as the former name and documents ~/.tinyagi plus ~/tinyagi-workspace runtime artifacts.
+  checked_at: '2026-03-22'
+- url: https://office.tinyagicompany.com/
+  kind: official_site
+  summary: Official TinyOffice site is the first-party hosted control surface for locally running TinyAGI/TinyClaw instances.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/TinyAGI/tinyagi
+      evidence: >-
+        The official TinyAGI repository identifies TinyClaw as the former name
+        and links `office.tinyagicompany.com` plus `tinyagicompany.com` as
+        first-party TinyAGI surfaces.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: office.tinyagicompany.com
+      match: exact
+      role: app_brand
+    - pattern: tinyagicompany.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: tinyclaw
+      match: substring
+    - pattern: tinyagi
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/TinyAGI/tinyagi
+      evidence: >-
+        The official TinyAGI repository documents `~/.tinyagi`,
+        `~/.tinyagi/settings.json`, and `~/tinyagi-workspace` as runtime
+        artifacts for local TinyAGI/TinyClaw installs.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.tinyagi
+    - ~/tinyagi-workspace
+    process_names:
+    - tinyagi

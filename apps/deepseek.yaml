@@ -1,0 +1,52 @@
+id: deepseek
+name: DeepSeek
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+- coding
+severity: medium
+priority_score: 66
+notes: Use exact DeepSeek-owned web and API hosts plus the official app bundle identifier; avoid broader provider domains.
+references:
+- url: https://www.deepseek.com/
+  kind: official_site
+  summary: Official DeepSeek product site is served from www.deepseek.com.
+  checked_at: '2026-03-22'
+- url: https://api-docs.deepseek.com/
+  kind: official_docs
+  summary: Official DeepSeek API docs are served from api-docs.deepseek.com and document the api.deepseek.com endpoint.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6737597349
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for DeepSeek - AI Assistant returns bundle ID com.deepseek.chat from seller Hangzhou DeepSeek Artificial Intelligence Co., Ltd.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://api-docs.deepseek.com/
+      evidence: The official DeepSeek site is served from www.deepseek.com and the official API docs are served from api-docs.deepseek.com and reference api.deepseek.com, so the reviewed network IOC set keeps only those DeepSeek-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.deepseek.com
+      match: exact
+      role: app_brand
+    - pattern: api-docs.deepseek.com
+      match: exact
+      role: app_brand
+    - pattern: api.deepseek.com
+      match: exact
+      role: ai_service_provider
+    keyword_patterns:
+    - pattern: deepseek
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6737597349
+      evidence: Apple's official lookup metadata for DeepSeek - AI Assistant returns bundle identifier com.deepseek.chat from seller Hangzhou DeepSeek Artificial Intelligence Co., Ltd., so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.deepseek.chat

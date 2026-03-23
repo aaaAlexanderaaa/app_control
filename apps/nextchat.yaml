@@ -1,0 +1,40 @@
+id: nextchat
+name: NextChat
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- llm_client
+severity: medium
+priority_score: 62
+notes: Popular open-source cross-platform AI client; for enterprise detection prefer the exact NextChat-owned web host and the official desktop bundle identifier over generic model-provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://nextchat.club/download
+      evidence: The official NextChat download page is served from nextchat.club/download and identifies the product as NextChat; the reviewed network IOC set keeps only the exact NextChat-owned web host and removes generic AI-provider domains that are not product-specific indicators.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: nextchat.club
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: nextchat
+      match: substring
+    - pattern: chatgpt next web
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/ChatGPTNextWeb/NextChat/main/src-tauri/tauri.conf.json
+      evidence: The official desktop Tauri configuration sets productName to NextChat, window title to NextChat, and bundle identifier to com.yida.chatgpt.next.web; retained host IOC is limited to that app bundle path, process name, and bundle identifier.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/NextChat.app
+    bundle_ids:
+    - com.yida.chatgpt.next.web
+    process_names:
+    - NextChat

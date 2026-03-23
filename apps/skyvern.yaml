@@ -1,0 +1,48 @@
+id: skyvern
+name: Skyvern
+category: AI_BROWSER_AGENT
+product_shape:
+- web
+- macos
+product_type:
+- browser_automation
+- workflow_agent
+severity: high
+priority_score: 85
+notes: >-
+  Official Skyvern materials expose product-owned website, docs, and cloud-app
+  hosts plus the product-specific `skyvern` CLI used for local setup and
+  service management.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/Skyvern-AI/skyvern
+      evidence: >-
+        Skyvern's official README links the primary site at `www.skyvern.com`,
+        the hosted cloud product at `app.skyvern.com`, and documentation under
+        `www.skyvern.com/docs`; the reviewed network IOC set keeps only those
+        Skyvern-owned exact hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.skyvern.com
+      match: exact
+      role: app_brand
+    - pattern: app.skyvern.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: skyvern
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/Skyvern-AI/skyvern
+      evidence: >-
+        The official README repeatedly documents the product-specific CLI
+        commands `skyvern quickstart`, `skyvern run all`, `skyvern run server`,
+        `skyvern run ui`, `skyvern status`, and `skyvern stop all`; retained
+        host IOC is therefore limited to the confirmed `skyvern` process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - skyvern

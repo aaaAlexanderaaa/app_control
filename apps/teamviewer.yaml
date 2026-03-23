@@ -1,0 +1,69 @@
+id: teamviewer
+name: TeamViewer
+category: REMOTE_ACCESS
+product_shape:
+- macos
+- web
+product_type:
+- remote_access
+severity: high
+priority_score: 81
+notes: Remote support traffic can bypass endpoint data-movement controls, so keep TeamViewer IOC on official TeamViewer service hosts and macOS package artifacts.
+references:
+- url: https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/troubleshooting/ports-used-by-teamviewer/
+  kind: official_support
+  summary: TeamViewer's official ports and URLs article documents the service hosts used by TeamViewer clients.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/teamviewer.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask installs TeamViewer.pkg, deletes TeamViewer.app on uninstall, and zaps TeamViewer-specific support, cache, cookie, HTTP storage, log, preference, saved-state, and WebKit paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.teamviewer.com/en/global/support/knowledge-base/teamviewer-remote/troubleshooting/ports-used-by-teamviewer/
+      evidence: TeamViewer's official ports and URLs article lists TeamViewer service hosts including `login.teamviewer.com`, `service.teamviewer.com`, `webapi.teamviewer.com`, and the wider `teamviewer.com` domain family used by TeamViewer clients.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: teamviewer.com
+      match: suffix
+      role: app_brand
+    - pattern: configdl.teamviewer.com
+      match: exact
+      role: file_download
+    - pattern: login.teamviewer.com
+      match: exact
+      role: platform_service
+    - pattern: service.teamviewer.com
+      match: exact
+      role: platform_service
+    - pattern: webapi.teamviewer.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: teamviewer
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/t/teamviewer.rb
+      evidence: The official Homebrew cask installs TeamViewer.pkg, deletes TeamViewer.app on uninstall, and zaps TeamViewer support, cache, cookie, HTTP storage, log, preference, saved-state, and WebKit paths; it also lists TeamViewer launch and quit identifiers on macOS.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/TeamViewer.app
+    - ~/Library/Application Support/TeamViewer
+    - ~/Library/Caches/com.teamviewer.TeamViewer
+    - ~/Library/Caches/TeamViewer
+    - ~/Library/Cookies/com.teamviewer.TeamViewer.binarycookies
+    - ~/Library/HTTPStorages/com.teamviewer.TeamViewer
+    - ~/Library/HTTPStorages/com.teamviewer.TeamViewer.binarycookies
+    - ~/Library/Logs/TeamViewer
+    - ~/Library/Preferences/com.teamviewer*
+    - ~/Library/Saved Application State/com.teamviewer.TeamViewer.savedState
+    - ~/Library/WebKit/com.teamviewer.TeamViewer
+    - /Library/Preferences/com.teamviewer*
+    bundle_ids:
+    - com.teamviewer.TeamViewer
+    process_names:
+    - TeamViewer

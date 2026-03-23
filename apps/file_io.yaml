@@ -1,0 +1,41 @@
+id: file_io
+name: file.io
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- ephemeral_file_transfer
+severity: medium
+priority_score: 73
+notes: Ephemeral file transfer; treat any SNI/DNS to file.io as high-risk file transfer context.
+references:
+- url: https://file.io/
+  kind: official_site
+  summary: Official file.io site is served from file.io and links the file-io GitHub organization.
+  checked_at: '2026-03-22'
+- url: https://github.com/file-io/fileio-cli
+  kind: github_repo
+  summary: Official file.io CLI repository is named fileio-cli and is published under the file-io GitHub organization.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://file.io/
+      evidence: The official file.io service is served from file.io, so the reviewed network IOC keeps only that exact file transfer hostname.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: file.io
+      match: exact
+      role: file_transfer
+    keyword_patterns:
+    - pattern: file.io
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/file-io/fileio-cli
+      evidence: The official file-io GitHub organization publishes the repository fileio-cli and describes it as the official file.io CLI, so the retained host IOC is the exact repo-local fileio-cli checkout path.
+      checked_at: '2026-03-22'
+    paths:
+    - "*/fileio-cli/"

@@ -1,0 +1,52 @@
+id: hailuo_ai
+name: Hailuo AI
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- assistant
+severity: medium
+priority_score: 63
+notes: Prefer exact Hailuo-owned domains and the official app bundle identifier; avoid broader MiniMax or third-party mobile distribution infrastructure for enterprise detection.
+references:
+- url: https://hailuoai.com/
+  kind: official_site
+  summary: Official Hailuo site lists the product on hailuoai.com, references the cdn.hailuoai.com asset host, and advertises Web, Windows, Mac, iOS, and Android availability.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/cn/app/%E6%B5%B7%E8%9E%BAai-%E8%A7%86%E9%A2%91%E5%88%9B%E4%BD%9C%E5%B7%A5%E5%85%B7/id6742046771
+  kind: app_store
+  summary: Apple App Store page for 海螺AI shows the official listing and macOS compatibility metadata for Apple Silicon Macs.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6742046771&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 海螺AI listing and bundleId com.hailuoai.video.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://hailuoai.com/
+      evidence: Hailuo's official site is hosted on https://hailuoai.com/, references the exact asset host https://cdn.hailuoai.com, and its structured metadata lists the app as available on Web, Windows, Mac, iOS, and Android; the reviewed network IOC set keeps only those exact Hailuo-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: hailuoai.com
+      match: exact
+      role: app_brand
+    - pattern: cdn.hailuoai.com
+      match: exact
+      role: cdn_static
+    keyword_patterns:
+    - pattern: hailuo
+      match: substring
+    - pattern: 海螺
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6742046771&country=cn
+      evidence: Apple's lookup API returns the official 海螺AI listing with bundleId com.hailuoai.video, and the App Store page for track 6742046771 marks the listing as Mac-compatible on Apple Silicon Macs.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.hailuoai.video

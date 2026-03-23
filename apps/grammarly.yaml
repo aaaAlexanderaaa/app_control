@@ -1,0 +1,60 @@
+id: grammarly
+name: Grammarly
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- writing
+- assistant
+severity: medium
+priority_score: 75
+notes: Prefer Grammarly-owned web and download hosts instead of broader historical
+  suffixes.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/g/grammarly-desktop.rb
+      evidence: The official Homebrew cask for Grammarly Desktop declares homepage
+        https://www.grammarly.com/desktop, download URL https://download-mac.grammarly.com/versions/.../Grammarly.dmg,
+        and update feed https://download-mac.grammarly.com/appcast.xml; the reviewed
+        network IOC set keeps those exact Grammarly-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.grammarly.com
+      match: exact
+      role: app_brand
+    - pattern: download-mac.grammarly.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: grammarly
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/g/grammarly-desktop.rb
+      evidence: The official Homebrew cask installs Grammarly Desktop.app and zaps
+        the app-specific ProjectLlama application support, cache, HTTP storage, launch
+        agent, preferences, and WebKit paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Grammarly Desktop.app
+    - /Applications/Grammarly Installer.app
+    - ~/Library/Application Support/com.grammarly.ProjectLlama
+    - ~/Library/Caches/com.grammarly.ProjectLlama
+    - ~/Library/HTTPStorages/com.grammarly.GRLlamaOnboarding.binarycookies
+    - ~/Library/HTTPStorages/com.grammarly.ProjectLlama
+    - ~/Library/HTTPStorages/com.grammarly.ProjectLlama.binarycookies
+    - ~/Library/LaunchAgents/com.grammarly.ProjectLlama.Shepherd.plist
+    - ~/Library/Preferences/com.grammarly.ProjectLlama.plist
+    - ~/Library/WebKit/com.grammarly.GRLlamaOnboarding
+    - ~/Library/WebKit/com.grammarly.ProjectLlama
+    bundle_ids:
+    - com.grammarly.GRLlamaOnboarding
+    - com.grammarly.ProjectLlama
+    - com.grammarly.ProjectLlama.Shepherd
+    process_names:
+    - Grammarly Desktop
+    - Grammarly Installer

@@ -1,0 +1,39 @@
+id: pi_mono
+name: pi-mono
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- cli
+- tui
+- web_ui
+- coding_agent
+severity: medium
+priority_score: 82
+notes: AI agent toolkit with coding agent CLI, unified LLM API, TUI and web UI libraries. 24.1k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://pi.dev/
+      evidence: The official pi coding agent README links to pi.dev as the project domain, so the reviewed network IOC set keeps that dedicated brand host and the project keyword instead of generic package-registry or provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: pi.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: pi-mono
+      match: substring
+    - pattern: pi coding agent
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/README.md
+      evidence: The official pi coding agent README tells users to install @mariozechner/pi-coding-agent globally, documents the pi CLI, and stores settings, models, keybindings, and sessions under ~/.pi/agent, so the reviewed host IOC set keeps those pi-specific files and the pi process name.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.pi/
+    process_names:
+    - pi

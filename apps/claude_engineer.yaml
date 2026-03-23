@@ -1,0 +1,42 @@
+id: claude_engineer
+name: Claude Engineer
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Open-source Claude Engineer framework; upstream lacks a dedicated product domain, so reviewed IOC stays on exact Claude Engineer and `cev3` names plus repo-local entrypoints.
+references:
+- url: https://raw.githubusercontent.com/Doriandarko/claude-engineer/main/readme.md
+  kind: upstream_readme
+  summary: Upstream README documents cloning claude-engineer and running app.py or ce3.py from the repository root.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Doriandarko/claude-engineer/main/pyproject.toml
+  kind: upstream_source
+  summary: Upstream project metadata defines the package name ce3 and the `cev3` script entrypoint.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Doriandarko/claude-engineer/main/pyproject.toml
+      evidence: Upstream materials consistently name the project Claude Engineer and define the `cev3` package script, but do not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to those exact project keywords.
+      checked_at: '2026-03-22'
+    keyword_patterns:
+    - pattern: claude engineer
+      match: substring
+    - pattern: cev3
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Doriandarko/claude-engineer/main/readme.md
+      evidence: The upstream README tells users to run app.py or ce3.py from the claude-engineer repository root, and project metadata defines the `cev3` script entrypoint, so the retained host IOC is limited to those exact repo-local files and process names.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/claude-engineer/'
+    process_names:
+    - cev3

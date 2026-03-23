@@ -1,0 +1,36 @@
+id: browser_use_desktop
+name: browser-use Desktop
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+product_type:
+- browser_automation
+- desktop_agent
+severity: high
+priority_score: 85
+notes: Desktop app that controls local Chrome; paired desktop surface for browser-use.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/browser-use/desktop/main/README.md
+      evidence: The upstream desktop README links the official docs and support endpoints under browser-use.com, giving a dedicated first-party product domain for reviewed network detection
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: browser-use.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: browser-use
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/browser-use/desktop
+      evidence: src/main.ts sets the desktop base directory to ~/Downloads/browser-use and the macOS Chrome profile under ~/Library/Application Support/browser-use-desktop/ChromeProfile, while package.json names the app browser-use-desktop
+      checked_at: '2026-03-21'
+    paths:
+    - ~/Downloads/browser-use
+    - ~/Library/Application Support/browser-use-desktop/ChromeProfile
+    process_names:
+    - browser-use-desktop

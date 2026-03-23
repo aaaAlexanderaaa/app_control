@@ -1,0 +1,41 @@
+id: blackbox
+name: Blackbox
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 77
+notes: Prefer Blackbox-owned web and extension artifacts; do not rely on shared model-provider
+  domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.blackbox.ai/
+      evidence: BLACKBOX AI’s official site canonicalizes to https://www.blackbox.ai,
+        and the official Marketplace listing verifies ownership of the blackbox.ai
+        domain; the reviewed network IOC set keeps that exact Blackbox-owned host
+        and drops shared provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.blackbox.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: blackbox
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=Blackboxapp.blackbox
+      evidence: The official VS Code Marketplace listing identifies the extension
+        as Blackboxapp.blackbox, which maps to the stable macOS VS Code extension
+        artifact paths for BLACKBOX AI.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/blackboxapp.blackbox-*
+    - ~/.vscode-insiders/extensions/blackboxapp.blackbox-*

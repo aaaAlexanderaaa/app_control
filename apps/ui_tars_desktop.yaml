@@ -1,0 +1,43 @@
+id: ui_tars_desktop
+name: UI-TARS-desktop
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+- web
+product_type:
+- computer_use_agent
+- gui_agent
+- vision_agent
+severity: high
+priority_score: 93
+notes: General multimodal AI agent stack from ByteDance with GUI agent / vision capabilities; CLI, Web UI, and desktop stack. 28.8k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/bytedance/UI-TARS-desktop/main/README.md
+      evidence: The upstream README states the desktop app now ships as Agent TARS and links first-party blog and documentation pages on agent-tars.com, so the reviewed network IOC set uses the dedicated Agent TARS domain instead of broad bytedance.com coverage
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: agent-tars.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: agent tars
+      match: substring
+    - pattern: ui-tars
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/agent-tars.json
+      evidence: The Homebrew cask installs Agent TARS.app, quits bundle id com.bytedance.agenttars, and zaps ~/Library/Application Support/agent-tars plus ~/Library/Logs/agent-tars
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Agent TARS.app
+    - ~/Library/Application Support/agent-tars
+    - ~/Library/Logs/agent-tars
+    bundle_ids:
+    - com.bytedance.agenttars
+    process_names:
+    - Agent TARS

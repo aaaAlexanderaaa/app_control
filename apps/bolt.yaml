@@ -1,0 +1,55 @@
+id: bolt
+name: Bolt
+category: GENAI_CODING
+product_shape:
+- web
+product_type:
+- coding
+- web_ide
+severity: high
+priority_score: 81
+notes: >-
+  Official Bolt docs confirm the local per-project `.bolt/` directory and
+  `.bolt/ignore` file; reviewed network IOC is limited to Bolt-operated
+  surfaces and excludes broader StackBlitz infrastructure domains.
+references:
+- url: https://bolt.new/
+  kind: official_site
+  summary: Official Bolt site establishes bolt.new as the canonical product host.
+  checked_at: '2026-03-22'
+- url: https://support.bolt.new/troubleshooting/issues
+  kind: official_docs
+  summary: Bolt's official troubleshooting docs state that the `.bolt` directory lives inside each project and includes the `.bolt/ignore` file.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support.bolt.new/troubleshooting/issues
+      evidence: >-
+        Bolt's official site and help center establish `bolt.new` and
+        `support.bolt.new` as Bolt-operated surfaces, so the reviewed network
+        IOC set is limited to those exact product hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: bolt.new
+      match: exact
+      role: app_brand
+    - pattern: support.bolt.new
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: bolt.new
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://support.bolt.new/troubleshooting/issues
+      evidence: >-
+        Bolt's official troubleshooting docs say the `.bolt` directory is
+        located within each Bolt project and contains the `.bolt/ignore` file,
+        so the reviewed host IOC is limited to those exact project-local
+        artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/.bolt/'

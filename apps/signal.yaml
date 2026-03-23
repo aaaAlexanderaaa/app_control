@@ -1,0 +1,42 @@
+id: signal
+name: Signal
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+severity: medium
+priority_score: 72
+notes: Even with E2EE, enterprise data can still be exfiltrated.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/signal.json
+      evidence: Homebrew cask exposes the Signal homepage on signal.org and the macOS desktop update archive on updates.signal.org.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: signal.org
+      match: exact
+      role: app_brand
+    - pattern: updates.signal.org
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: signal
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/signal.json
+      evidence: Homebrew cask defines the Signal app bundle and Signal-specific support, preference, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Signal.app
+    - ~/Library/Application Support/Signal
+    - ~/Library/Preferences/org.whispersystems.signal-desktop.helper.plist
+    - ~/Library/Preferences/org.whispersystems.signal-desktop.plist
+    - ~/Library/Saved Application State/org.whispersystems.signal-desktop.savedState
+    process_names:
+    - Signal

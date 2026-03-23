@@ -1,0 +1,46 @@
+id: le_chat_mistral
+name: Le Chat (Mistral)
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+severity: medium
+priority_score: 66
+notes: Keep Le Chat IOC on Mistral's exact Le Chat web surface and the official app bundle identifier.
+references:
+- url: https://mistral.ai/products/le-chat
+  kind: official_site
+  summary: Official Mistral product page identifies Le Chat on mistral.ai and links the service under chat.mistral.ai.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6740410176
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Le Chat by Mistral AI returns bundle ID ai.mistral.chat from seller MISTRAL AI.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://mistral.ai/products/le-chat
+      evidence: Mistral's official Le Chat product page is served from mistral.ai and points users to the live chat surface on chat.mistral.ai, so the reviewed network IOC set keeps only those exact Mistral-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: mistral.ai
+      match: exact
+      role: app_brand
+    - pattern: chat.mistral.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: mistral
+      match: substring
+    - pattern: le chat
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6740410176
+      evidence: Apple's official lookup metadata for Le Chat by Mistral AI returns bundle identifier ai.mistral.chat from seller MISTRAL AI, so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - ai.mistral.chat

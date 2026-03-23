@@ -1,0 +1,45 @@
+id: codegeex
+name: CodeGeeX
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 78
+notes: Use exact CodeGeeX hosts from official marketplace and upstream extension source;
+  drop broader unrelated provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/CodeGeeX/codegeex-vscode-extension/master/src/localconfig.ts
+      evidence: The upstream CodeGeeX VS Code extension source sets apiHref to https://tianqi.aminer.cn/api/v2,
+        and the official Marketplace listing points the extension homepage to https://codegeex.ai;
+        the reviewed network IOC set keeps those exact CodeGeeX-related hosts and
+        removes broader domains like codegeex.cn or zhipu.ai that were not individually
+        confirmed here.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: codegeex.ai
+      match: exact
+      role: app_brand
+    - pattern: tianqi.aminer.cn
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: codegeex
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=AMiner.codegeex
+      evidence: The official VS Code Marketplace listing identifies the extension
+        as AMiner.codegeex, which maps to the stable macOS VS Code extension artifact
+        paths for CodeGeeX.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/aminer.codegeex-*
+    - ~/.vscode-insiders/extensions/aminer.codegeex-*

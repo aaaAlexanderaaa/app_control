@@ -1,0 +1,52 @@
+id: openpipe
+name: OpenPipe
+category: AI_OBSERVABILITY
+product_shape:
+- web
+product_type:
+- llm_proxy
+- evaluation
+severity: medium
+priority_score: 73
+notes: Proxy-based platform; prefer exact OpenPipe-owned control-plane hosts and repo-local app env files instead of generic cloud or provider endpoints.
+references:
+- url: https://raw.githubusercontent.com/openpipe/openpipe/main/README.md
+  kind: upstream_readme
+  summary: README links the official site and docs, points at app.openpipe.ai demos, and documents copying app/.env.example to app/.env for local runs.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/openpipe/openpipe/main/docs/getting-started/openpipe-sdk.mdx
+  kind: upstream_docs
+  summary: SDK docs state that the default base URL is https://app.openpipe.ai/api/v1.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/openpipe/openpipe/main/client-libs/typescript/src/codegen/core/OpenAPI.ts
+  kind: upstream_source
+  summary: Generated TypeScript client hard-codes the default API base on https://app.openpipe.ai/api/v1.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/openpipe/openpipe/main/client-libs/typescript/src/codegen/core/OpenAPI.ts
+      evidence: The upstream README links openpipe.ai and docs.openpipe.ai, and the SDK docs and generated client both default to https://app.openpipe.ai/api/v1, so the reviewed network IOC retains only those exact OpenPipe-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: openpipe.ai
+      match: exact
+      role: app_brand
+    - pattern: app.openpipe.ai
+      match: exact
+      role: platform_service
+    - pattern: docs.openpipe.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: openpipe
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/openpipe/openpipe/main/README.md
+      evidence: The upstream local-run instructions explicitly copy app/.env.example to app/.env, so the retained host IOC is limited to those exact repo-local OpenPipe configuration files.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/openpipe/'

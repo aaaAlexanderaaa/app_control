@@ -1,0 +1,48 @@
+id: slite
+name: Slite
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- docs
+- knowledge_base
+severity: medium
+priority_score: 72
+notes: Prefer Slite-owned domains; avoid using the shared todesktop distribution host as a primary detector because it is common to unrelated apps.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://slite.com/
+      evidence: Slite’s official homepage is hosted on slite.com and the official workspace app is served on app.slite.com; the reviewed IOC set keeps only Slite-owned product hosts and excludes the shared todesktop download domain.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: slite.com
+      match: suffix
+      role: app_brand
+    - pattern: app.slite.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: slite
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/slite.json
+      evidence: Homebrew cask installs Slite.app and removes Slite-specific Application Support, caches, preferences, and saved-state data rooted at com.slite.desktop on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Slite.app
+    - ~/Library/Application Support/Slite
+    - ~/Library/Caches/com.slite.desktop
+    - ~/Library/Caches/com.slite.desktop.ShipIt
+    - ~/Library/Preferences/com.slite.desktop.helper.plist
+    - ~/Library/Preferences/com.slite.desktop.plist
+    - ~/Library/Saved Application State/com.slite.desktop.savedState
+    bundle_ids:
+    - com.slite.desktop
+    - com.slite.desktop.helper
+    process_names:
+    - Slite

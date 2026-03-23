@@ -1,0 +1,60 @@
+id: tongyi_qianwen
+name: Tongyi Qianwen
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+- coding
+severity: medium
+priority_score: 63
+notes: Prefer exact Tongyi/Qianwen product hosts and the Homebrew-backed macOS artifact; avoid broad Aliyun platform domains for enterprise detection.
+references:
+- url: https://formulae.brew.sh/api/cask/qianwen.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask API exposes Tongyi Qianwen's official homepage, exact macOS download host, app artifact name, and macOS cleanup paths.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/q/qianwen.rb
+  kind: homebrew_cask_formula
+  summary: Raw cask confirms the Qianwen desktop DMG URL pattern on qianwen-portal-cdn.tongyi.com and the installed app name Qianwen.app.
+  checked_at: '2026-03-22'
+- url: https://www.qianwen.com/qianwen
+  kind: official_site
+  summary: Official Tongyi Qianwen product site anchors the consumer app on the qianwen.com brand domain.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/q/qianwen.rb
+      evidence: The official Homebrew cask sets Tongyi Qianwen's homepage to https://www.qianwen.com/qianwen and downloads the macOS client from https://qianwen-portal-cdn.tongyi.com/native/app/...; the reviewed network IOC set keeps only those exact product and download hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.qianwen.com
+      match: exact
+      role: app_brand
+    - pattern: qianwen-portal-cdn.tongyi.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: tongyi
+      match: substring
+    - pattern: qianwen
+      match: substring
+    - pattern: 千问
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/qianwen.json
+      evidence: The Homebrew cask installs Qianwen.app and zaps Tongyi Qianwen-specific Application Support, logs, and preferences rooted at com.alibaba.tongyi on macOS, giving reliable host IOCs without guessing extra paths.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Qianwen.app
+    - ~/Library/Application Support/Qianwen
+    - ~/Library/Logs/Qianwen
+    - ~/Library/Preferences/com.alibaba.tongyi.plist
+    process_names:
+    - Qianwen

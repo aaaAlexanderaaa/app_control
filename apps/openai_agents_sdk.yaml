@@ -1,0 +1,48 @@
+id: openai_agents_sdk
+name: OpenAI Agents SDK
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- multi_agent
+severity: high
+priority_score: 84
+notes: Open-source multi-agent framework; keep IOC on the official OpenAI docs host and exact repo-local AGENTS/.agents artifacts rather than generic provider domains.
+references:
+- url: https://openai.github.io/openai-agents-python/
+  kind: official_docs
+  summary: Official OpenAI Agents SDK documentation is hosted on openai.github.io.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/openai/openai-agents-python/main/pyproject.toml
+  kind: upstream_source
+  summary: Upstream project metadata defines the package name openai-agents and homepage https://openai.github.io/openai-agents-python/.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/openai/openai-agents-python/main/AGENTS.md
+  kind: upstream_source
+  summary: Upstream repository root contains AGENTS.md and repo-local .agents guidance.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://openai.github.io/openai-agents-python/
+      evidence: OpenAI's official Agents SDK documentation is hosted on openai.github.io, and the upstream project metadata points to the same docs homepage, so the reviewed network IOC keeps the exact OpenAI Agents docs host rather than broader OpenAI infrastructure.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: openai.github.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: openai agents
+      match: substring
+    - pattern: openai-agents
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/openai/openai-agents-python/main/AGENTS.md
+      evidence: The upstream repository root contains AGENTS.md and a repo-local .agents directory, while project metadata defines the openai-agents package, so the retained host IOC is limited to those exact repository artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/openai-agents-python/'

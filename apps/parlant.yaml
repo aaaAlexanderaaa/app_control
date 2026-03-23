@@ -1,0 +1,48 @@
+id: parlant
+name: Parlant
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Prefer the canonical parlant.io product host plus explicit local config and log paths defined by Parlant's own server source; avoid inferring extra desktop or package-manager artifacts.
+references:
+- url: https://parlant.io/docs/quickstart/installation
+  kind: official_docs
+  summary: Official installation page is canonically served from parlant.io and documents the supported Parlant packages and SDKs.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/emcie-co/parlant/develop/README.md
+  kind: upstream_readme
+  summary: README links the official website and quickstart pages for Parlant.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/emcie-co/parlant/develop/src/parlant/bin/server.py
+  kind: upstream_source
+  summary: Server source defines parlant.toml, the default home directory names, and the Parlant file logger location.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://parlant.io/docs/quickstart/installation
+      evidence: The official installation page is served from https://parlant.io/docs/quickstart/installation and declares that canonical product surface on parlant.io; the reviewed network IOC therefore keeps only the exact parlant.io host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: parlant.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: parlant
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/emcie-co/parlant/develop/src/parlant/bin/server.py
+      evidence: Parlant's server source sets CONFIG_FILE_PATH to parlant.toml, defaults PARLANT_HOME_DIR to parlant-data unless runtime-data already exists, and logs to PARLANT_HOME_DIR / parlant.log; the retained host IOC is limited to those exact config and log paths.
+      checked_at: '2026-03-21'
+    paths:
+    - parlant.toml
+    - parlant-data/parlant.log
+    - runtime-data/parlant.log

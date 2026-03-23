@@ -1,0 +1,44 @@
+id: autoglm_claw
+name: AutoGLM Claw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Official AutoGLM app; keep IOC on the exact AutoGLM product host and exact App Store bundle instead of broader Zhipu parent domains.
+references:
+- url: https://autoglm.zhipuai.cn/
+  kind: official_site
+  summary: Official AutoGLM product site serves the AutoGLM landing page on autoglm.zhipuai.cn.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/us/app/autoglm/id6748391183
+  kind: app_store_listing
+  summary: Apple App Store metadata identifies AutoGLM with bundle ID com.zhipu.agent.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://autoglm.zhipuai.cn/
+      evidence: The official AutoGLM site is served from autoglm.zhipuai.cn, so the reviewed network IOC keeps only that exact AutoGLM-owned host instead of broader zhipuai.cn coverage.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: autoglm.zhipuai.cn
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: autoglm
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://apps.apple.com/us/app/autoglm/id6748391183
+      evidence: Apple's official App Store metadata for AutoGLM returns bundle ID com.zhipu.agent and the app name AutoGLM, so the retained host IOC is limited to that exact bundle ID and process name.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.zhipu.agent
+    process_names:
+    - AutoGLM

@@ -1,0 +1,57 @@
+id: crush
+name: Crush
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Charmbracelet terminal coding agent; keep IOC limited to Charm-owned hosts and Crush-specific local config, skills, and log artifacts.
+references:
+- url: https://raw.githubusercontent.com/charmbracelet/crush/main/README.md
+  kind: upstream_readme
+  summary: README documents official install surfaces, config precedence, skills directory, and the project-local Crush log path.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/charmbracelet/crush/main/internal/config/load.go
+  kind: upstream_source
+  summary: Source defines Crush global config and data locations under ~/.config/crush and ~/.local/share/crush.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/charmbracelet/crush/main/internal/agent/hyper/provider.go
+  kind: upstream_source
+  summary: Source pins the Charm Hyper provider base URL to https://hyper.charm.land.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/charmbracelet/crush/main/README.md
+      evidence: The upstream README installs Crush from Charm-operated hosts repo.charm.sh and charm.land, and the recorded upstream source also pins the optional Hyper provider to hyper.charm.land; the reviewed network IOC set keeps only those exact Charm-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: charm.land
+      match: suffix
+      role: app_brand
+    - pattern: repo.charm.sh
+      match: exact
+      role: file_download
+    - pattern: hyper.charm.land
+      match: exact
+      role: ai_service_provider
+    keyword_patterns:
+    - pattern: crush
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/charmbracelet/crush/main/README.md
+      evidence: The upstream README documents ~/.config/crush/crush.json, ~/.config/crush/skills, and ./.crush/logs/crush.log, while upstream source defines ~/.local/share/crush/crush.json as the global data file; retained host IOC is limited to those exact Crush-specific artifacts plus the crush process name.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/crush/crush.json
+    - ~/.config/crush/skills/
+    - ~/.local/share/crush/crush.json
+    - '*/.crush/logs/crush.log'
+    process_names:
+    - crush

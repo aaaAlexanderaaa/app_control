@@ -1,0 +1,44 @@
+id: codeium
+name: Codeium
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 78
+notes: Use Codeium-owned domains and extension artifacts; avoid shared third-party
+  model-provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.windsurf.com/troubleshooting/windsurf-common-issues
+      evidence: Windsurf’s official troubleshooting guide says restricted networks
+        should whitelist *.codeium.com, *.windsurf.com, and *.codeiumdata.com; for
+        the Codeium entry the reviewed network IOC set keeps the Codeium-owned domains
+        and excludes shared third-party AI provider hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: codeium.com
+      match: suffix
+      role: app_brand
+    - pattern: codeiumdata.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: codeium
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.windsurf.com/plugins/cascade/mcp
+      evidence: Windsurf’s official MCP documentation references the local file ~/.codeium/mcp_config.json,
+        and the official VS Code Marketplace listing identifies the extension as Codeium.codeium;
+        together these yield the stable macOS host artifacts ~/.codeium and ~/.vscode/extensions/codeium.codeium-*.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.codeium
+    - ~/.vscode/extensions/codeium.codeium-*

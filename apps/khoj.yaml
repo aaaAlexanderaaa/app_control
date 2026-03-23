@@ -1,0 +1,41 @@
+id: khoj
+name: Khoj
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Personal AI app and second-brain platform; prefer exact first-party Khoj app and docs hosts plus the documented ~/.khoj local data directory.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://khoj.dev/
+      evidence: Khoj's official site is hosted on khoj.dev, the upstream README links the first-party app at app.khoj.dev and docs at docs.khoj.dev, and describes Khoj as a personal AI app and second brain; the reviewed network IOC set keeps only those exact Khoj-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: khoj.dev
+      match: exact
+      role: app_brand
+    - pattern: app.khoj.dev
+      match: exact
+      role: app_brand
+    - pattern: docs.khoj.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: khoj
+      match: substring
+    - pattern: khoj app
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/khoj-ai/khoj/master/src/khoj/utils/constants.py
+      evidence: Khoj's source constants define ~/.khoj/env and ~/.khoj/content/, and the official self-host setup docs instruct macOS users to create and run from ~/.khoj; retained host IOC is limited to those exact Khoj-specific local paths.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.khoj

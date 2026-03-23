@@ -1,0 +1,42 @@
+id: claude_code
+name: Claude Code
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 87
+notes: Separate from generic Claude web usage using process metadata where possible.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://claude.ai/install.sh
+      evidence: The official Claude Code install script points users to code.claude.com/docs, so the reviewed network IOC set keeps the Claude Code-specific host and removes broader anthropic.com and claude.ai coverage
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: code.claude.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: claude code
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/claude-code.json
+      evidence: The Homebrew cask defines the claude binary and zap entries for ~/.cache/claude, ~/.claude, ~/.claude.json*, ~/.config/claude, ~/.local/bin/claude, ~/.local/share/claude, ~/.local/state/claude, and ~/Library/Caches/claude-cli-nodejs
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.cache/claude
+    - ~/.claude
+    - ~/.claude.json*
+    - ~/.config/claude
+    - ~/.local/bin/claude
+    - ~/.local/share/claude
+    - ~/.local/state/claude
+    - ~/Library/Caches/claude-cli-nodejs
+    process_names:
+    - claude

@@ -1,0 +1,46 @@
+id: chatbox
+name: Chatbox
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+- web
+product_type:
+- llm_client
+- chatbot
+severity: low
+priority_score: 60
+notes: Prefer Chatbox-owned domains and download hosts; avoid shared provider domains that vary by user configuration.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/chatbox.json
+      evidence: Homebrew cask exposes the Chatbox homepage on chatboxai.app and the macOS desktop download host on download.chatboxai.app.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: chatboxai.app
+      match: suffix
+      role: app_brand
+    - pattern: download.chatboxai.app
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: chatbox
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/chatbox.json
+      evidence: Homebrew cask defines the Chatbox app bundle, uninstall identifier, and Chatbox-specific support, cache, preference, saved-state, and WebKit paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/chatbox.app
+    - ~/Library/Application Support/xyz.chatboxapp.app
+    - ~/Library/Caches/xyz.chatboxapp.app
+    - ~/Library/Preferences/xyz.chatboxapp.app.plist
+    - ~/Library/Saved Application State/xyz.chatboxapp.app.savedState
+    - ~/Library/WebKit/xyz.chatboxapp.app
+    bundle_ids:
+    - xyz.chatboxapp.app
+    process_names:
+    - chatbox

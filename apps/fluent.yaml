@@ -1,0 +1,41 @@
+id: fluent
+name: Fluent
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- assistant
+- contextual_assistant
+- writing
+severity: medium
+priority_score: 74
+notes: Prefer Fluent-owned product and installer hosts over generic third-party AI or telemetry domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://fluentmac.app/
+      evidence: Fluent’s official homepage identifies the product as a native macOS app and links the installer from `https://cdn.fluentmac.app/download/Fluent-1.7.23.dmg`; the reviewed network IOC set keeps the product host and exact installer CDN host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: fluentmac.app
+      match: exact
+      role: app_brand
+    - pattern: cdn.fluentmac.app
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: fluentmac
+      match: substring
+    - pattern: fluent
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://fluentmac.app/
+      evidence: Fluent’s official macOS homepage and installer link name the desktop app `Fluent` and deliver `Fluent-1.7.23.dmg`; retained host IOC is limited to the app bundle and process name implied by the official installer naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Fluent.app
+    process_names:
+    - Fluent

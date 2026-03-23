@@ -1,0 +1,45 @@
+id: camel
+name: CAMEL
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- multi_agent
+severity: high
+priority_score: 84
+notes: CAMEL's reviewed IOC stays on exact camel-ai.org hosts and the explicitly documented camel_logs directory instead of generic package-index or provider infrastructure.
+references:
+- url: https://raw.githubusercontent.com/camel-ai/camel/master/README.md
+  kind: upstream_readme
+  summary: README links CAMEL's official website and documentation hosts on camel-ai.org.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/camel-ai/camel/master/.env.example
+  kind: upstream_metadata
+  summary: The official environment template defines CAMEL_LOG_DIR=camel_logs and the model logging toggles that write CAMEL request logs locally.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/camel-ai/camel/master/README.md
+      evidence: CAMEL's upstream README links the official website at www.camel-ai.org and documentation at docs.camel-ai.org, so the reviewed network IOC set keeps only those exact CAMEL-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.camel-ai.org
+      match: exact
+      role: app_brand
+    - pattern: docs.camel-ai.org
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: camel-ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/camel-ai/camel/master/.env.example
+      evidence: CAMEL's official .env example enables model logging through CAMEL_MODEL_LOG_ENABLED and sets CAMEL_LOG_DIR=camel_logs, so the reviewed host IOC is limited to that exact CAMEL log directory.
+      checked_at: '2026-03-21'
+    paths:
+    - camel_logs

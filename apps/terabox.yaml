@@ -1,0 +1,44 @@
+id: terabox
+name: TeraBox
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer exact TeraBox product, API, and static asset hosts; avoid broader parent-domain matching when direct TeraBox-owned hosts are available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.terabox.com/
+      evidence: TeraBox’s official homepage says users can download the TeraBox app for `PC, Mac, iPhone & Android`, and the page itself uses TeraBox-owned hosts including `www.terabox.com`, `data.terabox.com`, and `s5.teraboxcdn.com`; the reviewed network IOC set keeps those exact hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.terabox.com
+      match: exact
+      role: app_brand
+    - pattern: data.terabox.com
+      match: exact
+      role: platform_service
+    - pattern: s5.teraboxcdn.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: terabox
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://apps.apple.com/us/app/terabox-1tb-cloud-ai-space/id1509453185?uo=4
+      evidence: 'Apple’s official App Store metadata for the macOS build identifies the app as `TeraBox: 1TB Cloud & AI Space`, reports bundle ID `com.dubox.drive`, and lists `MacDesktop-MacDesktop` among supported devices; retained host IOC is limited to the app bundle name and bundle identifier exposed by Apple.'
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/TeraBox.app
+    bundle_ids:
+    - com.dubox.drive
+    process_names:
+    - TeraBox

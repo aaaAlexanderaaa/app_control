@@ -1,0 +1,42 @@
+id: elephas
+name: Elephas
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- writing
+- knowledge_assistant
+severity: medium
+priority_score: 74
+notes: Prefer Elephas-owned domains and app artifacts; avoid shared model-provider domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/elephas.json
+      evidence: Homebrew cask exposes the Elephas homepage on elephas.app and the macOS installer on assets.elephas.app.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: elephas.app
+      match: suffix
+      role: app_brand
+    - pattern: assets.elephas.app
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: elephas
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/elephas.json
+      evidence: Homebrew cask defines the Elephas app bundle and Elephas-specific support, cache, HTTP storage, and preference paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Elephas.app
+    - ~/Library/Application Support/Elephas
+    - ~/Library/Caches/com.kamban.elephas
+    - ~/Library/HTTPStorages/com.kamban.elephas
+    - ~/Library/Preferences/com.kamban.elephas.plist
+    process_names:
+    - Elephas

@@ -1,0 +1,53 @@
+id: qclaw
+name: QClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- desktop_agent
+- automation
+- messaging_gateway
+severity: critical
+priority_score: 96
+notes: Tencent PC Manager markets QClaw as a WeChat or QQ controlled local AI agent that can deploy OpenClaw-style automation
+  on macOS and Windows.
+references:
+- url: https://qclaw.qq.com/
+  kind: official_site
+  summary: Official QClaw site and download flow publish the qclaw.qq.com product surface and macOS distribution.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://qclaw.qq.com/
+      evidence: Official QClaw site and download API establish qclaw.qq.com, cdn.qclaw.qq.com, and jprx.m.qq.com as first-party QClaw web and download hosts
+      checked_at: '2026-03-20'
+    hostname_patterns:
+    - pattern: claw.guanjia.qq.com
+      match: exact
+      role: app_brand
+    - pattern: qclaw.qq.com
+      match: exact
+      role: app_brand
+    - pattern: cdn.qclaw.qq.com
+      match: exact
+      role: file_download
+    - pattern: jprx.m.qq.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: qclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://qclaw.qq.com/
+      evidence: Official QClaw download flow serves QClaw macOS DMG assets, supporting the retained QClaw bundle and process name
+      checked_at: '2026-03-20'
+    paths:
+    - /Applications/QClaw.app
+    - ~/Applications/QClaw.app
+    process_names:
+    - QClaw

@@ -1,0 +1,44 @@
+id: meta_ai
+name: Meta AI
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+- assistant
+severity: medium
+priority_score: 63
+notes: Keep Meta AI IOC on the exact ai.meta.com product surface and the official Meta AI app bundle rather than broader facebook.com or meta.com coverage.
+references:
+- url: https://ai.meta.com/meta-ai/
+  kind: official_site
+  summary: Official Meta AI product page is served from ai.meta.com/meta-ai.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/us/app/meta-ai-vibes-ai-glasses/id1558240027
+  kind: app_store_listing
+  summary: Apple App Store metadata identifies Meta AI - Vibes & AI Glasses with bundle ID com.facebook.stellaapp and seller URL https://ai.meta.com/meta-ai/.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://ai.meta.com/meta-ai/
+      evidence: Meta's official Meta AI product page is served from ai.meta.com/meta-ai, so the reviewed network IOC keeps only the exact ai.meta.com product host and drops broader parent domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: ai.meta.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: "meta ai"
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://apps.apple.com/us/app/meta-ai-vibes-ai-glasses/id1558240027
+      evidence: Apple's official App Store metadata for Meta AI - Vibes & AI Glasses returns bundle ID com.facebook.stellaapp and seller URL https://ai.meta.com/meta-ai/, so the retained host IOC is limited to that exact reviewed app bundle.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.facebook.stellaapp
+    process_names:
+    - "Meta AI"

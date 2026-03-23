@@ -1,0 +1,35 @@
+id: codex_cli
+name: Codex CLI
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Terminal-only Codex surface; CLI-specific IOC is kept separate from Codex App and Codex Web.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://developers.openai.com/codex/cli/
+      evidence: The official Codex CLI docs live on developers.openai.com and the upstream README points users to that CLI documentation; the reviewed network IOC set keeps this exact product-doc host and avoids broader openai.com patterns
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: developers.openai.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: codex
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://developers.openai.com/codex/local-config/
+      evidence: The official local configuration docs place user config at ~/.codex/config.toml, docs/install.md writes logs to ~/.codex/log/codex-tui.log by default, and the Homebrew cask installs the codex binary while zapping ~/.codex
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.codex
+    process_names:
+    - codex

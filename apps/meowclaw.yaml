@@ -1,0 +1,18 @@
+id: meowclaw
+name: MeowClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (D-中国变体/一键使用); detailed IOC review pending.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:archive:claw_ecosystem_full_report:2026-03-20
+      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
+      checked_at: '2026-03-20'

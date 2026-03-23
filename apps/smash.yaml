@@ -1,0 +1,48 @@
+id: smash
+name: Smash
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: Reviewed IOC stays on exact Smash-owned web/API/mobile surfaces and avoids generic public file-sharing infrastructure.
+references:
+- url: https://fromsmash.com/
+  kind: official_site
+  summary: Official Smash product site is served from fromsmash.com.
+  checked_at: '2026-03-22'
+- url: https://fromsmash.com/essential/smash-for-mobile
+  kind: official_site
+  summary: Official Smash page links users to the App Store and Play Store and references the Smash mobile experience from first-party fromsmash.com hosts.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=1494457680
+  kind: apple_lookup_api
+  summary: 'Apple lookup metadata for Smash: File transfer returns bundle ID com.smashco.smashIOS from seller Smash & Co and seller URL https://en.fromsmash.com/why-smash.'
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://fromsmash.com/essential/smash-for-mobile
+      evidence: Smash's official site and mobile page are served from fromsmash.com and expose the first-party API host api.fromsmash.com, so the reviewed network IOC set keeps only those exact Smash-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: fromsmash.com
+      match: suffix
+      role: app_brand
+    - pattern: api.fromsmash.com
+      match: exact
+      role: file_transfer
+    keyword_patterns:
+    - pattern: smash
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=1494457680
+      evidence: 'Apple''s official lookup metadata for Smash: File transfer returns bundle identifier com.smashco.smashIOS from seller Smash & Co, so the retained host IOC is the exact reviewed bundle ID.'
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.smashco.smashIOS

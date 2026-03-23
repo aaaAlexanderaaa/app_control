@@ -1,0 +1,47 @@
+id: perplexity
+name: Perplexity
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- ai_search
+severity: medium
+priority_score: 68
+notes: Prefer Perplexity-owned Mac entrypoints and avoid keeping unconfirmed short domains; Comet browser traffic may overlap with Perplexity domains.
+references:
+- url: https://www.perplexity.ai/mac
+  kind: official_site
+  summary: Official Perplexity Mac landing page redirects users to the vendor-backed Mac App Store distribution.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=1668000334
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Perplexity returns bundle ID ai.perplexity.app from seller Perplexity AI Inc. and seller URL https://www.perplexity.ai/iphone.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.perplexity.ai/mac
+      evidence: 'Perplexity’s official Mac landing URL redirects to the Mac App Store listing for Perplexity: Ask Anything, and that listing identifies the developer as Perplexity AI, Inc. while referencing official policies on www.perplexity.ai; the reviewed network IOC set keeps the product-owned perplexity.ai domain and drops unverified short domains.'
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: perplexity.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: perplexity ai
+      match: substring
+    - pattern: perplexity mac
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.perplexity.ai/mac
+      evidence: 'Perplexity’s official Mac landing path resolves to the Mac App Store listing for Perplexity: Ask Anything, which states the app is available on Mac; retained host IOC is limited to the Perplexity desktop app name implied by that official listing.'
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Perplexity*.app
+    process_names:
+    - Perplexity

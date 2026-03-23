@@ -1,0 +1,40 @@
+id: neovate_code
+name: Neovate Code
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Keep Neovate Code IOC on the exact Neovate docs and installer host plus the product-specific neovate CLI name.
+references:
+- url: https://neovateai.dev/en/docs/installation/
+  kind: official_docs
+  summary: Official Neovate Code installation docs are served from neovateai.dev, install the tool from neovateai.dev/install.sh or npm, and show the neovate CLI for config and updates.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://neovateai.dev/en/docs/installation/
+      evidence: The official Neovate Code installation guide is served from neovateai.dev and uses the first-party installer URL neovateai.dev/install.sh, so the reviewed network IOC set keeps only the exact Neovate-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: neovateai.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: neovate code
+      match: substring
+    - pattern: neovate
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://neovateai.dev/en/docs/installation/
+      evidence: The official installation guide installs @neovate/code globally and later uses the exact neovate command for configuration and updates, so the retained host IOC is the product-specific neovate CLI process name.
+      checked_at: '2026-03-22'
+    process_names:
+    - neovate

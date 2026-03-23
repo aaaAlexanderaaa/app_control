@@ -1,0 +1,53 @@
+id: doubao
+name: Doubao
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+- search
+severity: medium
+priority_score: 65
+notes: Prefer Doubao-owned domains and the exact official desktop download host; avoid generic ByteDance or Volcengine parent domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.doubao.com/legal/terms
+      evidence: Doubao’s official terms page on doubao.com describes the Doubao software and related services as including web pages and application programs, and the official Homebrew cask downloads the macOS app from the exact host lf-flow-web-cdn.doubao.com; the reviewed IOC set removes broad ByteDance and Volcengine parent domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: doubao.com
+      match: suffix
+      role: app_brand
+    - pattern: lf-flow-web-cdn.doubao.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: doubao
+      match: substring
+    - pattern: 豆包
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/doubao.json
+      evidence: Homebrew cask installs doubao.app and removes Doubao-specific Finder Sync, Application Support, caches, HTTP storage, containers, and preferences paths rooted at com.bot.pc.doubao on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/doubao.app
+    - ~/Library/Application Scripts/com.bot.pc.doubao.FinderSyncExtension
+    - ~/Library/Application Support/Doubao
+    - ~/Library/Caches/com.bot.pc.doubao
+    - ~/Library/Caches/Doubao
+    - ~/Library/Containers/com.bot.pc.doubao.FinderSyncExtension
+    - ~/Library/HTTPStorages/com.bot.pc.doubao
+    - ~/Library/Preferences/com.bot.pc.doubao.helper.plist
+    - ~/Library/Preferences/com.bot.pc.doubao.plist
+    bundle_ids:
+    - com.bot.pc.doubao
+    - com.bot.pc.doubao.FinderSyncExtension
+    process_names:
+    - doubao

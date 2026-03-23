@@ -1,0 +1,55 @@
+id: baidu_netdisk
+name: Baidu Netdisk
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer Baidu Netdisk brand and installer hosts over broader baidu.com platform domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/baidunetdisk.json
+      evidence: Homebrew cask exposes the Baidu Netdisk homepage on pan.baidu.com and the macOS installer on pkg-ant.baidu.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: pan.baidu.com
+      match: exact
+      role: app_brand
+    - pattern: pkg-ant.baidu.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: baidupan
+      match: substring
+    - pattern: pan.baidu
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/baidunetdisk.json
+      evidence: Homebrew cask defines the BaiduNetdisk macOS app bundle and Baidu Netdisk-specific application-script, support, cache, Finder Sync container, cookie, HTTP storage, preference, auth-cache, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/BaiduNetdisk_mac.app
+    - ~/Library/Application Scripts/com.baidu.BaiduNetdisk-mac.FinderSync
+    - ~/Library/Application Support/baidunetdisk
+    - ~/Library/Application Support/com.baidu.BaiduNetdisk-mac
+    - ~/Library/Caches/com.baidu.BaiduNetdisk-mac
+    - ~/Library/Caches/com.plausiblelabs.crashreporter.data/com.baidu.BaiduNetdisk-mac
+    - ~/Library/Containers/com.baidu.BaiduNetdisk-mac.FinderSync
+    - ~/Library/Cookies/com.baidu.BaiduNetdisk-mac.binarycookies
+    - ~/Library/HTTPStorages/com.baidu.BaiduNetdisk-mac
+    - ~/Library/Preferences/com.baidu.BaiduNetdisk-mac.plist
+    - ~/Library/sapi/wappass.baidu.com
+    - ~/Library/Saved Application State/com.baidu.BaiduNetdisk-mac.savedState
+    bundle_ids:
+    - com.baidu.BaiduNetdisk-mac
+    - com.baidu.BaiduNetdisk-mac.FinderSync
+    process_names:
+    - BaiduNetdisk_mac

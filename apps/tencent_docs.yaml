@@ -1,0 +1,49 @@
+id: tencent_docs
+name: Tencent Docs
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- docs
+- collaboration
+severity: medium
+priority_score: 73
+notes: Prefer Tencent Docs-specific hosts under docs.qq.com; avoid broader qq.com and tencent.com parent domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.qq.com/
+      evidence: Tencent Docs’s official homepage is hosted at docs.qq.com, and the official Homebrew cask downloads the macOS installer from desktop.docs.qq.com/Installer/.../TencentDocs-arm64.dmg; the reviewed IOC set removes broad qq.com and tencent.com parent domains in favor of Tencent Docs-specific hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: docs.qq.com
+      match: exact
+      role: app_brand
+    - pattern: desktop.docs.qq.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: 腾讯文档
+      match: substring
+    - pattern: docs.qq
+      match: substring
+    - pattern: tencentdocs
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/tencent-docs.json
+      evidence: Homebrew cask installs TencentDocs.app and removes Tencent Docs-specific crash reports, preferences, and saved-state data rooted at com.tencent.mac.tdappdesktop on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/TencentDocs.app
+    - /Library/Logs/DiagnosticReports/TencentDocs_*
+    - ~/Library/Application Support/CrashReporter/TencentDocs_*
+    - ~/Library/Preferences/com.tencent.mac.tdappdesktop.plist
+    - ~/Library/Saved Application State/com.tencent.mac.tdappdesktop.savedState
+    bundle_ids:
+    - com.tencent.mac.tdappdesktop
+    process_names:
+    - TencentDocs

@@ -1,0 +1,52 @@
+id: nanoclaw
+name: NanoClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- agent_runtime
+- automation
+- containerized_agent
+severity: critical
+priority_score: 94
+notes: >-
+  NanoClaw is marketed as a secure lightweight OpenClaw alternative that runs
+  Claude-driven agents inside Apple Container or Docker with modular messaging
+  skills.
+references:
+- url: https://nanoclaw.dev/
+  kind: official_site
+  summary: Official NanoClaw site establishes nanoclaw.dev as the canonical product host.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/qwibitai/nanoclaw/main/setup/service.ts
+  kind: upstream_source
+  summary: Service setup source writes the macOS LaunchAgent plist retained as the reviewed host IOC.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://nanoclaw.dev/
+      evidence: >-
+        The official NanoClaw site is served from `nanoclaw.dev` and presents
+        NanoClaw there as the product's first-party web surface.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: nanoclaw.dev
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: nanoclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/qwibitai/nanoclaw/main/setup/service.ts
+      evidence: >-
+        NanoClaw macOS service setup writes
+        `~/Library/LaunchAgents/com.nanoclaw.plist`, which is retained here as
+        the reviewed host indicator.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/Library/LaunchAgents/com.nanoclaw.plist

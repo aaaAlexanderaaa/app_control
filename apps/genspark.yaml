@@ -1,0 +1,42 @@
+id: genspark
+name: Genspark
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- ai_search
+- chatbot
+severity: medium
+priority_score: 67
+notes: Keep Genspark IOC on the exact Genspark web host and the official app bundle identifier.
+references:
+- url: https://www.genspark.ai/
+  kind: official_site
+  summary: Official Genspark site is served from www.genspark.ai.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6739554054
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Genspark AI Workspace returns bundle ID ai.mainfunc.genspark from seller genspark inc.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.genspark.ai/
+      evidence: The official Genspark product site is served from www.genspark.ai, so the reviewed network IOC set keeps only that exact Genspark-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.genspark.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: genspark
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6739554054
+      evidence: Apple's official lookup metadata for Genspark AI Workspace returns bundle identifier ai.mainfunc.genspark from seller genspark inc, so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - ai.mainfunc.genspark

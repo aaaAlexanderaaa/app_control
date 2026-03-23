@@ -1,0 +1,36 @@
+id: augment
+name: Augment
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- assistant
+severity: high
+priority_score: 81
+notes: Reviewed IOC is limited to Augment-owned domains and the official VS Code extension install path.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.augmentcode.com/install/vscode
+      evidence: Augment’s official install page and support article direct users to the VS Code marketplace entry for Augment on augmentcode.com-owned domains, so the reviewed network IOC set keeps the product-specific augmentcode.com domain family and drops shared model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: augmentcode.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: augment
+      match: substring
+    - pattern: augmentcode
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.augmentcode.com/install/vscode
+      evidence: Augment’s official install page links the VS Code marketplace itemName augment.vscode-augment, and the VS Code documentation states that macOS extensions are installed under ~/.vscode/extensions.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/augment.vscode-augment-*

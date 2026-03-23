@@ -1,0 +1,57 @@
+id: baichuan_chat
+name: Baichuan Chat
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+severity: medium
+priority_score: 63
+notes: Prefer exact Baixiaoying/Baichuan product hosts and the official app bundle identifier; avoid relying on the broader company root alone when narrower product hosts are available.
+references:
+- url: https://policy.baichuan-ai.com/mobile/privacy
+  kind: official_privacy
+  summary: Official 百小应 privacy policy states the product includes the web app at ying.baichuan-ai.com/chat and a client application called 百小应APP.
+  checked_at: '2026-03-22'
+- url: https://xiaoying.baichuan-ai.com/download
+  kind: official_download_page
+  summary: Official 百小应 download page is hosted on the product-specific xiaoying.baichuan-ai.com subdomain.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/cn/app/%E7%99%BE%E5%B0%8F%E5%BA%94/id6469997551
+  kind: app_store
+  summary: Apple App Store page for 百小应 shows the official listing and Mac-compatible app metadata for Apple Silicon Macs.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6469997551&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 百小应 listing and bundleId com.baichuan.baiying.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://policy.baichuan-ai.com/mobile/privacy
+      evidence: Baichuan's official 百小应 privacy policy states the product includes the web app at https://ying.baichuan-ai.com/chat and a client application called 百小应APP, while the official download page is hosted on https://xiaoying.baichuan-ai.com/download; the reviewed network IOC set keeps those exact product hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: ying.baichuan-ai.com
+      match: exact
+      role: app_brand
+    - pattern: xiaoying.baichuan-ai.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: baichuan
+      match: substring
+    - pattern: baixiaoying
+      match: substring
+    - pattern: 百小应
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6469997551&country=cn
+      evidence: Apple's lookup API returns the official 百小应 listing with bundleId com.baichuan.baiying, and the App Store page for track 6469997551 marks the listing as Mac-compatible on Apple Silicon Macs.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.baichuan.baiying

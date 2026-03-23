@@ -1,0 +1,46 @@
+id: resilio_sync
+name: Resilio Sync
+category: P2P_FILE_SHARING
+product_shape:
+- macos
+product_type:
+- p2p_sync
+- file_sync
+- file_sharing
+severity: high
+priority_score: 81
+notes: P2P data plane is not domain-based; reviewed network IOC is limited to Resilio-owned website and download hosts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/r/resilio-sync.rb
+      evidence: The Homebrew cask sets the official homepage to https://www.resilio.com/ and downloads the macOS DMG from https://download-cdn.resilio.com/stable/mac/osx/0/Resilio-Sync.dmg, so the reviewed network IOC set keeps those first-party Resilio hosts and drops older heuristic domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.resilio.com
+      match: exact
+      role: app_brand
+    - pattern: download-cdn.resilio.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: resilio
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/r/resilio-sync.rb
+      evidence: The Homebrew cask installs Resilio Sync.app, unregisters com.resilio.Sync on uninstall, and zaps the Resilio Sync support, cache, Finder extension, group-container, container, and preference paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Resilio Sync.app
+    - ~/Library/Application Scripts/com.resilio.Sync.FinderExtension
+    - ~/Library/Application Support/Resilio Sync
+    - ~/Library/Caches/com.resilio.Sync
+    - ~/Library/Containers/com.resilio.Sync.FinderExtension
+    - ~/Library/Group Containers/group.com.resilio.Sync
+    - ~/Library/Preferences/com.resilio.Sync.plist
+    bundle_ids:
+    - com.resilio.Sync
+    - com.resilio.Sync.FinderExtension

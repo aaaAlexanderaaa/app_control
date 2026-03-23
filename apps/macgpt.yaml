@@ -1,0 +1,38 @@
+id: macgpt
+name: MacGPT
+category: GENAI_CHAT
+product_shape:
+- macos
+product_type:
+- desktop_client
+- chatbot
+severity: low
+priority_score: 60
+notes: Prefer MacGPT-owned product and official download hosts over broad OpenAI-related domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.macgpt.com/
+      evidence: MacGPT’s official homepage is served from `www.macgpt.com`, names the product `MacGPT`, and routes downloads through the official Gumroad listing at `https://goodsnooze.gumroad.com/l/menugpt`; the reviewed network IOC set keeps only those exact hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.macgpt.com
+      match: exact
+      role: app_brand
+    - pattern: goodsnooze.gumroad.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: macgpt
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.macgpt.com/
+      evidence: MacGPT’s official homepage repeatedly names the desktop app `MacGPT`, describes it as running on macOS, and presents it as a native menubar app download; retained host IOC is limited to the app bundle and process name implied by the official product naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/MacGPT.app
+    process_names:
+    - MacGPT

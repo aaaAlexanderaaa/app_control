@@ -1,0 +1,46 @@
+id: nanobot
+name: nanobot
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- cli
+- automation
+severity: critical
+priority_score: 93
+notes: Ultra-light personal AI assistant inspired by OpenClaw with Homebrew-supported macOS installation plus multi-channel and scheduled-job workflows.
+references:
+- url: https://www.nanobot.ai/
+  kind: official_site
+  summary: Official Nanobot site is served from nanobot.ai.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/formula/nanobot.json
+  kind: homebrew_formula_api
+  summary: Homebrew formula metadata confirms the nanobot formula token and standard macOS CLI install paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.nanobot.ai/
+      evidence: The official Nanobot site is served from nanobot.ai, so the reviewed network IOC keeps only the Nanobot-owned domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: nanobot.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: nanobot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/formula/nanobot.json
+      evidence: The Homebrew formula installs the nanobot CLI token into standard Homebrew bin locations, so the retained host IOC is limited to those exact binary paths and process name.
+      checked_at: '2026-03-22'
+    paths:
+    - /opt/homebrew/bin/nanobot
+    - /usr/local/bin/nanobot
+    process_names:
+    - nanobot

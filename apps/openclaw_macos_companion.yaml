@@ -1,0 +1,44 @@
+id: openclaw_macos_companion
+name: OpenClaw macOS Companion App
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- macos_companion
+- gateway_proxy
+- permission_manager
+severity: high
+priority_score: 90
+notes: MoltCN distributes a macOS menu-bar companion app for OpenClaw that manages permissions, a local gateway proxy, notifications, and node exposure.
+references:
+- url: https://www.moltcn.com/platforms/macos.html
+  kind: official_site
+  summary: MoltCN's macOS platform page identifies the dedicated OpenClaw Companion app and its distribution surface.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.moltcn.com/platforms/macos.html
+      evidence: Official MoltCN documentation page identifies a dedicated OpenClaw macOS companion app distributed under the moltcn.com domain
+      checked_at: '2026-03-20'
+    hostname_patterns:
+    - pattern: moltcn.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: moltcn
+      match: substring
+    - pattern: openclaw companion
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.moltcn.com/platforms/macos.html
+      evidence: MoltCN documentation identifies a dedicated macOS companion app for OpenClaw, supporting the retained generic companion bundle and process name
+      checked_at: '2026-03-20'
+    paths:
+    - /Applications/OpenClaw Companion.app
+    - ~/Applications/OpenClaw Companion.app
+    process_names:
+    - OpenClaw Companion

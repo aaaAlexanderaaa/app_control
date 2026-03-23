@@ -1,0 +1,37 @@
+id: open_interpreter
+name: Open Interpreter
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- cli_agent
+- desktop_agent
+severity: high
+priority_score: 81
+notes: Local-first interpreter agent; reviewed IOC keeps only Open Interpreter brand hosts and source-backed local profile/conversation storage.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/OpenInterpreter/open-interpreter/main/README.md
+      evidence: The upstream README and docs use openinterpreter.com as the official product and profile host, so provider-wide domains were removed from the reviewed app IOC set
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: openinterpreter.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: open interpreter
+      match: substring
+    - pattern: openinterpreter
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/OpenInterpreter/open-interpreter/main/interpreter/terminal_interface/utils/local_storage_path.py
+      evidence: local_storage_path.py uses platformdirs.user_config_dir("open-interpreter") as the base storage path; on macOS this resolves to ~/Library/Application Support/open-interpreter, profiles.py stores profiles there, basic-usage.mdx stores conversations in the application directory, and the CLI runs as interpreter
+      checked_at: '2026-03-21'
+    paths:
+    - ~/Library/Application Support/open-interpreter
+    process_names:
+    - interpreter

@@ -1,0 +1,56 @@
+id: skype
+name: Skype
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+- calling
+severity: medium
+priority_score: 72
+notes: Skype consumer service retired on 2025-05-05 (Microsoft announcement); keep only Skype-specific legacy hosts and artifacts, and avoid broad microsoft.com matching.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/skype.json
+      evidence: Homebrew cask exposes Skype’s homepage on skype.com and downloads the macOS installer from the exact host download.skype.com; the reviewed IOC set keeps only Skype-specific legacy hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: skype.com
+      match: suffix
+      role: app_brand
+    - pattern: download.skype.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: skype
+      match: substring
+    - pattern: skype for desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/skype.json
+      evidence: Homebrew cask installs Skype.app and zaps Skype-specific Application Scripts, Application Support, caches, containers, preferences, saved-state, and WebKit data rooted at com.skype.skype on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Skype.app
+    - ~/Library/Application Scripts/com.skype.skype.shareagent
+    - ~/Library/Application Support/Microsoft/Skype for Desktop
+    - ~/Library/Application Support/Skype Helper
+    - ~/Library/Application Support/Skype
+    - ~/Library/Caches/com.skype.skype
+    - ~/Library/Caches/com.skype.skype.ShipIt
+    - ~/Library/Containers/com.skype.skype.shareagent
+    - ~/Library/Cookies/com.skype.skype.binarycookies
+    - ~/Library/Group Containers/*.com.skype.skype
+    - ~/Library/Preferences/com.skype.skype.plist
+    - ~/Library/Preferences/com.skype.skypewifi.plist
+    - ~/Library/Saved Application State/com.skype.skype.savedState
+    - ~/Library/WebKit/com.skype.skype
+    bundle_ids:
+    - com.skype.skype
+    process_names:
+    - Skype

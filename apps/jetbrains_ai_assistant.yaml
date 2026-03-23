@@ -1,0 +1,49 @@
+id: jetbrains_ai_assistant
+name: JetBrains AI Assistant
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- ide
+severity: high
+priority_score: 78
+notes: Use exact JetBrains AI service hosts and extension identifiers instead of broad
+  jetbrains.com or shared model-provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.jetbrains.com/help/ai-assistant/disable-ai-assistant.html
+      evidence: JetBrains’ official AI Assistant administration guide says administrators
+        can block the service by blocking https://api.jetbrains.ai/, https://api.app.prod.grazie.aws.intellij.net/,
+        and for Mainland China https://api.ai.jetbrains.com.cn/; the reviewed network
+        IOC set keeps those exact AI Assistant hosts and drops broader JetBrains or
+        third-party AI domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: api.jetbrains.ai
+      match: exact
+      role: app_brand
+    - pattern: api.app.prod.grazie.aws.intellij.net
+      match: exact
+      role: platform_service
+    - pattern: api.ai.jetbrains.com.cn
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: jetbrains
+      match: substring
+    - pattern: ai assistant
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=JetBrains.jetbrains-ai-assistant
+      evidence: The official VS Code Marketplace listing identifies the extension
+        as JetBrains.jetbrains-ai-assistant, which maps to the stable macOS VS Code
+        extension artifact paths for JetBrains AI Assistant.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/jetbrains.jetbrains-ai-assistant-*
+    - ~/.vscode-insiders/extensions/jetbrains.jetbrains-ai-assistant-*

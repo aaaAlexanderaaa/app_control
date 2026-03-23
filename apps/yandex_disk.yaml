@@ -1,0 +1,38 @@
+id: yandex_disk
+name: Yandex Disk
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_storage
+- file_sync
+- file_sharing
+severity: medium
+priority_score: 73
+notes: Prefer disk.yandex.* branded hostnames for detection; avoid broad yandex.* to reduce FP.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/yandex-disk.json
+      evidence: Homebrew cask exposes Yandex Disk’s official homepage and macOS installer on disk.yandex.ru; the reviewed network IOC set keeps only the product-specific disk.yandex.ru host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: disk.yandex.ru
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: disk.yandex
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/yandex-disk.json
+      evidence: Homebrew cask installs Yandex.Disk.2.app and zaps the Yandex Disk-specific Application Support and preference files on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Yandex.Disk.2.app
+    - ~/Library/Application Support/Yandex.Disk.2
+    - ~/Library/Preferences/ru.yandex.desktop.disk.screenshots.plist
+    - ~/Library/Preferences/ru.yandex.desktop.disk2.plist

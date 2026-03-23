@@ -1,0 +1,41 @@
+id: tabnine
+name: Tabnine
+category: GENAI_CODING
+product_shape:
+- macos
+- web
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 76
+notes: Prefer Tabnine-owned website and extension identifiers; self-hosted enterprise
+  deployments may add separate customer-managed servers.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.tabnine.com/
+      evidence: Tabnine’s official website canonicalizes to https://www.tabnine.com/,
+        and the official VS Code Marketplace listings verify TabNine ownership of
+        the tabnine.com domain; the reviewed network IOC keeps the exact Tabnine web
+        host instead of broad unrelated infrastructure.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.tabnine.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: tabnine
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode-self-hosted-updater
+      evidence: Tabnine’s official VS Code Marketplace listings use the extension
+        identifiers TabNine.tabnine-vscode and TabNine.tabnine-vscode-self-hosted-updater,
+        which map to the stable macOS VS Code extension artifact paths for standard
+        and enterprise Tabnine deployments.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/tabnine.tabnine-vscode*

@@ -1,0 +1,46 @@
+id: crewai
+name: CrewAI
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- multi_agent_orchestration
+severity: medium
+priority_score: 82
+notes: >-
+  Official docs confirm the `crewai` CLI and the hosted control plane on
+  `app.crewai.com`; local projects themselves are framework code, so host
+  detection is best kept to the confirmed CLI process.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.crewai.com/en/quickstart
+      evidence: >-
+        CrewAI's official quickstart repeatedly links the hosted control plane
+        at `app.crewai.com` and is served from `docs.crewai.com`; the reviewed
+        network IOC set keeps only those CrewAI-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: app.crewai.com
+      match: exact
+      role: platform_service
+    - pattern: docs.crewai.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: crewai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/crewAIInc/crewAI
+      evidence: >-
+        The official CrewAI README uses the product-specific CLI commands
+        `crewai create crew <project_name>`, `crewai install`, and `crewai run`;
+        retained host IOC is therefore limited to the confirmed `crewai`
+        process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - crewai

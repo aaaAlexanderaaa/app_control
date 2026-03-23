@@ -1,0 +1,48 @@
+id: rewind
+name: Rewind
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- recall
+- assistant
+severity: high
+priority_score: 81
+notes: Continuous capture products carry high inadvertent leakage risk.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/r/rewind.rb
+      evidence: The Homebrew cask sets the official homepage to https://www.rewind.ai/ and downloads the DMG from https://download.rewind.ai/Rewind.dmg, so the reviewed network IOC set keeps those dedicated first-party Rewind hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.rewind.ai
+      match: exact
+      role: app_brand
+    - pattern: download.rewind.ai
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: rewind
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/r/rewind.rb
+      evidence: The Homebrew cask installs Rewind.app, unregisters com.rewind.Rewind and com.memoryvault.MemoryVault on uninstall, and zaps the Rewind application-support, cache, LaunchAgent, log, preference, HTTP storage, and WebKit paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Rewind.app
+    - ~/Library/Application Support/com.memoryvault.MemoryVault
+    - ~/Library/Caches/com.memoryvault.MemoryVault
+    - ~/Library/HTTPStorages/com.memoryvault.MemoryVault
+    - ~/Library/LaunchAgents/com.rewind.Rewind.plist
+    - ~/Library/Logs/Rewind
+    - ~/Library/Preferences/com.memoryvault.MemoryVault.plist
+    - ~/Library/WebKit/com.memoryvault.MemoryVault
+    bundle_ids:
+    - com.memoryvault.MemoryVault
+    - com.rewind.Rewind
+    process_names:
+    - Rewind

@@ -1,0 +1,47 @@
+id: warp
+name: Warp
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- terminal
+- coding_assistant
+severity: high
+priority_score: 89
+notes: Terminal assistants can leak command history, credentials, and infra names.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.warp.dev/download
+      evidence: Warp's official site uses warp.dev as the product domain and the download flow references app.warp.dev as a first-party Warp download host, so generic model-provider domains were removed from the reviewed app IOC set
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: warp.dev
+      match: suffix
+      role: app_brand
+    - pattern: app.warp.dev
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: warp
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/warp.json
+      evidence: Homebrew cask defines app bundle, config paths, and code signing info
+      checked_at: '2026-03-20'
+    paths:
+    - /Applications/Warp.app
+    - ~/.warp
+    - ~/Library/Application Support/dev.warp.Warp-Stable
+    - ~/Library/Logs/warp.log
+    - ~/Library/Preferences/dev.warp.Warp-Stable.plist
+    - ~/Library/Saved Application State/dev.warp.Warp-Stable.savedState
+    bundle_ids:
+    - dev.warp.Warp-Stable
+    process_names:
+    - Warp
+    team_ids:
+    - 2BBY89MBSN

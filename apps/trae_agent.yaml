@@ -1,0 +1,37 @@
+id: trae_agent
+name: Trae Agent
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: ByteDance's open-source CLI agent for software engineering; prefer the exact Trae product host and repo-local Trae Agent config artifacts over generic model-provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.trae.ai/agent
+      evidence: The official Trae agent page is served from www.trae.ai/agent, and the upstream README describes Trae Agent as a CLI agent for general-purpose software engineering tasks; the reviewed network IOC set keeps only the exact Trae product host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.trae.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: trae agent
+      match: substring
+    - pattern: trae-cli
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/bytedance/trae-agent/main/README.md
+      evidence: The official README installs the project by cloning trae-agent and copying trae_config.yaml, while the upstream pyproject defines the trae-cli entry point; retained host IOC is limited to the repo-local Trae Agent config file and the exact CLI process name.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/trae-agent/trae_config.yaml'
+    process_names:
+    - trae-cli

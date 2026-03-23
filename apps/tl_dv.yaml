@@ -1,0 +1,55 @@
+id: tl_dv
+name: tl;dv
+category: MEETING_TRANSCRIPTION
+product_shape:
+- web
+product_type:
+- meeting_recording
+- transcription
+severity: medium
+priority_score: 70
+notes: Meeting recorder available as a Chrome extension and web app; keep exact tl;dv-owned hosts and the official extension ID rather than broad meeting-tool heuristics.
+references:
+- url: https://tldv.io/get-the-tdv-app/
+  kind: official_site
+  summary: Official app page advertises the Chrome extension and desktop app and embeds the Chrome Web Store link for tl;dv.
+  checked_at: '2026-03-21'
+- url: https://doc.tldv.io/
+  kind: official_api_docs
+  summary: Official API docs link back to tldv.io, show app.tldv.io meeting URLs, and declare the production API endpoint on pasta.tldv.io.
+  checked_at: '2026-03-21'
+- url: https://chromewebstore.google.com/detail/record-transcribe-chatgpt/lknmjhcajhfbbglglccadlfdjbaiifig
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes the official tl;dv extension ID lknmjhcajhfbbglglccadlfdjbaiifig.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://doc.tldv.io/
+      evidence: The official API docs link to tldv.io, expose web-app URLs on app.tldv.io, and declare the production API endpoint on pasta.tldv.io, so the reviewed network IOC keeps only those exact tl;dv-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: tldv.io
+      match: exact
+      role: app_brand
+    - pattern: doc.tldv.io
+      match: exact
+      role: app_brand
+    - pattern: app.tldv.io
+      match: exact
+      role: platform_service
+    - pattern: pasta.tldv.io
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: tldv
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://tldv.io/get-the-tdv-app/
+      evidence: The official tl;dv app page embeds a Chrome Web Store URL that resolves to extension ID lknmjhcajhfbbglglccadlfdjbaiifig, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-21'
+    chrome_extension_ids:
+    - lknmjhcajhfbbglglccadlfdjbaiifig

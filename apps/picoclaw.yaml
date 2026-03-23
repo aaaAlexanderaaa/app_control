@@ -1,0 +1,58 @@
+id: picoclaw
+name: PicoClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- agent_runtime
+- automation
+severity: critical
+priority_score: 93
+notes: >-
+  PicoClaw publishes official macOS download artifacts on picoclaw.io and its
+  dedicated branded download bucket. The project explicitly warns that other
+  TLD variants are unofficial.
+references:
+- url: https://picoclaw.io/
+  kind: official_site
+  summary: Official PicoClaw site establishes picoclaw.io as the canonical product host and macOS download surface.
+  checked_at: '2026-03-22'
+- url: https://github.com/sipeed/picoclaw
+  kind: official_repo
+  summary: Official PicoClaw repository documents ~/.local/bin/picoclaw and ~/.picoclaw host artifacts.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://picoclaw.io/
+      evidence: >-
+        The official PicoClaw site is served from `picoclaw.io` and publishes
+        macOS downloads from the dedicated
+        `picoclaw-downloads.tos-cn-beijing.volces.com` bucket.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: picoclaw.io
+      match: suffix
+      role: app_brand
+    - pattern: picoclaw-downloads.tos-cn-beijing.volces.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: picoclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/sipeed/picoclaw
+      evidence: >-
+        The official PicoClaw repository documents `~/.local/bin/picoclaw`
+        plus `~/.picoclaw/config.json` and `~/.picoclaw/workspace` as local
+        runtime artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.local/bin/picoclaw
+    - ~/.picoclaw/
+    process_names:
+    - picoclaw

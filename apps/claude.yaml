@@ -1,0 +1,59 @@
+id: claude
+name: Claude
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+- coding
+severity: medium
+priority_score: 71
+notes: Prefer the current official Claude web/download hosts and desktop-specific macOS artifacts for detection.
+references:
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/claude.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask sets the current Claude desktop homepage to claude.com/download, downloads the macOS archive from downloads.claude.ai, installs Claude.app, and zaps Claude-specific support, cache, log, HTTP storage, preference, and saved-state paths.
+  checked_at: '2026-03-22'
+- url: https://support.anthropic.com/en/articles/10065433-installing-claude-desktop
+  kind: official_support
+  summary: Anthropic support documents the Claude Desktop installation flow and points users to the official Claude desktop download page.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/claude.rb
+      evidence: The official Homebrew cask sets the current Claude desktop homepage to `claude.com/download` and downloads the macOS archive from `downloads.claude.ai`, so the reviewed network IOC set keeps those current official Claude desktop hosts and removes broader legacy Anthropic domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: claude.com
+      match: suffix
+      role: app_brand
+    - pattern: downloads.claude.ai
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: claude
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/claude.rb
+      evidence: The official Homebrew cask installs Claude.app and zaps Claude-specific support, shared-file-list, cache, HTTP storage, log, preference, and saved-state paths.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Claude.app
+    - ~/Library/Application Support/Claude
+    - ~/Library/Caches/com.anthropic.claudefordesktop
+    - ~/Library/HTTPStorages/com.anthropic.claudefordesktop
+    - ~/Library/Logs/Claude
+    - ~/Library/Preferences/com.anthropic.claudefordesktop.plist
+    - ~/Library/Saved Application State/com.anthropic.claudefordesktop.savedState
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.anthropic.claudefordesktop.sfl*
+    - ~/Library/Caches/com.anthropic.claudefordesktop.ShipIt
+    bundle_ids:
+    - com.anthropic.claudefordesktop
+    process_names:
+    - Claude

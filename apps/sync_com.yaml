@@ -1,0 +1,49 @@
+id: sync_com
+name: Sync.com
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer Sync.com-owned product, control-plane, and installer hosts for detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.sync.com/install/
+      evidence: Sync.com’s official install page exposes the web control-plane host cp.sync.com and offers the macOS installer from www10.sync.com/download/apple/Sync-2.2.55.dmg.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: sync.com
+      match: suffix
+      role: file_sync
+    - pattern: cp.sync.com
+      match: exact
+      role: platform_service
+    - pattern: www10.sync.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: sync.com
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/sync.json
+      evidence: Homebrew cask installs Sync.app, quits com.sync.desktop on uninstall, and removes Sync-specific Application Scripts, Group Containers, and preferences on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Sync.app
+    - ~/Library/Application Scripts/com.sync.desktop
+    - ~/Library/Application Scripts/com.sync.desktop.findersync
+    - ~/Library/Group Containers/com.sync.desktop
+    - ~/Library/Preferences/com.sync.desktop.plist
+    - ~/Sync
+    bundle_ids:
+    - com.sync.desktop
+    process_names:
+    - Sync

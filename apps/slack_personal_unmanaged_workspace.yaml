@@ -1,0 +1,84 @@
+id: slack_personal_unmanaged_workspace
+name: Slack (Personal/Unmanaged Workspace)
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+- collaboration
+severity: medium
+priority_score: 73
+notes: Risk is primarily unmanaged tenant usage. Official network requirements list
+  file/image/message domains (files.slack.com, slack-files.com, slack-imgs.com, slack-msgs.com,
+  downloads.slack-edge.com).
+references:
+- url: https://my.slack.com/help/articles/360001603387-manage-slacks-connection-to-your-network
+  kind: official_help
+  summary: Official Slack help article documents the Slack-owned domains enterprises should allowlist for network connectivity.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=803453959
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Slack for Desktop returns bundle ID com.tinyspeck.slackmacgap from seller SLACK TECHNOLOGIES L.L.C. and seller URL https://slack.com.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/cask/slack.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask metadata exposes the Slack macOS app bundle and app-specific uninstall paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://my.slack.com/help/articles/360001603387-manage-slacks-connection-to-your-network
+      evidence: Slack's official network guidance documents downloads.slack-edge.com, files.slack.com, slack-files.com, slack-imgs.com, slack-msgs.com, and slack.com as Slack-owned connectivity surfaces, so the reviewed network IOC set keeps only those exact Slack hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: downloads.slack-edge.com
+      match: exact
+      role: file_download
+    - pattern: files.slack.com
+      match: exact
+      role: file_transfer
+    - pattern: slack-files.com
+      match: suffix
+      role: file_transfer
+    - pattern: slack-imgs.com
+      match: suffix
+      role: cdn_static
+    - pattern: slack-msgs.com
+      match: suffix
+      role: app_brand
+    - pattern: slack.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: slack
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/slack.json
+      evidence: The official Homebrew cask installs Slack.app and zaps the app-specific
+        Slack application scripts, support, caches, containers, cookies, group containers,
+        HTTP storage, logs, preferences, saved-state, and WebKit paths on macOS.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Slack.app
+    - ~/Library/Application Scripts/com.tinyspeck.slackmacgap
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.tinyspeck.slackmacgap.sfl*
+    - ~/Library/Application Support/Slack
+    - ~/Library/Caches/com.tinyspeck.slackmacgap*
+    - ~/Library/Containers/com.tinyspeck.slackmacgap*
+    - ~/Library/Cookies/com.tinyspeck.slackmacgap.binarycookies
+    - ~/Library/Group Containers/*.com.tinyspeck.slackmacgap
+    - ~/Library/Group Containers/*.slack
+    - ~/Library/HTTPStorages/com.tinyspeck.slackmacgap*
+    - ~/Library/Logs/Slack
+    - ~/Library/Preferences/ByHost/com.tinyspeck.slackmacgap.ShipIt.*.plist
+    - ~/Library/Preferences/com.tinyspeck.slackmacgap*
+    - ~/Library/Saved Application State/com.tinyspeck.slackmacgap.savedState
+    - ~/Library/WebKit/com.tinyspeck.slackmacgap
+    bundle_ids:
+    - com.tinyspeck.slackmacgap
+    process_names:
+    - Slack

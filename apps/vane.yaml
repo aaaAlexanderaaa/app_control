@@ -1,0 +1,52 @@
+id: vane
+name: Vane
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- answering_engine
+- agent
+- search
+severity: medium
+priority_score: 82
+notes: AI-powered answering engine with agentic capabilities. Prefer the exact vane.ai origin plus the upstream Vane repo and self-host files that are explicitly documented.
+references:
+- url: https://vane.ai/
+  kind: official_site
+  summary: Official Vane site is served from vane.ai.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/ItzCrazyKns/Vane/master/README.md
+  kind: upstream_readme
+  summary: Vane README documents cloning the Vane repository, building from source, and running the Docker image with the Vane data volume.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/ItzCrazyKns/Vane/master/docker-compose.yaml
+  kind: upstream_source
+  summary: Upstream docker-compose.yaml defines the Vane service and its persistent data volume.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/ItzCrazyKns/Vane/master/searxng/settings.yml
+  kind: upstream_source
+  summary: Vane repository ships a product-specific searxng/settings.yml file for the bundled search component.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://vane.ai/
+      evidence: The official Vane site is served from vane.ai, so the reviewed network IOC keeps only the exact Vane-owned hostname.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: vane.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: vane
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/ItzCrazyKns/Vane/master/README.md
+      evidence: Vane's upstream README documents cloning the Vane repository, changing into the Vane checkout, and using the bundled docker-compose.yaml and searxng/settings.yml files, so the retained host IOC is limited to those exact repo-local Vane artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/Vane/'

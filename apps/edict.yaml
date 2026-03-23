@@ -1,0 +1,36 @@
+id: edict
+name: Edict
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- multi_agent_orchestration
+- claw_ecosystem
+severity: high
+priority_score: 90
+notes: >-
+  OpenClaw-oriented multi-agent orchestration runtime. Reviewed host IOC is
+  retained on Edict-specific workspace paths, while the reviewed network IOC
+  was withdrawn after edict.dev failed revalidation and only a broad keyword
+  match remained.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: https://github.com/cft0808/edict
+      evidence: >-
+        The official GitHub repository remains the verified distribution
+        point, but `edict.dev` failed revalidation and the remaining
+        network-side evidence collapsed to the broad keyword `edict`, which is
+        too high-noise to keep as a reviewed network IOC. The reviewed network
+        IOC was therefore withdrawn pending stronger first-party hostname
+        evidence.
+      checked_at: '2026-03-23'
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/cft0808/edict/main/install.sh
+      evidence: Edict install script creates named OpenClaw workspaces under ~/.openclaw, which are retained here as host indicators for the orchestration runtime
+      checked_at: '2026-03-20'
+    paths:
+    - ~/.openclaw/

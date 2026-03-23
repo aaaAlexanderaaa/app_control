@@ -1,0 +1,48 @@
+id: deepl
+name: DeepL
+category: TRANSLATION
+product_shape:
+- web
+- macos
+product_type:
+- translation
+- writing
+severity: medium
+priority_score: 59
+notes: Prefer DeepL-owned domains and the exact macOS download path; translation services are a common accidental leakage path for sensitive text.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.deepl.com/
+      evidence: DeepL’s official site is hosted on deepl.com, and the official Homebrew cask downloads the macOS app from the DeepL-owned host www.deepl.com/macos/download/...; the reviewed IOC set keeps only DeepL-owned product and download hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: deepl.com
+      match: suffix
+      role: app_brand
+    - pattern: www.deepl.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: deepl
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/deepl.json
+      evidence: Homebrew cask installs DeepL.app, quits DeepL helper components, and removes DeepL-specific cache, group container, and preference paths rooted at com.linguee.DeepL on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/DeepL.app
+    - ~/Library/Caches/com.linguee.DeepLCopyTranslator*
+    - ~/Library/Group Containers/*.com.linguee.DeepL
+    - ~/Library/Preferences/com.linguee.DeepLCopyTranslator.plist
+    bundle_ids:
+    - com.linguee.DeepLCopyTranslator
+    - com.linguee.DeepLLauncher
+    - com.linguee.DeepLStatusBar
+    process_names:
+    - DeepL
+    - DeepLLauncher
+    - DeepLStatusBar

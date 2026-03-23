@@ -1,0 +1,45 @@
+id: cua
+name: CUA (Computer-Use Agent)
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- computer_use_agent
+- desktop_sandbox
+- cli_agent
+severity: high
+priority_score: 93
+notes: Open-source infrastructure for computer-use agents; supports full desktops including macOS and provides CLI onboarding.
+  13k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://cua.ai
+      evidence: The upstream trycua/cua repository currently publishes https://cua.ai as the official homepage and serves Lume documentation from that same app-brand domain
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: cua.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: cua
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/trycua/cua
+      evidence: docs/content/docs/lume/guide/getting-started/installation.mdx and libs/lume/scripts/install.sh explicitly install ~/.local/bin/lume, ~/.local/share/lume/lume.app, ~/.local/bin/lume-update, and LaunchAgents com.trycua.lume_daemon/com.trycua.lume_updater; libs/lume/src/FileSystem/Settings.swift and libs/lume/resources/Info.plist define ~/.config/lume/config.yaml, ~/.lume, and bundle ID com.trycua.lume
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.lume
+    - ~/.config/lume/config.yaml
+    - ~/.local/bin/lume
+    - ~/.local/bin/lume-update
+    - ~/.local/share/lume/lume.app
+    - ~/Library/LaunchAgents/com.trycua.lume_daemon.plist
+    - ~/Library/LaunchAgents/com.trycua.lume_updater.plist
+    bundle_ids:
+    - com.trycua.lume
+    process_names:
+    - lume

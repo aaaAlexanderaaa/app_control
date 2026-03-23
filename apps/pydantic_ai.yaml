@@ -1,0 +1,46 @@
+id: pydantic_ai
+name: Pydantic AI
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: >-
+  Official Pydantic AI docs are served from the product-specific
+  `ai.pydantic.dev` host, and the upstream package defines a product-specific
+  `pai` CLI entry point that is suitable as a local host signal.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/pydantic/pydantic-ai
+      evidence: >-
+        The official README points to Pydantic AI documentation at
+        `ai.pydantic.dev`; the reviewed network IOC set keeps that exact
+        product-specific host and avoids broad provider domains mentioned in the
+        docs.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: ai.pydantic.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: pydantic ai
+      match: substring
+    - pattern: pydantic-ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/pydantic/pydantic-ai/blob/main/pyproject.toml
+      evidence: >-
+        Pydantic AI's official `pyproject.toml` declares `name =
+        "pydantic-ai"` and the console script `[project.scripts] pai =
+        "pydantic_ai._cli:cli_exit"`; retained host IOC is therefore limited to
+        the product-specific `pai` process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - pai

@@ -1,0 +1,49 @@
+id: wenshushu
+name: Wenshushu
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: Reviewed IOC stays on exact Wenshushu-owned web/static hosts and the exact 文叔叔 app name promoted on Wenshushu's official about page.
+references:
+- url: https://www.wenshushu.cn/
+  kind: official_site
+  summary: Official Wenshushu site is served from wenshushu.cn.
+  checked_at: '2026-03-22'
+- url: https://www.wenshushu.cn/about
+  kind: official_site
+  summary: Official about page advertises Apple APP and Android APP downloads under the 文叔叔 product name.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.wenshushu.cn/about
+      evidence: Wenshushu's official product and about pages are served from www.wenshushu.cn and pull first-party assets from static.wenshushu.cn and wss-static.wenshushu.cn, so the reviewed network IOC set keeps only those exact Wenshushu-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.wenshushu.cn
+      match: exact
+      role: app_brand
+    - pattern: static.wenshushu.cn
+      match: exact
+      role: cdn_static
+    - pattern: wss-static.wenshushu.cn
+      match: exact
+      role: cdn_static
+    keyword_patterns:
+    - pattern: 文叔叔
+      match: substring
+    - pattern: wenshushu
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.wenshushu.cn/about
+      evidence: Wenshushu's official about page advertises Apple APP and Android APP downloads under the 文叔叔 name, so the retained host IOC is limited to that exact reviewed app/process name.
+      checked_at: '2026-03-22'
+    process_names:
+    - 文叔叔

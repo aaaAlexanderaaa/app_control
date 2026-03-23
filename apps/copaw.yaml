@@ -1,0 +1,56 @@
+id: copaw
+name: CoPaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- desktop_agent
+- automation
+severity: critical
+priority_score: 93
+notes: >-
+  Open-source personal AI assistant with local or cloud deployment, multiple
+  chat channels, built-in scheduling, and a downloadable macOS desktop app
+  plus CLI workflow.
+references:
+- url: https://copaw.agentscope.io/docs/quickstart/
+  kind: official_docs
+  summary: Official CoPaw docs establish copaw.agentscope.io as the first-party host and document the supported desktop and CLI install flow.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/agentscope-ai/CoPaw/main/README.md
+  kind: official_repo
+  summary: Official README documents pip install copaw, ~/.copaw/bin, and the macOS desktop xattr step on /Applications/CoPaw.app.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://copaw.agentscope.io/docs/quickstart/
+      evidence: >-
+        Official CoPaw quickstart and docs are served from
+        `copaw.agentscope.io`, so the reviewed network IOC keeps that exact
+        product host and removes the broader parent domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: copaw.agentscope.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: copaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/agentscope-ai/CoPaw/main/README.md
+      evidence: >-
+        The official README documents `pip install copaw`,
+        `~/.copaw/bin/copaw`, and the macOS desktop remediation step
+        `xattr -cr /Applications/CoPaw.app`, so the reviewed host IOC keeps
+        `/Applications/CoPaw.app`, `~/.copaw`, and the `copaw` CLI.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/CoPaw.app
+    - ~/.copaw
+    process_names:
+    - copaw

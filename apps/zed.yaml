@@ -1,0 +1,51 @@
+id: zed
+name: Zed
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- editor
+severity: medium
+priority_score: 74
+notes: Use Zed-owned release endpoints and app artifacts; avoid shared model-provider
+  domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/z/zed.rb
+      evidence: The official Homebrew cask for Zed declares homepage https://zed.dev/
+        and uses the exact release APIs under https://zed.dev/api/releases/... for
+        stable downloads and update checks; the reviewed network IOC set keeps that
+        Zed-owned host and drops configurable third-party model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: zed.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: zed
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/z/zed.rb
+      evidence: The official Homebrew cask installs Zed.app, exposes the zed CLI binary,
+        and zaps the app-specific Zed config, support, caches, HTTP storage, logs,
+        preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Zed.app
+    - ~/.config/zed
+    - ~/Library/Application Support/Zed
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/dev.zed.zed.sfl*
+    - ~/Library/Caches/Zed
+    - ~/Library/Caches/dev.zed.Zed
+    - ~/Library/HTTPStorages/dev.zed.Zed
+    - ~/Library/Logs/Zed
+    - ~/Library/Preferences/dev.zed.Zed.plist
+    - ~/Library/Saved Application State/dev.zed.Zed.savedState
+    process_names:
+    - Zed
+    - zed

@@ -1,0 +1,42 @@
+id: 123_pan
+name: 123 Pan
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer exact 123 Pan web, login, and static asset hosts over generic cloud or CDN infrastructure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.123pan.com/download
+      evidence: 123 Pan’s official download page is served from `www.123pan.com`, declares the application name `123云盘`, loads static assets from `statics.123pan.com`, and its page logic defaults authentication redirects to `https://login.123pan.com`; the reviewed network IOC set keeps those exact 123 Pan-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.123pan.com
+      match: exact
+      role: app_brand
+    - pattern: statics.123pan.com
+      match: exact
+      role: file_download
+    - pattern: login.123pan.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: 123pan
+      match: substring
+    - pattern: 123云盘
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.123pan.com/download
+      evidence: 123 Pan’s official download page sets both `apple-mobile-web-app-title` and `application-name` to `123云盘`, and the official desktop web bundle contains Electron-specific code paths such as `src/platform/isElectron.ts` and client-download entry points; retained host IOC is limited to the desktop app name implied by those first-party artifacts.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/123云盘.app

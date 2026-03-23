@@ -1,0 +1,40 @@
+id: gitlab_duo
+name: GitLab Duo
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 77
+notes: Prefer Duo-specific GitLab endpoints and the exact GitLab Workflow extension identifier over broad GitLab properties.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.gitlab.com/user/gitlab_duo/troubleshooting/
+      evidence: GitLab’s official Duo troubleshooting guide tells administrators to verify connectivity to `https://cloud.gitlab.com` and `https://customers.gitlab.com`; the reviewed network IOC set keeps those Duo-related GitLab endpoints and drops broad `*.gitlab.com` matching.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: cloud.gitlab.com
+      match: exact
+      role: app_brand
+    - pattern: customers.gitlab.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: gitlab duo
+      match: substring
+    - pattern: gitlab workflow
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.gitlab.com/editor_extensions/visual_studio_code/setup/
+      evidence: GitLab’s official VS Code setup guide directs standard VS Code users to the marketplace item `GitLab.gitlab-workflow` and unofficial VS Code builds to `open-vsx.org/extension/GitLab/gitlab-workflow`; paired with VS Code’s documented macOS extension directory, this yields the stable local artifact paths for GitLab Duo’s editor extension.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/gitlab.gitlab-workflow-*
+    - ~/.vscode-insiders/extensions/gitlab.gitlab-workflow-*

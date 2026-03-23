@@ -1,0 +1,52 @@
+id: coze
+name: Coze
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- agent_builder
+- chatbot
+severity: medium
+priority_score: 70
+notes: Prefer exact Coze product hosts and the official app bundle identifier; avoid broad ByteDance or Volcengine parent domains for enterprise detection.
+references:
+- url: https://www.coze.cn/
+  kind: official_site
+  summary: Official Coze site anchors the product on www.coze.cn and references the product-specific CDN host lf-coze-web-cdn.coze.cn.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/cn/app/%E6%89%A3%E5%AD%90-%E8%81%8C%E5%9C%BA-ai-%E5%B0%B1%E7%94%A8%E6%89%A3%E5%AD%90/id6747420043
+  kind: app_store
+  summary: Apple App Store page for 扣子 shows the official listing and macOS compatibility metadata for Apple Silicon Macs.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6747420043&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 扣子 listing and bundleId com.coze.space.ios.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.coze.cn/
+      evidence: Coze's official site is hosted on https://www.coze.cn/ and references the product-specific CDN host lf-coze-web-cdn.coze.cn; the reviewed network IOC set keeps only those exact Coze hosts instead of broad ByteDance or Volcengine domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.coze.cn
+      match: exact
+      role: app_brand
+    - pattern: lf-coze-web-cdn.coze.cn
+      match: exact
+      role: cdn_static
+    keyword_patterns:
+    - pattern: coze
+      match: substring
+    - pattern: 扣子
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6747420043&country=cn
+      evidence: Apple's lookup API returns the official 扣子 listing with bundleId com.coze.space.ios, and the App Store page for track 6747420043 marks the listing as Mac-compatible on Apple Silicon Macs.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.coze.space.ios

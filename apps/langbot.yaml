@@ -1,0 +1,54 @@
+id: langbot
+name: LangBot
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: LangBot publishes first-party product, docs, and space hosts, and the upstream project defines an exact langbot CLI plus a checked-in data/config.yaml path for local runtime configuration.
+references:
+- url: https://raw.githubusercontent.com/langbot-app/LangBot/master/README.md
+  kind: upstream_readme
+  summary: README links LangBot's official product site, docs site, and LangBot Space, and documents the uvx langbot workflow.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/langbot-app/LangBot/master/pyproject.toml
+  kind: upstream_metadata
+  summary: pyproject.toml registers the langbot console script.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/langbot-app/LangBot/master/web/src/i18n/locales/en-US.ts
+  kind: upstream_source
+  summary: The web locale file references data/config.yaml as LangBot's configuration file.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/langbot-app/LangBot/master/README.md
+      evidence: LangBot's upstream README links the official product host langbot.app, docs.langbot.app, and the LangBot Space host space.langbot.app, so the reviewed network IOC set keeps only those exact LangBot-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: langbot.app
+      match: exact
+      role: app_brand
+    - pattern: docs.langbot.app
+      match: exact
+      role: app_brand
+    - pattern: space.langbot.app
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: langbot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/langbot-app/LangBot/master/pyproject.toml
+      evidence: LangBot's pyproject.toml registers the langbot CLI and the project's locale source references data/config.yaml as its configuration file, so the reviewed host IOC is limited to that exact process name and config path.
+      checked_at: '2026-03-21'
+    paths:
+    - data/config.yaml
+    process_names:
+    - langbot

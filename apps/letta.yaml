@@ -1,0 +1,46 @@
+id: letta
+name: Letta
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: >-
+  Official Letta materials expose both the Letta documentation surface and the
+  hosted app portal; local framework usage is best anchored on the product-
+  specific `letta` CLI process.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/letta-ai/letta
+      evidence: >-
+        Letta's official README links the docs at `docs.letta.com` and the
+        hosted portal at `app.letta.com`; the reviewed network IOC set keeps
+        only those exact Letta-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: docs.letta.com
+      match: exact
+      role: app_brand
+    - pattern: app.letta.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: letta
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/letta-ai/letta/blob/main/pyproject.toml
+      evidence: >-
+        Letta's official `pyproject.toml` declares `name = "letta"` and the
+        console entry point `[project.scripts] letta = "letta.main:app"`;
+        retained host IOC is therefore limited to the product-specific `letta`
+        process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - letta

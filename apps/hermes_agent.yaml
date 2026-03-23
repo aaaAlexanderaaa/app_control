@@ -1,0 +1,61 @@
+id: hermes_agent
+name: Hermes Agent
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+- web
+product_type:
+- personal_agent
+- desktop_agent
+- automation
+severity: critical
+priority_score: 96
+notes: >-
+  Self-improving agent with learning loop, persistent memory, and scheduled
+  automations. Reviewed IOC is limited to the official Hermes docs host, the
+  explicit `~/.local/bin/hermes` symlink from the installer, and documented
+  `~/.hermes` state.
+references:
+- url: https://github.com/NousResearch/hermes-agent
+  kind: official_repo
+  summary: Official Hermes Agent repository documents the project host, install flow, and local ~/.hermes state.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh
+  kind: upstream_installer
+  summary: Official install script creates ~/.hermes, symlinks ~/.local/bin/hermes, and writes ~/.hermes config, env, skill, and gateway-log paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/NousResearch/hermes-agent
+      evidence: >-
+        The official Hermes Agent repository repeatedly links the first-party
+        docs host `hermes-agent.nousresearch.com/docs`, so the reviewed network
+        IOC is limited to that exact Hermes host plus app-specific keywords.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: hermes-agent.nousresearch.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: hermes-agent
+      match: substring
+    - pattern: hermes agent
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh
+      evidence: >-
+        The official installer creates `~/.hermes`, symlinks
+        `~/.local/bin/hermes`, writes `~/.hermes/.env` and
+        `~/.hermes/config.yaml`, seeds `~/.hermes/skills/`, and logs gateway
+        output under `~/.hermes/logs/gateway.log`, so the reviewed host IOC
+        keeps those explicit artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.hermes
+    - ~/.local/bin/hermes
+    process_names:
+    - hermes

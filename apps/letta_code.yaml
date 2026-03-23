@@ -1,0 +1,54 @@
+id: letta_code
+name: Letta Code
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- agentic_coding
+severity: high
+priority_score: 85
+notes: Memory-first coding agent; prefer exact Letta-owned control-plane hosts and source-backed ~/.letta or .letta settings paths instead of guessed desktop artifacts.
+references:
+- url: https://formulae.brew.sh/api/formula/letta-code.json
+  kind: homebrew_formula_api
+  summary: Homebrew formula metadata identifies Letta Code's official homepage on docs.letta.com.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/letta-ai/letta-code/main/README.md
+  kind: upstream_readme
+  summary: README points to the official docs page and states that Letta Code connects to the Letta API at app.letta.com by default.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/letta-ai/letta-code/main/hooks/permissions-status.sh
+  kind: upstream_source
+  summary: The permissions-status hook explicitly checks Letta Code's XDG, legacy, project, and project-local settings files.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/letta-ai/letta-code/main/README.md
+      evidence: The upstream README links the official docs page at https://docs.letta.com/letta-code and states that Letta Code connects to the Letta API at https://app.letta.com/ by default; the reviewed network IOC set keeps only those exact Letta-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: docs.letta.com
+      match: exact
+      role: app_brand
+    - pattern: app.letta.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: letta code
+      match: substring
+    - pattern: letta-code
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/letta-ai/letta-code/main/hooks/permissions-status.sh
+      evidence: The upstream permissions-status hook explicitly checks ~/.config/letta/settings.json, ~/.letta/settings.json, .letta/settings.json, and .letta/settings.local.json; the retained host IOC is limited to those exact Letta Code settings paths.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/letta/settings.json
+    - ~/.letta/settings.json
+    - .letta/settings.json
+    - .letta/settings.local.json

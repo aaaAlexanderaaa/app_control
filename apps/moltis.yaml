@@ -1,0 +1,47 @@
+id: moltis
+name: Moltis
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Moltis exposes dedicated first-party website and docs hosts and explicitly documents its local config and data roots, so the reviewed IOC avoids broader container or package-manager infrastructure.
+references:
+- url: https://raw.githubusercontent.com/moltis-org/moltis/main/README.md
+  kind: upstream_readme
+  summary: README links Moltis's official site and docs, documents the install script, and shows ~/.config/moltis and ~/.moltis as the default local config and data roots.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/moltis-org/moltis/main/README.md
+      evidence: Moltis's upstream README links the official site at moltis.org, the install script at www.moltis.org, and product docs on docs.moltis.org, so the reviewed network IOC set keeps only those exact Moltis-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: moltis.org
+      match: exact
+      role: app_brand
+    - pattern: www.moltis.org
+      match: exact
+      role: app_brand
+    - pattern: docs.moltis.org
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: moltis
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/moltis-org/moltis/main/README.md
+      evidence: Moltis's README mounts /home/moltis/.config/moltis and /home/moltis/.moltis in its Docker examples and documents --config-dir and --data-dir overrides, confirming ~/.config/moltis and ~/.moltis as the default local config and data roots alongside the moltis CLI.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/moltis
+    - ~/.moltis
+    process_names:
+    - moltis

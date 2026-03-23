@@ -1,0 +1,42 @@
+id: pastebin
+name: Pastebin
+category: PASTE_SHARING
+product_shape:
+- web
+product_type:
+- paste
+- code_sharing
+severity: medium
+priority_score: 73
+notes: Frequently used to share snippets; high risk of credential and config leaks.
+references:
+- url: https://pastebin.com/
+  kind: official_site
+  summary: Official Pastebin site is served from pastebin.com.
+  checked_at: '2026-03-22'
+- url: https://pastebin.com/tools
+  kind: official_tools
+  summary: Pastebin's official tools page recommends the Google Chrome extension and links the exact extension ID ghipmampnddcpdlppkkamoankmkmcbmh.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://pastebin.com/
+      evidence: The official Pastebin service is served from pastebin.com, so the reviewed network IOC keeps the Pastebin-owned domain and avoids broader third-party infrastructure.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: pastebin.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: pastebin
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://pastebin.com/tools
+      evidence: Pastebin's official tools page explicitly recommends the Google Chrome extension and links the exact Chrome extension URL carrying ID ghipmampnddcpdlppkkamoankmkmcbmh.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - ghipmampnddcpdlppkkamoankmkmcbmh

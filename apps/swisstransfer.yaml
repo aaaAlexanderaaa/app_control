@@ -1,0 +1,41 @@
+id: swisstransfer
+name: SwissTransfer
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: Often used for one-time file transfer outside managed channels.
+references:
+- url: https://www.swisstransfer.com/en-us
+  kind: official_site
+  summary: Official SwissTransfer site is served from swisstransfer.com.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/swisstransfer/fgnamjpfdanadgjchlokpiclkdgnnkdj
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID fgnamjpfdanadgjchlokpiclkdgnnkdj, identifies the publisher as Infomaniak, and links the extension to swisstransfer.com.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.swisstransfer.com/en-us
+      evidence: The official SwissTransfer site is served from swisstransfer.com, and the official Chrome Web Store listing for the product also points to the same product domain, so the reviewed network IOC keeps only the SwissTransfer-owned host family.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: swisstransfer.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: swisstransfer
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/swisstransfer/fgnamjpfdanadgjchlokpiclkdgnnkdj
+      evidence: The official Chrome Web Store listing for SwissTransfer by Infomaniak uses the stable extension identifier fgnamjpfdanadgjchlokpiclkdgnnkdj, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - fgnamjpfdanadgjchlokpiclkdgnnkdj

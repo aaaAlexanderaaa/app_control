@@ -1,0 +1,39 @@
+id: messenger
+name: Messenger
+category: NON_WORK_IM
+product_shape:
+- web
+- macos
+product_type:
+- im
+- social
+severity: medium
+priority_score: 73
+notes: Use messenger domain token rather than generic facebook-only matching.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/messenger.json
+      evidence: Homebrew cask exposes the Messenger desktop homepage and macOS download flow on www.messenger.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.messenger.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: messenger
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/messenger.json
+      evidence: Homebrew cask defines the Messenger app bundle and Messenger-specific support, cache, and log paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Messenger.app
+    - ~/Library/Application Support/Messenger
+    - ~/Library/Caches/Messenger
+    - ~/Library/Logs/Messenger
+    process_names:
+    - Messenger

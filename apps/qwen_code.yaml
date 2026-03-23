@@ -1,0 +1,41 @@
+id: qwen_code
+name: Qwen Code
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Open-source terminal coding agent from QwenLM with local ~/.qwen state and exact DashScope/Qwen installer endpoints.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/QwenLM/qwen-code/main/README.md
+      evidence: The upstream README publishes the official installer at qwen-code-assets.oss-cn-hangzhou.aliyuncs.com and shows exact DashScope coding endpoints such as coding.dashscope.aliyuncs.com in recommended settings, so the reviewed network IOC set keeps only exact service hosts rather than broad aliyuncs.com patterns
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: qwen-code-assets.oss-cn-hangzhou.aliyuncs.com
+      match: exact
+      role: file_download
+    - pattern: coding.dashscope.aliyuncs.com
+      match: exact
+      role: ai_service_provider
+    - pattern: dashscope.aliyuncs.com
+      match: exact
+      role: ai_service_provider
+    keyword_patterns:
+    - pattern: qwen code
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/QwenLM/qwen-code/main/README.md
+      evidence: packages/cli/package.json registers the qwen binary, the README documents ~/.qwen/settings.json, and the official install-qwen.sh script creates ~/.qwen/source.json during installation
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.qwen
+    process_names:
+    - qwen

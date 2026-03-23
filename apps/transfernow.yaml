@@ -1,0 +1,51 @@
+id: transfernow
+name: TransferNow
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: TransferNow spans web, browser extension, and desktop distribution, so the reviewed IOC set stays on exact TransferNow-owned hosts and the official Chrome extension ID.
+references:
+- url: https://www.transfernow.net/en/apps
+  kind: official_site
+  summary: Official apps page lists TransferNow web, API, desktop, mobile, Outlook, and Chrome/Gmail surfaces on the TransferNow domain.
+  checked_at: '2026-03-21'
+- url: https://www.transfernow.net/en/apps/chrome-extension-gmail
+  kind: official_site
+  summary: Official Chrome/Gmail page describes the TransferNow browser extension and embeds the Chrome Web Store link.
+  checked_at: '2026-03-21'
+- url: https://chromewebstore.google.com/detail/transfernow-for-chrome-an/ejaijeeblgpgldhdonlbleempkgpmjdb
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes the official TransferNow extension ID ejaijeeblgpgldhdonlbleempkgpmjdb.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.transfernow.net/en/apps
+      evidence: The official apps page serves TransferNow from transfernow.net and links the developer portal on developers.transfernow.net, so the reviewed network IOC keeps only those exact TransferNow-owned hosts plus the canonical www host used by current app pages.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: transfernow.net
+      match: exact
+      role: app_brand
+    - pattern: www.transfernow.net
+      match: exact
+      role: app_brand
+    - pattern: developers.transfernow.net
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: transfernow
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.transfernow.net/en/apps/chrome-extension-gmail
+      evidence: The official Chrome/Gmail page embeds a Chrome Web Store URL that resolves to extension ID ejaijeeblgpgldhdonlbleempkgpmjdb, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-21'
+    chrome_extension_ids:
+    - ejaijeeblgpgldhdonlbleempkgpmjdb

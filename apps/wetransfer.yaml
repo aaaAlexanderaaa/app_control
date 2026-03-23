@@ -1,0 +1,41 @@
+id: wetransfer
+name: WeTransfer
+category: FILE_TRANSFER
+product_shape:
+- web
+- macos
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: Prefer WeTransfer-owned domains and the macOS App Store app name; avoid generic shorteners unless directly confirmed.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://wetransfer.com/
+      evidence: WeTransfer’s official home page is hosted on wetransfer.com, serves its web assets from the exact host cdn.wetransfer.com, and its official response headers explicitly permit service content on wetransfer.net; the reviewed IOC set keeps only those vendor-owned domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: wetransfer.com
+      match: suffix
+      role: app_brand
+    - pattern: cdn.wetransfer.com
+      match: exact
+      role: platform_service
+    - pattern: wetransfer.net
+      match: suffix
+      role: platform_service
+    keyword_patterns:
+    - pattern: wetransfer
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://apps.apple.com/us/app/wetransfer-send-files/id1114922065?mt=12
+      evidence: 'Apple’s official macOS App Store listing identifies the app as WeTransfer: Send Files, available on Mac, and describes choosing files from the menu bar; retained host IOC is limited to the WeTransfer desktop app name implied by that official listing.'
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/WeTransfer*.app
+    process_names:
+    - WeTransfer

@@ -1,0 +1,49 @@
+id: pairdrop
+name: PairDrop
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- p2p_file_transfer
+- webrtc
+severity: medium
+priority_score: 72
+notes: Snapdrop fork; prefer the exact PairDrop web origin plus the official PairDrop CLI and self-host paths that are explicitly documented upstream.
+references:
+- url: https://pairdrop.net/
+  kind: official_site
+  summary: Official PairDrop site is served from pairdrop.net and links the maintained PairDrop GitHub project.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/schlagmichdoch/PairDrop/master/docs/how-to.md
+  kind: upstream_docs
+  summary: PairDrop how-to documents the pairdrop CLI command, the /usr/share/pairdrop-cli installation directory, and the Nautilus send-with-pairdrop script path.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/schlagmichdoch/PairDrop/master/docs/host-your-own.md
+  kind: upstream_docs
+  summary: PairDrop host-your-own guide documents self-host files such as rtc_config.json, turnserver.conf, and docker-compose-coturn.yml.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://pairdrop.net/
+      evidence: The official PairDrop site is served from pairdrop.net, so the reviewed network IOC keeps only that exact PairDrop-owned hostname.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: pairdrop.net
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: pairdrop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/schlagmichdoch/PairDrop/master/docs/how-to.md
+      evidence: PairDrop's official how-to documents the pairdrop CLI command plus the exact /usr/share/pairdrop-cli directory, the /usr/share/pairdrop-cli/.pairdrop-cli-config file, the /usr/share/pairdrop-cli/pairdrop executable, and the ~/.local/share/nautilus/scripts/send-with-pairdrop script path.
+      checked_at: '2026-03-22'
+    paths:
+    - /usr/share/pairdrop-cli/
+    - ~/.local/share/nautilus/scripts/send-with-pairdrop
+    process_names:
+    - pairdrop

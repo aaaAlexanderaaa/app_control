@@ -1,0 +1,47 @@
+id: aliyun_drive
+name: Aliyun Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer Aliyun Drive-owned product, auth, API, and download hosts; avoid broader aliyun.com provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.aliyundrive.com/download
+      evidence: Aliyun Drive’s official download page publishes macOS installers on cdn.aliyundrive.net and references product service hosts including www.aliyundrive.com, api.aliyundrive.com, and auth.aliyundrive.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.aliyundrive.com
+      match: exact
+      role: app_brand
+    - pattern: api.aliyundrive.com
+      match: exact
+      role: platform_service
+    - pattern: auth.aliyundrive.com
+      match: exact
+      role: platform_service
+    - pattern: cdn.aliyundrive.net
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: aliyundrive
+      match: substring
+    - pattern: alipan
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.aliyundrive.com/download
+      evidence: Inference from Aliyun Drive’s official macOS installer names aDrive-6.9.1.dmg and aDrive-6.9.1-arm64.dmg; retained host IOC is limited to the aDrive desktop app/process name implied by the official installer naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/aDrive.app
+    process_names:
+    - aDrive

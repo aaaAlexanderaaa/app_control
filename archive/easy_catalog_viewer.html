@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App Data Leak Catalog - Easy Viewer</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --bg-accent: #e8f1eb;
+      --panel: #fffdf8;
+      --ink: #1e2a2a;
+      --ink-muted: #5e6a69;
+      --line: #d8d0c3;
+      --brand: #0f766e;
+      --brand-soft: #d8efeb;
+      --critical: #9f1239;
+      --high: #b45309;
+      --medium: #0369a1;
+      --low: #4d7c0f;
+      --chip: #ede7db;
+      --shadow: rgba(34, 34, 34, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Avenir Next", "Trebuchet MS", "Gill Sans", sans-serif;
+      background:
+        radial-gradient(1200px 600px at -20% -10%, #e7efe5 0%, transparent 60%),
+        radial-gradient(1000px 500px at 110% -20%, #e7e8f3 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg) 0%, #f7f5f0 100%);
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 18px 44px;
+    }
+
+    .hero {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, var(--panel), var(--bg-accent));
+      box-shadow: 0 12px 28px var(--shadow);
+      margin-bottom: 16px;
+      animation: rise 450ms ease both;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.45rem, 2.9vw, 2rem);
+      letter-spacing: 0.3px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+
+    .stats {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+    }
+
+    .stat .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .stat .value {
+      margin-top: 4px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin: 14px 0 16px;
+      animation: rise 550ms ease both;
+      align-items: end;
+    }
+
+    .controls.bulk-actions {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      margin-top: 0;
+    }
+
+    .action-panels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 12px;
+      margin: 0 0 16px;
+      animation: rise 650ms ease both;
+    }
+
+    .panel-block {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255, 253, 248, 0.92);
+      box-shadow: 0 8px 18px var(--shadow);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .panel-header h2 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+    }
+
+    .panel-header p {
+      margin: 0;
+      color: var(--ink-muted);
+      line-height: 1.4;
+      font-size: 0.9rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .field.action {
+      align-self: end;
+    }
+
+    .field label {
+      font-size: 0.77rem;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    input,
+    select,
+    button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 11px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    input:focus,
+    select:focus,
+    button:focus {
+      outline: 2px solid #7bc6bb;
+      outline-offset: 1px;
+    }
+
+    button {
+      cursor: pointer;
+      background: linear-gradient(180deg, #fff, #f4f7f6);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.58;
+      box-shadow: none;
+    }
+
+    button.primary {
+      background: linear-gradient(160deg, var(--brand), #0d9488);
+      border-color: #0a6b64;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(15, 118, 110, 0.25);
+    }
+
+    .toggle-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fff, #f4f8f7);
+      cursor: pointer;
+    }
+
+    .toggle-card input {
+      margin-top: 3px;
+    }
+
+    .toggle-label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toggle-label strong {
+      font-size: 0.95rem;
+    }
+
+    .scope-switch {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .scope-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .scope-option.disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .scope-option input {
+      margin: 0;
+    }
+
+    .copy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 8px;
+    }
+
+    .copy-grid button {
+      text-align: left;
+      min-height: 44px;
+    }
+
+    .help-line {
+      margin: 10px 0 0;
+    }
+
+    #status {
+      margin: 8px 0 12px;
+      color: var(--ink-muted);
+      min-height: 1.2em;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 8px 18px var(--shadow);
+      animation: rise 320ms ease both;
+    }
+
+    .card h3 {
+      margin: 0 0 4px;
+      font-size: 1.08rem;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .muted {
+      color: var(--ink-muted);
+      font-size: 0.9rem;
+      word-break: break-word;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.74rem;
+      background: var(--chip);
+      border: 1px solid #ded6ca;
+    }
+
+    .chip.severity-critical {
+      background: #ffe0ea;
+      border-color: #f3a2bd;
+      color: var(--critical);
+    }
+
+    .chip.severity-high {
+      background: #fff0d8;
+      border-color: #f2cf98;
+      color: var(--high);
+    }
+
+    .chip.severity-medium {
+      background: #e2f3ff;
+      border-color: #a8d8f5;
+      color: var(--medium);
+    }
+
+    .chip.severity-low {
+      background: #e9f8da;
+      border-color: #badf9a;
+      color: var(--low);
+    }
+
+    details {
+      border-top: 1px dashed var(--line);
+      margin-top: 9px;
+      padding-top: 8px;
+    }
+
+    details summary {
+      cursor: pointer;
+      color: var(--brand);
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .meta-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--ink-muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .ioc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    .ioc-table th,
+    .ioc-table td {
+      text-align: left;
+      border: 1px solid var(--line);
+      padding: 4px 6px;
+      vertical-align: top;
+      word-break: break-word;
+    }
+
+    .ioc-table th {
+      background: #faf6ef;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+      color: var(--ink-muted);
+    }
+
+    .tiny {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      margin-top: 14px;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .controls {
+        grid-template-columns: 1fr;
+      }
+      .panel-header {
+        flex-direction: column;
+      }
+      .shell {
+        padding: 14px 12px 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <h1>Easy App Leak Risk Viewer</h1>
+      <p>
+        This view turns the large JSON catalog into a simple list of apps, their risk level, and why each one matters.
+        Filter first, bulk-select visible apps when needed, and copy IOC values by class in one click.
+      </p>
+      <div id="stats" class="stats"></div>
+    </section>
+
+    <section class="controls">
+      <div class="field">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Try: chatgpt, cloud storage, remote access">
+      </div>
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category"></select>
+      </div>
+      <div class="field">
+        <label for="risk">Risk Type</label>
+        <select id="risk"></select>
+      </div>
+      <div class="field">
+        <label for="severity">Severity</label>
+        <select id="severity"></select>
+      </div>
+      <div class="field">
+        <label for="hostSignal">Host Signal</label>
+        <select id="hostSignal"></select>
+      </div>
+      <div class="field">
+        <label for="productShape">Type</label>
+        <select id="productShape"></select>
+      </div>
+      <div class="field action">
+        <label>&nbsp;</label>
+        <button id="clearBtn" class="primary" type="button">Clear Filters</button>
+      </div>
+    </section>
+
+    <section class="action-panels">
+      <section class="panel-block" aria-labelledby="selectionPanelTitle">
+        <div class="panel-header">
+          <div>
+            <h2 id="selectionPanelTitle">Bulk Selection</h2>
+            <p id="selectionSummary">0 filtered apps · 0 selected apps</p>
+          </div>
+          <button id="clearSelectionBtn" type="button">Clear Selection</button>
+        </div>
+        <label class="toggle-card" for="selectFilteredToggle">
+          <input id="selectFilteredToggle" type="checkbox">
+          <span class="toggle-label">
+            <strong id="selectFilteredLabel">Select all filtered apps</strong>
+            <span id="selectFilteredHint" class="muted">Add or remove every app currently shown without opening cards.</span>
+          </span>
+        </label>
+      </section>
+
+      <section class="panel-block" aria-labelledby="copyPanelTitle">
+        <div class="panel-header">
+          <div>
+            <h2 id="copyPanelTitle">IOC Quick Copy</h2>
+            <p id="copyScopeHint">Copy newline-separated IOC values from the current filter.</p>
+          </div>
+        </div>
+        <div class="scope-switch" role="radiogroup" aria-label="Copy scope">
+          <label id="scopeFilteredLabel" class="scope-option">
+            <input id="scopeFiltered" type="radio" name="copyScope" value="filtered" checked>
+            <span id="scopeFilteredText">Filtered Results</span>
+          </label>
+          <label id="scopeSelectedLabel" class="scope-option">
+            <input id="scopeSelected" type="radio" name="copyScope" value="selected">
+            <span id="scopeSelectedText">Selected Apps</span>
+          </label>
+        </div>
+        <div class="copy-grid">
+          <button id="copyHostnamesBtn" type="button">Non-Platform Hostnames</button>
+          <button id="copyPlatformHostnamesBtn" type="button">Platform Hostnames</button>
+          <button id="copyKeywordsBtn" type="button">Keywords</button>
+          <button id="copyBundleIdsBtn" type="button">Bundle IDs</button>
+          <button id="copyProcessNamesBtn" type="button">Process Names</button>
+          <button id="copyDirectoryPathsBtn" type="button">Path IOCs</button>
+          <button id="copyTeamIdsBtn" type="button">Team IDs</button>
+          <button id="copyChromeExtensionsBtn" type="button">Chrome Ext IDs</button>
+          <button id="copySafariExtensionsBtn" type="button">Safari Ext IDs</button>
+          <button id="copyAllIocsBtn" class="primary" type="button">All IOC Types</button>
+        </div>
+        <p class="tiny help-line">Each copy action writes plain text to the clipboard, one IOC per line.</p>
+      </section>
+    </section>
+
+    <p id="status">Loading catalog...</p>
+    <section id="results" class="cards"></section>
+
+    <p class="tiny">
+      Tip: If this page cannot load JSON in your browser, run
+      <code>python3 -m http.server 8000</code> in this folder and open
+      <code>http://localhost:8000/easy_catalog_viewer.html</code>.
+    </p>
+  </main>
+
+  <script>
+    const els = {
+      search: document.getElementById("search"),
+      category: document.getElementById("category"),
+      risk: document.getElementById("risk"),
+      severity: document.getElementById("severity"),
+      hostSignal: document.getElementById("hostSignal"),
+      productShape: document.getElementById("productShape"),
+      clearBtn: document.getElementById("clearBtn"),
+      clearSelectionBtn: document.getElementById("clearSelectionBtn"),
+      selectionSummary: document.getElementById("selectionSummary"),
+      selectFilteredToggle: document.getElementById("selectFilteredToggle"),
+      selectFilteredLabel: document.getElementById("selectFilteredLabel"),
+      selectFilteredHint: document.getElementById("selectFilteredHint"),
+      copyScopeHint: document.getElementById("copyScopeHint"),
+      scopeFiltered: document.getElementById("scopeFiltered"),
+      scopeSelected: document.getElementById("scopeSelected"),
+      scopeFilteredText: document.getElementById("scopeFilteredText"),
+      scopeSelectedLabel: document.getElementById("scopeSelectedLabel"),
+      scopeSelectedText: document.getElementById("scopeSelectedText"),
+      copyHostnamesBtn: document.getElementById("copyHostnamesBtn"),
+      copyPlatformHostnamesBtn: document.getElementById("copyPlatformHostnamesBtn"),
+      copyKeywordsBtn: document.getElementById("copyKeywordsBtn"),
+      copyBundleIdsBtn: document.getElementById("copyBundleIdsBtn"),
+      copyProcessNamesBtn: document.getElementById("copyProcessNamesBtn"),
+      copyDirectoryPathsBtn: document.getElementById("copyDirectoryPathsBtn"),
+      copyTeamIdsBtn: document.getElementById("copyTeamIdsBtn"),
+      copyChromeExtensionsBtn: document.getElementById("copyChromeExtensionsBtn"),
+      copySafariExtensionsBtn: document.getElementById("copySafariExtensionsBtn"),
+      copyAllIocsBtn: document.getElementById("copyAllIocsBtn"),
+      status: document.getElementById("status"),
+      results: document.getElementById("results"),
+      stats: document.getElementById("stats")
+    };
+
+    const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+    const zhFallback = {
+      category: {},
+      risk: {},
+      severity: { critical: "严重", high: "高", medium: "中", low: "低" },
+      hostSignal: { verified: "已验证", heuristic: "启发式", missing: "缺失" }
+    };
+    function cloneI18nFallback() {
+      return {
+        category: {},
+        risk: {},
+        severity: { ...zhFallback.severity },
+        hostSignal: { ...zhFallback.hostSignal }
+      };
+    }
+
+    let i18n = cloneI18nFallback();
+    let apps = [];
+    let riskById = new Map();
+    let selectedAppIds = new Set();
+    let openDetailAppIds = new Set();
+
+    const copyButtonConfigs = [
+      { key: "copyHostnamesBtn", label: "Non-Platform Hostnames", emptyLabel: "non-platform hostname IOCs", pick: (iocs) => iocs.hostnames },
+      { key: "copyPlatformHostnamesBtn", label: "Platform Hostnames", emptyLabel: "platform_service hostname IOCs", pick: (iocs) => iocs.platformServiceHostnames },
+      { key: "copyKeywordsBtn", label: "Keywords", emptyLabel: "keyword IOCs", pick: (iocs) => iocs.keywords },
+      { key: "copyBundleIdsBtn", label: "Bundle IDs", emptyLabel: "bundle IDs", pick: (iocs) => iocs.host.bundle_ids },
+      { key: "copyProcessNamesBtn", label: "Process Names", emptyLabel: "process names", pick: (iocs) => iocs.host.process_names },
+      { key: "copyDirectoryPathsBtn", label: "Path IOCs", emptyLabel: "macOS path IOCs", pick: (iocs) => iocs.host.directory_paths },
+      { key: "copyTeamIdsBtn", label: "Team IDs", emptyLabel: "team IDs", pick: (iocs) => iocs.host.team_ids },
+      { key: "copyChromeExtensionsBtn", label: "Chrome Ext IDs", emptyLabel: "Chrome extension IDs", pick: (iocs) => iocs.host.chrome_extension_ids },
+      { key: "copySafariExtensionsBtn", label: "Safari Ext IDs", emptyLabel: "Safari extension bundle IDs", pick: (iocs) => iocs.host.safari_extension_bundle_ids }
+    ];
+
+    function esc(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function textOrDash(value) {
+      return value && String(value).trim() ? value : "-";
+    }
+
+    function labelCategory(id) {
+      const zh = i18n.category[id];
+      return zh ? `${id} / ${zh}` : id;
+    }
+
+    function labelRisk(riskId) {
+      const risk = riskById.get(riskId) || {};
+      const title = risk.title || riskId;
+      const zh = i18n.risk[riskId];
+      return zh ? `${title} / ${zh}` : title;
+    }
+
+    function labelSeverity(level) {
+      const zh = i18n.severity[level];
+      return zh ? `${level} / ${zh}` : level;
+    }
+
+    function labelHostSignal(status) {
+      const zh = i18n.hostSignal[status];
+      return zh ? `${status} / ${zh}` : status;
+    }
+
+    function optionList(select, items, allLabel) {
+      select.innerHTML = `<option value="">${esc(allLabel)}</option>`;
+      for (const item of items) {
+        const opt = document.createElement("option");
+        opt.value = item.value;
+        opt.textContent = item.label;
+        select.appendChild(opt);
+      }
+    }
+
+    function getSearchText(app) {
+      const riskTitles = app.risk_profile.risks
+        .map((id) => labelRisk(id))
+        .join(" ");
+      return [
+        app.name,
+        app.id,
+        app.category,
+        i18n.category[app.category] || "",
+        app.notes,
+        app.risk_profile.severity,
+        i18n.severity[app.risk_profile.severity] || "",
+        app.risk_profile.risks.join(" "),
+        riskTitles,
+        app.fingerprints.host.macos.host_signal_status
+      ].join(" ").toLowerCase();
+    }
+
+    function filteredApps() {
+      const q = els.search.value.trim().toLowerCase();
+      const category = els.category.value;
+      const risk = els.risk.value;
+      const severity = els.severity.value;
+      const hostSignal = els.hostSignal.value;
+      const productShape = els.productShape.value;
+
+      return apps
+        .filter((app) => {
+          if (category && app.category !== category) return false;
+          if (risk && !app.risk_profile.risks.includes(risk)) return false;
+          if (severity && app.risk_profile.severity !== severity) return false;
+          if (hostSignal && app.fingerprints.host.macos.host_signal_status !== hostSignal) return false;
+          if (productShape && !(app.product_shape || []).includes(productShape)) return false;
+          if (q && !getSearchText(app).includes(q)) return false;
+          return true;
+        })
+        .sort((a, b) => {
+          const p = (b.risk_profile.priority_score || 0) - (a.risk_profile.priority_score || 0);
+          if (p !== 0) return p;
+          const s = (severityOrder[b.risk_profile.severity] || 0) - (severityOrder[a.risk_profile.severity] || 0);
+          if (s !== 0) return s;
+          return a.name.localeCompare(b.name);
+        });
+    }
+
+    function renderStats(list) {
+      const highPlus = list.filter((a) => ["critical", "high"].includes(a.risk_profile.severity)).length;
+      const critical = list.filter((a) => a.risk_profile.severity === "critical").length;
+      const heuristic = list.filter((a) => a.evidence.verification_status === "heuristic").length;
+      const hostMissing = list.filter((a) => a.fingerprints.host.macos.host_signal_status === "missing").length;
+
+      const stats = [
+        { label: "Showing", value: `${list.length} / ${apps.length}` },
+        { label: "High + Critical", value: highPlus },
+        { label: "Critical", value: critical },
+        { label: "Heuristic Evidence", value: heuristic },
+        { label: "Missing Host Signals", value: hostMissing }
+      ];
+
+      els.stats.innerHTML = stats.map((s) => `
+        <div class="stat">
+          <div class="label">${esc(s.label)}</div>
+          <div class="value">${esc(s.value)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderHostnameIocs(app) {
+      const patterns = app.fingerprints.network.hostname_patterns || [];
+      if (!patterns.length) return "<div class=\"muted\">-</div>";
+      return `
+        <table class="ioc-table">
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Role</th>
+              <th>Match</th>
+              <th>On</th>
+              <th>Precision</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${patterns.map((p) => `
+              <tr>
+                <td><code>${esc(p.pattern || "-")}</code></td>
+                <td>${esc(p.role || "-")}</td>
+                <td>${esc(p.match || "-")}</td>
+                <td>${esc((p.match_on || []).join(", ") || "-")}</td>
+                <td>${esc(p.precision || "-")}</td>
+                <td>${esc(p.weight ?? "-")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderKeywordIocs(app) {
+      const patterns = app.fingerprints.network.keyword_patterns || [];
+      if (!patterns.length) return "<div class=\"muted\">-</div>";
+      return `
+        <table class="ioc-table">
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Match</th>
+              <th>Precision</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${patterns.map((p) => `
+              <tr>
+                <td><code>${esc(p.pattern || "-")}</code></td>
+                <td>${esc(p.match || "-")}</td>
+                <td>${esc(p.precision || "-")}</td>
+                <td>${esc(p.weight ?? "-")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function normalizeIocValues(values) {
+      return (values || []).map((v) => {
+        if (typeof v === "string") return v;
+        if (v && typeof v === "object" && typeof v.value === "string") return v.value;
+        return JSON.stringify(v);
+      });
+    }
+
+    function collectAppHostIocs(app) {
+      const mac = (app.fingerprints.host && app.fingerprints.host.macos) || {};
+      return {
+        bundle_ids: normalizeIocValues(mac.bundle_ids),
+        process_names: normalizeIocValues(mac.process_names),
+        directory_paths: normalizeIocValues(mac.directory_paths),
+        team_ids: normalizeIocValues(mac.team_ids),
+        chrome_extension_ids: normalizeIocValues(mac.chrome_extension_ids),
+        safari_extension_bundle_ids: normalizeIocValues(mac.safari_extension_bundle_ids)
+      };
+    }
+
+    function uniqueSorted(values) {
+      return [...new Set((values || []).map((value) => String(value || "").trim()).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b));
+    }
+
+    function captureOpenDetails() {
+      const openIds = [...els.results.querySelectorAll("article[data-app-id] details[open]")]
+        .map((detail) => detail.closest("article[data-app-id]")?.getAttribute("data-app-id"))
+        .filter(Boolean);
+      openDetailAppIds = new Set(openIds);
+    }
+
+    function getSelectedApps() {
+      return apps.filter((app) => selectedAppIds.has(app.id));
+    }
+
+    function currentScopeLabel() {
+      return els.scopeSelected.checked && selectedAppIds.size ? "selected" : "filtered";
+    }
+
+    function getScopeApps(filteredList = null) {
+      if (currentScopeLabel() === "selected") {
+        return getSelectedApps();
+      }
+      return filteredList || filteredApps();
+    }
+
+    function filteredSelectionStats(list) {
+      const selectedInFilter = list.filter((app) => selectedAppIds.has(app.id)).length;
+      return {
+        selectedInFilter,
+        allSelected: !!list.length && selectedInFilter === list.length,
+        partiallySelected: selectedInFilter > 0 && selectedInFilter < list.length
+      };
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      textarea.remove();
+    }
+
+    function collectIocClasses(list) {
+      const host = {
+        bundle_ids: new Set(),
+        process_names: new Set(),
+        directory_paths: new Set(),
+        team_ids: new Set(),
+        chrome_extension_ids: new Set(),
+        safari_extension_bundle_ids: new Set()
+      };
+      const hostnames = new Set();
+      const platformServiceHostnames = new Set();
+      const keywords = new Set();
+
+      for (const app of list) {
+        for (const item of app.fingerprints.network.hostname_patterns || []) {
+          if (!item.pattern) continue;
+          if (item.role === "platform_service") {
+            platformServiceHostnames.add(item.pattern);
+            continue;
+          }
+          hostnames.add(item.pattern);
+        }
+        for (const item of app.fingerprints.network.keyword_patterns || []) {
+          if (item.pattern) keywords.add(item.pattern);
+        }
+
+        const hostIocs = collectAppHostIocs(app);
+        for (const [key, values] of Object.entries(hostIocs)) {
+          for (const value of values) host[key].add(value);
+        }
+      }
+
+      return {
+        hostnames: uniqueSorted([...hostnames]),
+        platformServiceHostnames: uniqueSorted([...platformServiceHostnames]),
+        keywords: uniqueSorted([...keywords]),
+        host: Object.fromEntries(
+          Object.entries(host).map(([key, values]) => [key, uniqueSorted([...values])])
+        )
+      };
+    }
+
+    function formatSection(title, values) {
+      if (!values.length) return "";
+      return `[${title}]\n${values.join("\n")}`;
+    }
+
+    function formatHostIocsText(host) {
+      return [
+        formatSection("bundle_ids", host.bundle_ids),
+        formatSection("process_names", host.process_names),
+        formatSection("directory_paths", host.directory_paths),
+        formatSection("team_ids", host.team_ids),
+        formatSection("chrome_extension_ids", host.chrome_extension_ids),
+        formatSection("safari_extension_bundle_ids", host.safari_extension_bundle_ids)
+      ].filter(Boolean).join("\n\n");
+    }
+
+    async function copyValueList(label, values) {
+      const scopeApps = getScopeApps();
+      if (!scopeApps.length) {
+        els.status.textContent = `No ${currentScopeLabel()} apps available.`;
+        return;
+      }
+      if (!values.length) {
+        els.status.textContent = `No ${label} found in the ${currentScopeLabel()} apps.`;
+        return;
+      }
+      await copyText(values.join("\n"));
+      els.status.textContent = `Copied ${values.length} ${label} from ${scopeApps.length} ${currentScopeLabel()} app${scopeApps.length === 1 ? "" : "s"}.`;
+    }
+
+    async function copyAllIocsForApps(list, scopeLabel = currentScopeLabel()) {
+      if (!list.length) {
+        els.status.textContent = `No ${scopeLabel} apps available.`;
+        return;
+      }
+
+      const iocs = collectIocClasses(list);
+      const blocks = [
+        formatSection("hostname_patterns", iocs.hostnames),
+        formatSection("platform_service_hostname_patterns", iocs.platformServiceHostnames),
+        formatSection("keyword_patterns", iocs.keywords),
+        formatHostIocsText(iocs.host)
+      ].filter(Boolean);
+
+      if (!blocks.length) {
+        els.status.textContent = `No IOC values found in the ${scopeLabel} apps.`;
+        return;
+      }
+
+      await copyText(blocks.join("\n\n"));
+      els.status.textContent = `Copied all IOC classes from ${list.length} ${scopeLabel} app${list.length === 1 ? "" : "s"}.`;
+    }
+
+    function renderHostIocs(app) {
+      const mac = (app.fingerprints.host && app.fingerprints.host.macos) || {};
+      const hostIocs = collectAppHostIocs(app);
+      const renderPathValues = (values) => (values || [])
+        .map((value) => {
+          const pathType = value && typeof value === "object" ? value.path_type : "";
+          const raw = value && typeof value === "object" ? value.value : value;
+          return pathType ? `${raw} [${pathType}]` : raw;
+        })
+        .filter(Boolean);
+      const entries = [
+        ["bundle_ids", hostIocs.bundle_ids],
+        ["process_names", hostIocs.process_names],
+        ["directory_paths", renderPathValues(mac.directory_paths)],
+        ["team_ids", hostIocs.team_ids],
+        ["chrome_extension_ids", hostIocs.chrome_extension_ids],
+        ["safari_extension_bundle_ids", hostIocs.safari_extension_bundle_ids]
+      ];
+      const rows = entries
+        .filter(([, values]) => values.length)
+        .map(([k, values]) => `<tr><td>${esc(k)}</td><td><code>${esc(values.join(", "))}</code></td></tr>`)
+        .join("");
+      if (!rows) return "<div class=\"muted\">-</div>";
+      return `
+        <table class="ioc-table">
+          <thead>
+            <tr><th>Type</th><th>Values</th></tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function updateSelectionPanel(list) {
+      const stats = filteredSelectionStats(list);
+      const totalSelected = selectedAppIds.size;
+
+      els.selectionSummary.textContent =
+        `${list.length} filtered app${list.length === 1 ? "" : "s"} · ` +
+        `${totalSelected} selected app${totalSelected === 1 ? "" : "s"}`;
+
+      els.selectFilteredToggle.disabled = !list.length;
+      els.selectFilteredToggle.checked = stats.allSelected;
+      els.selectFilteredToggle.indeterminate = stats.partiallySelected;
+      els.selectFilteredLabel.textContent = list.length
+        ? `Select all filtered apps (${list.length})`
+        : "Select all filtered apps";
+      els.selectFilteredHint.textContent = list.length
+        ? `${stats.selectedInFilter} of the visible apps are already selected.`
+        : "Adjust filters first to bulk-select visible apps.";
+    }
+
+    function updateCopyPanel(scopeApps) {
+      const scope = currentScopeLabel();
+      const selectedCount = selectedAppIds.size;
+      const filteredCount = filteredApps().length;
+
+      if (!selectedCount && els.scopeSelected.checked) {
+        els.scopeFiltered.checked = true;
+      }
+
+      els.scopeSelected.disabled = !selectedCount;
+      els.scopeSelectedLabel.classList.toggle("disabled", !selectedCount);
+      els.scopeFilteredText.textContent = `Filtered Results (${filteredCount})`;
+      els.scopeSelectedText.textContent = `Selected Apps (${selectedCount})`;
+
+      if (!scopeApps.length) {
+        els.copyScopeHint.textContent = scope === "selected"
+          ? "Selected scope is empty. Select some apps first."
+          : "Current filter has no apps to copy from.";
+      } else {
+        els.copyScopeHint.textContent =
+          `Copy newline-separated IOC values from ${scopeApps.length} ${scope} app${scopeApps.length === 1 ? "" : "s"}.`;
+      }
+
+      const iocs = collectIocClasses(scopeApps);
+      for (const config of copyButtonConfigs) {
+        const values = config.pick(iocs);
+        const button = els[config.key];
+        button.textContent = `${config.label} (${values.length})`;
+        button.disabled = !scopeApps.length || !values.length;
+      }
+
+      const anyIoc = [
+        iocs.hostnames.length,
+        iocs.platformServiceHostnames.length,
+        iocs.keywords.length,
+        iocs.host.bundle_ids.length,
+        iocs.host.process_names.length,
+        iocs.host.directory_paths.length,
+        iocs.host.team_ids.length,
+        iocs.host.chrome_extension_ids.length,
+        iocs.host.safari_extension_bundle_ids.length
+      ].some(Boolean);
+      const totalIocValues =
+        iocs.hostnames.length +
+        iocs.platformServiceHostnames.length +
+        iocs.keywords.length +
+        iocs.host.bundle_ids.length +
+        iocs.host.process_names.length +
+        iocs.host.directory_paths.length +
+        iocs.host.team_ids.length +
+        iocs.host.chrome_extension_ids.length +
+        iocs.host.safari_extension_bundle_ids.length;
+      els.copyAllIocsBtn.disabled = !scopeApps.length || !anyIoc;
+      els.copyAllIocsBtn.textContent = `All IOC Types (${totalIocValues})`;
+    }
+
+    function renderCards(list) {
+      if (!list.length) {
+        els.results.innerHTML = `<div class="empty">No apps match your filter. Try clearing filters.</div>`;
+        return;
+      }
+
+      els.results.innerHTML = list.map((app) => {
+        const sev = app.risk_profile.severity || "low";
+        const risks = app.risk_profile.risks || [];
+        const riskTitles = risks.map((id) => labelRisk(id));
+        const confidence = app.evidence.verification_status || "unknown";
+        const hostSignal = app.fingerprints.host.macos.host_signal_status || "unknown";
+        const hostnameIocs = renderHostnameIocs(app);
+        const keywordIocs = renderKeywordIocs(app);
+        const hostIocs = renderHostIocs(app);
+        const sourceCount = (app.evidence.source_ids || []).length;
+        const shape = (app.product_shape || []).join(", ");
+        const priority = app.risk_profile.priority_score ?? "-";
+        const scoring = app.fingerprints.scoring || {};
+
+        return `
+          <article class="card" data-app-id="${esc(app.id)}">
+            <h3>${esc(app.name)}</h3>
+            <div class="muted">${esc(labelCategory(app.category))} · ${esc(shape)}</div>
+            <div class="chips">
+              <span class="chip severity-${esc(sev)}">${esc(labelSeverity(sev).toUpperCase())}</span>
+              <span class="chip">Priority ${esc(priority)}</span>
+              <span class="chip">Evidence: ${esc(confidence)}</span>
+              <span class="chip">Host signal: ${esc(labelHostSignal(hostSignal))}</span>
+            </div>
+            <div class="muted">${esc(app.notes || "No notes")}</div>
+            <div class="chips">
+              ${riskTitles.slice(0, 4).map((r) => `<span class="chip">${esc(r)}</span>`).join("")}
+            </div>
+            <div class="chips">
+              <label class="chip"><input class="select-app" type="checkbox" data-app-id="${esc(app.id)}" ${selectedAppIds.has(app.id) ? "checked" : ""}> Select</label>
+              <button class="chip copy-app-iocs" type="button" data-app-id="${esc(app.id)}">Copy IOCs</button>
+            </div>
+            <details ${openDetailAppIds.has(app.id) ? "open" : ""}>
+              <summary>Show technical details</summary>
+              <ul class="meta-list">
+                <li><strong>Hostname IOCs:</strong> ${hostnameIocs}</li>
+                <li><strong>Keyword IOCs:</strong> ${keywordIocs}</li>
+                <li><strong>Host IOCs (macOS):</strong> ${hostIocs}</li>
+                <li><strong>Scoring:</strong> method=${esc(scoring.method || "-")}, threshold=${esc(scoring.suggested_threshold ?? "-")}</li>
+                <li><strong>Evidence source count:</strong> ${esc(sourceCount)}</li>
+                <li><strong>Last reviewed:</strong> ${esc(app.evidence.last_reviewed_at)}</li>
+                <li><strong>App ID:</strong> ${esc(app.id)}</li>
+              </ul>
+            </details>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function render(statusMessage = "") {
+      captureOpenDetails();
+      const list = filteredApps();
+      const scopeApps = getScopeApps(list);
+      renderStats(list);
+      updateSelectionPanel(list);
+      updateCopyPanel(scopeApps);
+      renderCards(list);
+      els.status.textContent = statusMessage || (
+        `${list.length} app${list.length === 1 ? "" : "s"} shown · ` +
+        `${selectedAppIds.size} selected · copy scope: ${currentScopeLabel()}`
+      );
+    }
+
+    function connectEvents() {
+      [els.search, els.category, els.risk, els.severity, els.hostSignal, els.productShape].forEach((el) => {
+        el.addEventListener("input", render);
+        el.addEventListener("change", render);
+      });
+      els.clearBtn.addEventListener("click", () => {
+        els.search.value = "";
+        els.category.value = "";
+        els.risk.value = "";
+        els.severity.value = "";
+        els.hostSignal.value = "";
+        els.productShape.value = "";
+        render("Filters cleared.");
+      });
+      els.clearSelectionBtn.addEventListener("click", () => {
+        selectedAppIds = new Set();
+        render("Selection cleared.");
+      });
+      els.selectFilteredToggle.addEventListener("change", () => {
+        const list = filteredApps();
+        if (els.selectFilteredToggle.checked) {
+          for (const app of list) selectedAppIds.add(app.id);
+          render(`Selected all ${list.length} filtered app${list.length === 1 ? "" : "s"}.`);
+          return;
+        }
+        for (const app of list) selectedAppIds.delete(app.id);
+        render(`Removed ${list.length} filtered app${list.length === 1 ? "" : "s"} from selection.`);
+      });
+      [els.scopeFiltered, els.scopeSelected].forEach((el) => {
+        el.addEventListener("change", () => {
+          render(`Copy scope switched to ${currentScopeLabel()} apps.`);
+        });
+      });
+
+      for (const config of copyButtonConfigs) {
+        els[config.key].addEventListener("click", async () => {
+          const scopeApps = getScopeApps();
+          const iocs = collectIocClasses(scopeApps);
+          await copyValueList(config.emptyLabel, config.pick(iocs));
+        });
+      }
+
+      els.copyAllIocsBtn.addEventListener("click", async () => {
+        await copyAllIocsForApps(getScopeApps());
+      });
+      els.results.addEventListener("change", (ev) => {
+        const target = ev.target;
+        if (!(target instanceof HTMLInputElement) || !target.classList.contains("select-app")) return;
+        const appId = target.getAttribute("data-app-id");
+        if (!appId) return;
+        if (target.checked) selectedAppIds.add(appId);
+        else selectedAppIds.delete(appId);
+        render(`${target.checked ? "Selected" : "Unselected"} ${appId}.`);
+      });
+      els.results.addEventListener("click", async (ev) => {
+        const target = ev.target;
+        if (!(target instanceof HTMLElement) || !target.classList.contains("copy-app-iocs")) return;
+        const appId = target.getAttribute("data-app-id");
+        const app = apps.find((a) => a.id === appId);
+        if (!app) return;
+        await copyAllIocsForApps([app], `app ${app.id}`);
+      });
+    }
+
+    async function loadZhMapping() {
+      try {
+        const res = await fetch("catalog_i18n_zh.json", { cache: "no-store" });
+        if (!res.ok) return;
+        const map = await res.json();
+        i18n = {
+          category: map.category_map || {},
+          risk: map.risk_map || {},
+          severity: { ...zhFallback.severity, ...(map.severity_map || {}) },
+          hostSignal: { ...zhFallback.hostSignal, ...(map.host_signal_map || {}) }
+        };
+      } catch {
+        i18n = cloneI18nFallback();
+      }
+    }
+
+    async function init() {
+      try {
+        await loadZhMapping();
+        const res = await fetch("app_data_leak_risk_catalog.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`Could not load JSON (${res.status})`);
+        const data = await res.json();
+
+        apps = Array.isArray(data.apps) ? data.apps : [];
+        const risks = (data.taxonomy && data.taxonomy.risks && data.taxonomy.risks.items) || [];
+        riskById = new Map(risks.map((r) => [r.id, r]));
+
+        const categories = [...new Set(apps.map((a) => a.category))].sort();
+        optionList(els.category, categories.map((c) => ({ value: c, label: labelCategory(c) })), "All categories");
+
+        optionList(
+          els.risk,
+          risks.map((r) => ({ value: r.id, label: `${labelRisk(r.id)} (${r.id})` })),
+          "All risks"
+        );
+
+        optionList(
+          els.severity,
+          ["critical", "high", "medium", "low"].map((v) => ({ value: v, label: labelSeverity(v) })),
+          "All severities"
+        );
+
+        const hostStates = [...new Set(apps.map((a) => a.fingerprints.host.macos.host_signal_status))].sort();
+        optionList(
+          els.hostSignal,
+          hostStates.map((h) => ({ value: h, label: labelHostSignal(h) })),
+          "All host-signal states"
+        );
+
+        const productShapes = [...new Set(apps.flatMap((a) => a.product_shape || []))].sort();
+        optionList(
+          els.productShape,
+          productShapes.map((s) => ({ value: s, label: s })),
+          "All types"
+        );
+
+        connectEvents();
+        render();
+      } catch (err) {
+        console.error(err);
+        els.status.textContent = "Could not load JSON file.";
+        els.results.innerHTML = `
+          <div class="empty">
+            <p><strong>Load error:</strong> ${esc(err.message)}</p>
+            <p>If you opened this file directly, run a local server in this folder:</p>
+            <p><code>python3 -m http.server 8000</code></p>
+            <p>Then open: <code>http://localhost:8000/easy_catalog_viewer.html</code></p>
+          </div>
+        `;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

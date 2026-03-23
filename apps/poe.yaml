@@ -1,0 +1,50 @@
+id: poe
+name: Poe
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- aggregator
+severity: medium
+priority_score: 66
+notes: Prefer Poe-owned brand and desktop update hosts; avoid broad provider domains that depend on user-selected bots.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/poe.json
+      evidence: Homebrew cask exposes the Poe homepage on poe.com and the macOS desktop update archive on desktop-app.poecdn.net.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: poe.com
+      match: suffix
+      role: app_brand
+    - pattern: desktop-app.poecdn.net
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: poe
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/poe.json
+      evidence: Homebrew cask defines the Poe app bundle and Poe-specific shared-file-list, support, cache, ShipIt, HTTP storage, preference, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Poe.app
+    - ~/Library/Application Support/Poe
+    - ~/Library/Application Support/poe-electron
+    - ~/Library/Caches/com.quora.poe.electron
+    - ~/Library/HTTPStorages/com.quora.poe.electron
+    - ~/Library/Preferences/com.quora.poe.electron.plist
+    - ~/Library/Saved Application State/com.quora.poe.electron.savedState
+    - ~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.quora.poe.electron.sfl*
+    - ~/Library/Caches/com.quora.poe.electron.ShipIt
+    - ~/Library/HTTPStorages/com.quora.poe.electron.binarycookies
+    bundle_ids:
+    - com.quora.poe.electron
+    process_names:
+    - Poe

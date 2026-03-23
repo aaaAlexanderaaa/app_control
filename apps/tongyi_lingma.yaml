@@ -1,0 +1,40 @@
+id: tongyi_lingma
+name: Tongyi Lingma
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 78
+notes: Prefer Tongyi Lingma-owned hosts and exact extension identifiers over broad Aliyun parent domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://lingma.aliyun.com/download
+      evidence: Tongyi Lingma’s official download page exposes the exact VS Code extension URI `vscode:extension/Alibaba-Cloud.tongyi-lingma` and the JetBrains offline package URL `https://tongyi-code.oss-cn-hangzhou.aliyuncs.com/jetbrain/tongyi-jetbrains-latest.zip`; the reviewed network IOC set keeps the product host and exact installer host while dropping broad aliyun.com and aliyuncs.com parent-domain matching.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: lingma.aliyun.com
+      match: exact
+      role: app_brand
+    - pattern: tongyi-code.oss-cn-hangzhou.aliyuncs.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: tongyi lingma
+      match: substring
+    - pattern: lingma
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://lingma.aliyun.com/download
+      evidence: Tongyi Lingma’s official installer page uses the exact VS Code extension URI `vscode:extension/Alibaba-Cloud.tongyi-lingma`; paired with VS Code’s documented macOS extension directory under `~/.vscode/extensions`, this yields the stable local artifact paths for the Tongyi Lingma extension on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/alibaba-cloud.tongyi-lingma-*
+    - ~/.vscode-insiders/extensions/alibaba-cloud.tongyi-lingma-*

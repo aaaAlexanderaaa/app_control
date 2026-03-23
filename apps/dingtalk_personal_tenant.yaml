@@ -1,0 +1,51 @@
+id: dingtalk_personal_tenant
+name: DingTalk (Personal Tenant)
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+- collaboration
+severity: medium
+priority_score: 73
+notes: Prefer DingTalk-owned desktop and download hosts over broader Alibaba platform domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/dingtalk.json
+      evidence: Homebrew cask exposes the DingTalk homepage on www.dingtalk.com and the macOS installer on dtapp-pub.dingtalk.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.dingtalk.com
+      match: exact
+      role: app_brand
+    - pattern: dtapp-pub.dingtalk.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: dingtalk
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/dingtalk.json
+      evidence: Homebrew cask defines the DingTalk app bundle, quit identifier, and DingTalk-specific support, cache, preference, saved-state, and WebKit paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/DingTalk.app
+    - ~/Library/Application Support/DingTalkMac
+    - ~/Library/Caches/com.alibaba.DingTalkInstaller
+    - ~/Library/Caches/com.alibaba.DingTalkMac
+    - ~/Library/Caches/DingTalk
+    - ~/Library/Preferences/com.alibaba.DingTalk-Helper.plist
+    - ~/Library/Preferences/com.alibaba.DingTalkInstaller.plist
+    - ~/Library/Preferences/com.alibaba.DingTalkMac.plist
+    - ~/Library/Preferences/com.dingtalk.mac.plist
+    - ~/Library/Saved Application State/com.alibaba.DingTalkMac.savedState
+    - ~/Library/WebKit/com.alibaba.DingTalkMac
+    bundle_ids:
+    - com.alibaba.DingTalkMac
+    process_names:
+    - DingTalk

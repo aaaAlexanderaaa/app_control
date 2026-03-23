@@ -1,0 +1,36 @@
+id: continue
+name: Continue
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- assistant
+severity: high
+priority_score: 80
+notes: Open-source client; network profile varies by configured model providers.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/continuedev/continue/main/README.md
+      evidence: The upstream README links Continue’s official sites at https://continue.dev and https://docs.continue.dev; the reviewed network IOC set keeps those Continue-owned hosts and removes shared model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: continue.dev
+      match: suffix
+      role: app_brand
+    - pattern: docs.continue.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: continue
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/continuedev/continue/main/core/util/paths.ts
+      evidence: Upstream code resolves the global Continue directory to ~/.continue on macOS/Linux and creates config, sharedConfig, .continuerc, .env, session, index, and logs paths underneath it.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.continue

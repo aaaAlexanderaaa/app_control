@@ -1,0 +1,46 @@
+id: countbot
+name: CountBot
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Prefer the official 654321.ai brand host plus repo-root CountBot startup and workspace artifacts backed by upstream docs and source; avoid broad model-provider domains.
+references:
+- url: https://654321.ai/
+  kind: official_site
+  summary: Official CountBot site is served from 654321.ai and describes CountBot as a locally deployed Python, FastAPI, and SQLite agent framework.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/countbot-ai/countbot/main/README.md
+  kind: upstream_readme
+  summary: README documents cloning the countbot repo and starting the app with python start_app.py.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/countbot-ai/countbot/main/backend/modules/config/schema.py
+  kind: upstream_source
+  summary: WorkspaceConfig defaults CountBot's workspace to the program directory's workspace folder and creates workspace/temp under it.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://654321.ai/
+      evidence: The official CountBot site is served from 654321.ai and advertises CountBot as the locally deployed open-source product, so the reviewed network IOC keeps only that exact CountBot-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: 654321.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: countbot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/countbot-ai/countbot/main/backend/modules/config/schema.py
+      evidence: The upstream README starts CountBot with python start_app.py from a cloned countbot repo, and WorkspaceConfig defaults the runtime workspace to the app directory's workspace folder with a workspace/temp subdirectory, so the retained host IOC is limited to those explicit repo-root artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/countbot/'

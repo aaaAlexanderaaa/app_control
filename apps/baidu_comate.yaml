@@ -1,0 +1,43 @@
+id: baidu_comate
+name: Baidu Comate
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 78
+notes: Prefer the exact Baidu Comate product host and extension identifier over broader
+  Baidu platform domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://comate.baidu.com/docs/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/VSCode%20%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/VSCode.html
+      evidence: Baidu Comate’s official VS Code quick-start documentation for macOS
+        and Windows is hosted on comate.baidu.com, and the official Marketplace page
+        links its help documentation to the same host; the reviewed network IOC set
+        therefore keeps the exact Comate-owned host and drops broader Baidu platform
+        domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: comate.baidu.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: comate
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=BaiduComate.comate
+      evidence: The official VS Code Marketplace listing identifies the extension
+        as BaiduComate.comate, and Baidu’s official VS Code quick-start says the extension
+        supports macOS; this yields the stable macOS host-side extension paths for
+        Baidu Comate.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/baiducomate.comate-*
+    - ~/.vscode-insiders/extensions/baiducomate.comate-*

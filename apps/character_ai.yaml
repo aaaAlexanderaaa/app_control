@@ -1,0 +1,42 @@
+id: character_ai
+name: Character.AI
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+- roleplay
+severity: medium
+priority_score: 60
+notes: Keep Character.AI IOC on the official character.ai host and the official app bundle identifier.
+references:
+- url: https://character.ai/
+  kind: official_site
+  summary: Official Character.AI product site is served from character.ai.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=1671705818
+  kind: apple_lookup_api
+  summary: 'Apple lookup metadata for Character AI: Chat, Talk, Text returns bundle ID ai.character.app from seller Character Technologies, Inc.'
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://character.ai/
+      evidence: The official Character.AI service is served from character.ai, so the reviewed network IOC set keeps only that exact Character.AI-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: character.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: character.ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=1671705818
+      evidence: 'Apple''s official lookup metadata for Character AI: Chat, Talk, Text returns bundle identifier ai.character.app from seller Character Technologies, Inc., so the retained host IOC is the exact reviewed bundle ID.'
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - ai.character.app

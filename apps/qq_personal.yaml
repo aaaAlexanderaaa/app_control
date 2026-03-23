@@ -1,0 +1,48 @@
+id: qq_personal
+name: QQ (Personal)
+category: NON_WORK_IM
+product_shape:
+- macos
+product_type:
+- im
+- social
+severity: medium
+priority_score: 73
+notes: Prefer QQ-specific messaging and download hosts; avoid broad qq.com and tencent.com domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://im.qq.com/macqq/index.shtml
+      evidence: QQ’s official Mac download page is hosted on im.qq.com and the official Homebrew cask downloads the macOS installer from dldir1v6.qq.com; the reviewed IOC set removes generic qq.com and tencent.com parent domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: im.qq.com
+      match: suffix
+      role: app_brand
+    - pattern: dldir1v6.qq.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: macqq
+      match: substring
+    - pattern: qqnt
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/qq.json
+      evidence: Homebrew cask installs QQ.app, quits com.tencent.qq, and removes QQ-specific Application Scripts, caches, containers, preferences, saved-state, and WebKit data on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/QQ.app
+    - ~/Library/Application Scripts/com.tencent.qq
+    - ~/Library/Caches/com.tencent.qq
+    - ~/Library/Containers/com.tencent.qq
+    - ~/Library/Preferences/com.tencent.qq.plist
+    - ~/Library/Saved Application State/com.tencent.qq.savedState
+    - ~/Library/WebKit/com.tencent.qq
+    bundle_ids:
+    - com.tencent.qq
+    process_names:
+    - QQ

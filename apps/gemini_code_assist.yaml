@@ -1,0 +1,34 @@
+id: gemini_code_assist
+name: Gemini Code Assist
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: medium
+priority_score: 79
+notes: Prefer exact Gemini Code Assist web and extension artifacts over broad Google Cloud or Google APIs domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://codeassist.google/
+      evidence: Google serves the official Gemini Code Assist web experience from https://codeassist.google/; the reviewed network IOC set keeps that exact product host and drops broader shared Google domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: codeassist.google
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: gemini code assist
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=Google.geminicodeassist
+      evidence: The official VS Code marketplace page identifies the extension as Google.geminicodeassist; paired with VS Code’s documented macOS extension directory under ~/.vscode/extensions, this yields the stable host-side artifact ~/.vscode/extensions/google.geminicodeassist-*.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/google.geminicodeassist-*

@@ -1,0 +1,46 @@
+id: ironclaw
+name: IronClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- agent_runtime
+- cli
+severity: critical
+priority_score: 93
+notes: OpenClaw-inspired Rust agent focused on privacy and security; supports Homebrew and shell-based onboarding on macOS.
+references:
+- url: https://www.ironclaw.com
+  kind: official_site
+  summary: Official IronClaw site is served from ironclaw.com.
+  checked_at: '2026-03-22'
+- url: https://formulae.brew.sh/api/formula/ironclaw.json
+  kind: homebrew_formula_api
+  summary: Homebrew formula metadata confirms the ironclaw formula token and standard macOS CLI install paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.ironclaw.com
+      evidence: The official IronClaw site is served from ironclaw.com, so the reviewed network IOC keeps only the IronClaw-owned domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: ironclaw.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: ironclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/formula/ironclaw.json
+      evidence: The Homebrew formula installs the ironclaw CLI token into standard Homebrew bin locations, so the retained host IOC is limited to those exact binary paths and process name.
+      checked_at: '2026-03-22'
+    paths:
+    - /opt/homebrew/bin/ironclaw
+    - /usr/local/bin/ironclaw
+    process_names:
+    - ironclaw

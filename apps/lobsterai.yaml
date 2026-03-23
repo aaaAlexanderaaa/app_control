@@ -1,0 +1,37 @@
+id: lobsterai
+name: LobsterAI
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: NetEase Youdao publishes LobsterAI Enterprise on ai.youdao.com with separate macOS Apple Silicon and Intel clients; prefer the exact LobsterAI product host over broader Youdao domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://ai.youdao.com/new/lobsterai
+      evidence: The official LobsterAI Enterprise page is hosted on ai.youdao.com/new/lobsterai, names the product LobsterAI 企业版, and publishes separate macOS Apple Silicon and macOS Intel client downloads; the reviewed network IOC set keeps only the exact LobsterAI product host instead of broader Youdao domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: ai.youdao.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: lobsterai
+      match: substring
+    - pattern: 龙虾ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://ai.youdao.com/new/lobsterai
+      evidence: The official LobsterAI Enterprise download section advertises native macOS Apple Silicon and macOS Intel clients under the LobsterAI name; retained host IOC is limited to the LobsterAI app bundle and process name implied by that official client naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/LobsterAI.app
+    process_names:
+    - LobsterAI

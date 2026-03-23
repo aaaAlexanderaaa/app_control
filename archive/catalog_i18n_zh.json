@@ -1,0 +1,58 @@
+{
+  "language": "zh-CN",
+  "updated_at": "2026-03-12",
+  "category_map": {
+    "AI_AGENT_FRAMEWORK": "AI Agent 框架",
+    "AI_BROWSER_AGENT": "AI 浏览器 Agent",
+    "AI_DESKTOP_ASSISTANT": "AI 桌面助手",
+    "AI_OBSERVABILITY": "AI 可观测与日志",
+    "CLOUD_STORAGE": "云存储",
+    "COLLAB_KNOWLEDGE": "协作知识库",
+    "DOC_CONVERSION_UPLOAD": "文档转换上传",
+    "FILE_TRANSFER": "文件传输",
+    "GENAI_CHAT": "生成式 AI 对话",
+    "GENAI_CODING": "生成式 AI 编码",
+    "GENAI_MEDIA": "生成式 AI 媒体",
+    "MEETING_TRANSCRIPTION": "会议转录",
+    "NON_WORK_IM": "非工作即时通信",
+    "PASTE_SHARING": "代码/文本粘贴分享",
+    "REMOTE_ACCESS": "远程访问",
+    "SCREEN_RECORDING_SHARE": "录屏与视频分享",
+    "TRANSLATION": "翻译工具",
+    "P2P_FILE_SHARING": "P2P 文件共享",
+    "CLAW_FAMILY_APP": "claw系app"
+  },
+  "risk_map": {
+    "R_PROMPT_EXFIL": "提示词/文本外泄",
+    "R_CODE_CONTEXT_EXFIL": "代码上下文外泄",
+    "R_FILE_SYNC": "非受控文件同步",
+    "R_FILE_TRANSFER": "临时文件外传",
+    "R_FILE_SHARE_LINK": "外部公开分享链接",
+    "R_DOC_COLLAB": "外部文档协作泄露",
+    "R_MEETING_AUDIO_UPLOAD": "会议音视频上传",
+    "R_MEETING_TRANSCRIPT": "会议转录与摘要存储",
+    "R_SCREEN_RECORDING": "录屏内容上传",
+    "R_TRANSLATION_UPLOAD": "翻译场景上传",
+    "R_DOC_CONVERSION": "文档转换上传",
+    "R_PASTE_SHARING": "粘贴板/片段分享泄露",
+    "R_REMOTE_CONTROL": "远程控制通道风险",
+    "R_SUPPLY_CHAIN": "插件/技能供应链风险",
+    "R_CREDENTIAL_EXPOSURE": "凭据/API Key 暴露",
+    "R_OBSERVABILITY_LOGGING": "LLM 可观测日志泄露",
+    "R_TENANT_MISMATCH": "非受控租户使用",
+    "R_AGENT_AUTOMATION": "Agent 自动化外泄风险",
+    "R_BIOMETRIC_MEDIA": "生物特征媒体上传",
+    "R_DATA_RETENTION": "历史记录与保留风险"
+  },
+  "severity_map": {
+    "critical": "严重",
+    "high": "高",
+    "medium": "中",
+    "low": "低"
+  },
+  "host_signal_map": {
+    "verified": "已验证",
+    "heuristic": "启发式",
+    "missing": "缺失"
+  }
+}

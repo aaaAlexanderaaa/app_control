@@ -1,0 +1,54 @@
+id: dify
+name: Dify
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- llm_app_platform
+- rag_platform
+- agent_builder
+severity: medium
+priority_score: 82
+notes: SaaS usage is high-confidence on Dify-owned domains, while self-hosted deployments expose repo-local Docker config artifacts that are more reliable than generic provider traffic.
+references:
+- url: https://dify.ai/
+  kind: official_site
+  summary: Official Dify site is served from dify.ai and links the hosted cloud service.
+  checked_at: '2026-03-21'
+- url: https://docs.dify.ai/en/self-host/quick-start/docker-compose
+  kind: official_docs
+  summary: Self-host Docker Compose guide clones the dify repo, works under dify/docker, copies .env.example to .env, and starts the stack there.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/langgenius/dify/main/docker/.env.example
+  kind: official_repo
+  summary: The upstream Dify Docker environment template lives under docker/.env.example.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://dify.ai/
+      evidence: Dify's official site is served from dify.ai, its docs are served from docs.dify.ai, and the official homepage links the hosted cloud service on cloud.dify.ai, so the reviewed network IOC set keeps only those exact Dify-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: dify.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.dify.ai
+      match: exact
+      role: platform_service
+    - pattern: cloud.dify.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: dify
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.dify.ai/en/self-host/quick-start/docker-compose
+      evidence: The official Docker Compose guide clones the dify repository, works inside the dify/docker directory, copies .env.example to .env, and uses the docker/docker-compose.yaml stack file, so the retained host IOC is limited to those repo-local deployment files.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/dify/'

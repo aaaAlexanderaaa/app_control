@@ -1,0 +1,46 @@
+id: yuque
+name: Yuque
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- knowledge_base
+- docs
+severity: medium
+priority_score: 73
+notes: Prefer Yuque-owned domains and the exact official desktop download host; avoid broad Alibaba and Aliyun parent domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.yuque.com/
+      evidence: Yuque’s official homepage is hosted on yuque.com, and the official Homebrew cask downloads the macOS desktop client from the exact host app.nlark.com; the reviewed IOC set removes broad Alibaba and Aliyun parent domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: yuque.com
+      match: suffix
+      role: app_brand
+    - pattern: app.nlark.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: yuque
+      match: substring
+    - pattern: 语雀
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/yuque.json
+      evidence: Homebrew cask installs 语雀.app and removes Yuque-specific Application Support, preferences, and saved-state data rooted at com.yuque.app on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/语雀.app
+    - ~/Library/Application Support/yuque-desktop
+    - ~/Library/Preferences/com.yuque.app.plist
+    - ~/Library/Saved Application State/com.yuque.app.savedState
+    bundle_ids:
+    - com.yuque.app
+    process_names:
+    - 语雀

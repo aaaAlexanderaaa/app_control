@@ -1,0 +1,46 @@
+id: kimi
+name: Kimi
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+- long_context
+severity: medium
+priority_score: 65
+notes: Prefer Kimi-owned product domains and the exact official macOS download host; avoid broad Moonshot parent-only matching when narrower Kimi indicators are available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.kimi.com/
+      evidence: Kimi’s official web app is hosted on kimi.com and Moonshot AI’s official site identifies Kimi as its product; the official Homebrew cask downloads the macOS app from the exact host kimi-img.moonshot.cn, so the reviewed IOC set keeps the Kimi product domain plus the exact installer host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: kimi.com
+      match: suffix
+      role: app_brand
+    - pattern: kimi-img.moonshot.cn
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: kimi
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/kimi.json
+      evidence: Homebrew cask installs Kimi.app and removes Kimi-specific Application Support, cache, HTTP storage, and preferences paths rooted at com.moonshot.kimichat on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Kimi.app
+    - ~/Library/Application Support/kimi
+    - ~/Library/Caches/KimiAppCache
+    - ~/Library/HTTPStorages/com.moonshot.kimichat
+    - ~/Library/Preferences/com.moonshot.kimichat.plist
+    bundle_ids:
+    - com.moonshot.kimichat
+    process_names:
+    - Kimi

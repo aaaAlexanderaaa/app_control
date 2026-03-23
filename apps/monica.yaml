@@ -1,0 +1,48 @@
+id: monica
+name: Monica
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- web
+- macos
+product_type:
+- assistant
+- writing
+severity: medium
+priority_score: 74
+notes: Prefer Monica-owned service and download hosts; avoid shared model-provider domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://monica.im/download
+      evidence: Monica’s official download page and download-page JavaScript publish macOS installers at download.monica.im and desktop runtime endpoints note.butterfly-effect.dev, monica.butterfly-effect.dev, and monica-agent.butterfly-effect.dev.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: monica.im
+      match: suffix
+      role: app_brand
+    - pattern: download.monica.im
+      match: exact
+      role: file_download
+    - pattern: note.butterfly-effect.dev
+      match: exact
+      role: platform_service
+    - pattern: monica.butterfly-effect.dev
+      match: exact
+      role: platform_service
+    - pattern: monica-agent.butterfly-effect.dev
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: monica
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://assets.monica.im/home-web/_next/static/chunks/app/download/page-fd9a7a58afbd3658.js
+      evidence: Inference from Monica’s official macOS download controller, which serves Monica-2.7.0.dmg and Monica-2.7.0-arm64.dmg; retained host IOC is limited to the Monica app/process name implied by the official installer naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Monica.app
+    process_names:
+    - Monica

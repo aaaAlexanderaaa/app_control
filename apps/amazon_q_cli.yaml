@@ -1,0 +1,38 @@
+id: amazon_q_cli
+name: Amazon Q CLI
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Amazon Q CLI desktop and terminal surfaces are source-backed by Amazon Q.app bundle identifiers and ~/.aws/amazonq state, though the upstream README now points users to Kiro CLI for newest features.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/aws/amazon-q-developer-cli/main/README.md
+      evidence: The official README points macOS users to the exact DMG host desktop-release.q.us-east-1.amazonaws.com and Homebrew cask amazon-q, so the reviewed network IOC set keeps the app-specific download host instead of broad amazonaws.com coverage
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: desktop-release.q.us-east-1.amazonaws.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: amazon q
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/aws/amazon-q-developer-cli
+      evidence: build-config/signing/app/manifest.yaml defines Amazon Q.app with bundle identifiers com.amazon.codewhisperer, com.amazon.q, and com.amazon.qterm, while docs place persistent CLI data under ~/.aws/amazonq including cli-agents and mcp.json
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Amazon Q.app
+    - ~/.aws/amazonq
+    bundle_ids:
+    - com.amazon.codewhisperer
+    - com.amazon.q
+    - com.amazon.qterm

@@ -1,0 +1,77 @@
+id: openclaw
+name: OpenClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- desktop_agent
+- automation
+severity: critical
+priority_score: 96
+notes: >-
+  OpenClaw is the reference claw-family personal agent with ClawHub skills,
+  remote messaging control, and local automation. Reviewed IOC keeps only
+  first-party OpenClaw and ClawHub network surfaces plus explicit local app,
+  CLI, state, and log artifacts from the upstream repository.
+references:
+- url: https://docs.openclaw.ai/tools/clawhub
+  kind: official_docs
+  summary: Official OpenClaw docs publish the ClawHub tools surface on docs.openclaw.ai.
+  checked_at: '2026-03-22'
+- url: https://github.com/openclaw/openclaw
+  kind: official_repo
+  summary: Official OpenClaw repository documents the macOS app, CLI install paths, and local ~/.openclaw state.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.openclaw.ai/tools/clawhub
+      evidence: >-
+        Official OpenClaw docs and repository establish `openclaw.ai`,
+        `docs.openclaw.ai`, `clawhub.ai`, and `clawhub.com` as first-party
+        OpenClaw surfaces, so the reviewed network IOC removes broader
+        third-party provider and platform domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: clawhub.ai
+      match: suffix
+      role: app_brand
+    - pattern: clawhub.com
+      match: suffix
+      role: app_brand
+    - pattern: docs.openclaw.ai
+      match: suffix
+      role: app_brand
+    - pattern: openclaw.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: clawhub
+      match: substring
+    - pattern: openclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/openclaw/openclaw
+      evidence: >-
+        The official OpenClaw repository documents the macOS app,
+        `/opt/homebrew/bin/openclaw`, `/usr/local/bin/openclaw`, the
+        `~/.openclaw` state directory, and `~/Library/Logs/OpenClaw`, so the
+        reviewed host IOC keeps only those explicit OpenClaw artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/OpenClaw.app
+    - /opt/homebrew/bin/openclaw
+    - /usr/local/bin/openclaw
+    - ~/.cargo/bin/openclaw
+    - ~/.local/bin/openclaw
+    - ~/.openclaw
+    - ~/Applications/OpenClaw.app
+    - ~/Library/Logs/OpenClaw/diagnostics.jsonl
+    bundle_ids:
+    - ai.openclaw.mac
+    process_names:
+    - openclaw

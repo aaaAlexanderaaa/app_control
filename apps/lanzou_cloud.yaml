@@ -1,0 +1,30 @@
+id: lanzou_cloud
+name: Lanzou Cloud
+category: CLOUD_STORAGE
+product_shape:
+- web
+product_type:
+- cloud_drive
+- file_hosting
+severity: medium
+priority_score: 73
+notes: Often used for ad-hoc file distribution.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: lanzou.com
+      match: suffix
+      role: app_brand
+    - pattern: lanzoux.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: lanzou
+      match: substring
+    - pattern: lanzoux
+      match: substring

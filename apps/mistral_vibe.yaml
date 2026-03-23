@@ -1,0 +1,52 @@
+id: mistral_vibe
+name: Mistral Vibe
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Prefer source-backed ~/.vibe paths and concrete Mistral service hosts that the CLI configures by default; avoid falling back to broad parent domains when an exact service host exists.
+references:
+- url: https://formulae.brew.sh/api/formula/mistral-vibe.json
+  kind: homebrew_formula_api
+  summary: Homebrew formula metadata tracks the open-source Mistral Vibe CLI package.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/mistralai/mistral-vibe/main/README.md
+  kind: upstream_readme
+  summary: README documents the ~/.vibe home directory, configuration files, trust-store files, and setup flow for API keys.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/mistralai/mistral-vibe/main/vibe/core/paths/_vibe_home.py
+  kind: upstream_source
+  summary: Path helpers define the default ~/.vibe home and derived .env, log, history, trust, and plans files.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/mistralai/mistral-vibe/main/vibe/core/config/_settings.py
+  kind: upstream_source
+  summary: Default provider settings hard-code Mistral Vibe's default API base on api.mistral.ai.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/mistralai/mistral-vibe/main/vibe/core/config/_settings.py
+      evidence: Upstream default providers set api_base to https://api.mistral.ai/v1 and wss://api.mistral.ai for the realtime transcribe client, so the reviewed network IOC retains the exact api.mistral.ai host instead of broader mistral.ai domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: api.mistral.ai
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: mistral vibe
+      match: substring
+    - pattern: vibe-acp
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/mistralai/mistral-vibe/main/vibe/core/paths/_vibe_home.py
+      evidence: Upstream path helpers set VIBE_HOME to ~/.vibe by default and derive .env, trusted_folders.toml, logs/vibe.log, vibehistory, and plans beneath it; the reviewed host IOC is limited to those exact paths.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vibe

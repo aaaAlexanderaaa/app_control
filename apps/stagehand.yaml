@@ -1,0 +1,52 @@
+id: stagehand
+name: Stagehand
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+product_type:
+- browser
+- browser_automation
+severity: high
+priority_score: 85
+notes: Browser automation framework; keep exact Stagehand-owned docs and API hosts plus repo-local env files instead of broad browserbase.com coverage.
+references:
+- url: https://raw.githubusercontent.com/browserbase/stagehand/main/README.md
+  kind: upstream_readme
+  summary: README links the official Stagehand site and docs, and documents copying .env.example to .env during local setup.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/browserbase/stagehand/main/.env.example
+  kind: upstream_source
+  summary: Upstream repository ships a top-level .env.example file for local Stagehand configuration.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/browserbase/stagehand/main/stainless.yml
+  kind: upstream_source
+  summary: API configuration declares docs.stagehand.dev and the production endpoint api.stagehand.browserbase.com.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/browserbase/stagehand/main/stainless.yml
+      evidence: The upstream README links stagehand.dev and docs.stagehand.dev, and stainless.yml sets the production API endpoint to https://api.stagehand.browserbase.com, so the reviewed network IOC keeps only those exact Stagehand service hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: stagehand.dev
+      match: exact
+      role: app_brand
+    - pattern: docs.stagehand.dev
+      match: exact
+      role: app_brand
+    - pattern: api.stagehand.browserbase.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: stagehand
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/browserbase/stagehand/main/README.md
+      evidence: The upstream setup flow copies .env.example to .env in the repository root, and the repo ships both files plus stainless.yml there, so the retained host IOC is limited to those exact repo-local Stagehand artifacts.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/stagehand/'

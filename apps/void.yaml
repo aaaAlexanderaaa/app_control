@@ -1,0 +1,50 @@
+id: void
+name: Void
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- editor
+severity: medium
+priority_score: 75
+notes: Use Void-owned hosts and Homebrew cask artifacts; avoid shared model-provider
+  domains that depend on user configuration.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/v/void.rb
+      evidence: The official Homebrew cask for Void declares homepage https://voideditor.com/
+        while the GitHub release URL is only used for packaging; the reviewed network
+        IOC set keeps the exact Void-owned host and drops configurable third-party
+        model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: voideditor.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: voideditor
+      match: substring
+    - pattern: void
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/v/void.rb
+      evidence: The official Homebrew cask installs Void.app, exposes the void binary,
+        and zaps the Void application support, cache, preferences, and saved-state
+        paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Void.app
+    - ~/Library/Application Support/Void
+    - ~/Library/Caches/com.voideditor.Void
+    - ~/Library/Preferences/com.voideditor.Void.plist
+    - ~/Library/Saved Application State/com.voideditor.Void.savedState
+    bundle_ids:
+    - com.voideditor.Void
+    process_names:
+    - Void
+    - void

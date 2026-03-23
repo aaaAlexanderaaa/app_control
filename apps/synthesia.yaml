@@ -1,0 +1,54 @@
+id: synthesia
+name: Synthesia
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- avatar_video_generation
+severity: medium
+priority_score: 59
+notes: Synthesia's AI screen recorder is officially distributed as a browser extension, so the reviewed IOC set stays on exact Synthesia-owned web, app, docs, and help hosts plus the official extension ID.
+references:
+- url: https://docs.synthesia.io/docs/record
+  kind: official_docs
+  summary: Official Synthesia documentation explains how to use the AI screen recorder and links users to the Chrome extension and app.synthesia.io.
+  checked_at: '2026-03-22'
+- url: https://www.synthesia.io/
+  kind: official_site
+  summary: Official Synthesia site is served from www.synthesia.io.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/synthesia-ai-screen-recor/nfhnknijidlahaoemjlbpfpgpheakoph
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID nfhnknijidlahaoemjlbpfpgpheakoph and identifies Synthesia Limited as the publisher.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.synthesia.io/docs/record
+      evidence: Official Synthesia docs link users to app.synthesia.io, help.synthesia.io, and the Chrome extension install flow from docs.synthesia.io, so the reviewed network IOC keeps only those exact Synthesia-owned hosts plus the canonical www host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.synthesia.io
+      match: exact
+      role: app_brand
+    - pattern: app.synthesia.io
+      match: exact
+      role: platform_service
+    - pattern: docs.synthesia.io
+      match: exact
+      role: app_brand
+    - pattern: help.synthesia.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: synthesia
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.synthesia.io/docs/record
+      evidence: Synthesia's official screen-recorder documentation links Chrome users to the Web Store item that resolves to extension ID nfhnknijidlahaoemjlbpfpgpheakoph, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - nfhnknijidlahaoemjlbpfpgpheakoph

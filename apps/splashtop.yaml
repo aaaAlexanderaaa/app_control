@@ -1,0 +1,58 @@
+id: splashtop
+name: Splashtop
+category: REMOTE_ACCESS
+product_shape:
+- macos
+product_type:
+- remote_access
+severity: high
+priority_score: 80
+notes: Remote support sessions can include uncontrolled file copy channels.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support-splashtopbusiness.splashtop.com/hc/en-us/articles/115001811966-What-are-the-Firewall-Exceptions-and-IP-addresses-of-Splashtop-servers-Services
+      evidence: Splashtop’s official firewall guidance for corporate environments tells administrators to allow *.api.splashtop.com, *.relay.splashtop.com, update.splashtop.com, update-g3.splashtop.com, plus the regional API domains under splashtop.eu and splashtop.nr; the reviewed network IOC set keeps those Splashtop-owned service hosts and avoids generic CDN infrastructure.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.splashtop.com
+      match: exact
+      role: app_brand
+    - pattern: api.splashtop.com
+      match: suffix
+      role: platform_service
+    - pattern: relay.splashtop.com
+      match: suffix
+      role: platform_service
+    - pattern: update.splashtop.com
+      match: exact
+      role: file_download
+    - pattern: update-g3.splashtop.com
+      match: exact
+      role: file_download
+    - pattern: api.splashtop.eu
+      match: suffix
+      role: platform_service
+    - pattern: api.splashtop.nr
+      match: suffix
+      role: platform_service
+    keyword_patterns:
+    - pattern: splashtop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/s/splashtop-business.rb
+      evidence: The Homebrew cask installs Splashtop Business.pkg and zaps the app-specific Application Support, cache, HTTP storage, and preferences paths for the macOS client.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Splashtop Business.app
+    - ~/Library/Application Support/Splashtop Business
+    - ~/Library/Caches/com.splashtop.stb.macosx
+    - ~/Library/HTTPStorages/com.splashtop.stb.macosx
+    - ~/Library/Preferences/com.splashtop.stb.macosx.plist
+    bundle_ids:
+    - com.splashtop.stb.macosx
+    process_names:
+    - Splashtop Business

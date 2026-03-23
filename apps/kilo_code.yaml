@@ -1,0 +1,39 @@
+id: kilo_code
+name: Kilo Code
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- agentic_coding
+severity: high
+priority_score: 85
+notes: Open-source AI coding agent with IDE and desktop surfaces; prefer the exact Kilo product host and the official desktop bundle identity over generic marketplace or provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://kilo.ai/
+      evidence: Kilo's official homepage is served from kilo.ai and titles the product as the open-source AI coding agent for VS Code, JetBrains, and the CLI; the reviewed network IOC set keeps only the exact Kilo product host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: kilo.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: kilo code
+      match: substring
+    - pattern: kilocode
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Kilo-Org/kilocode/main/packages/desktop/src-tauri/tauri.conf.json
+      evidence: The official desktop Tauri configuration sets productName to Kilo, mainBinaryName to Kilo, and bundle identifier to ai.kilo.desktop.dev; retained host IOC is limited to the desktop app bundle, exact bundle identifier, and process name.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Kilo.app
+    bundle_ids:
+    - ai.kilo.desktop.dev
+    process_names:
+    - Kilo

@@ -1,0 +1,38 @@
+id: coda
+name: Coda
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- docs
+- workspace
+severity: medium
+priority_score: 73
+notes: Prefer Coda-owned domains and desktop-specific wording; avoid generic coda keyword matching because it can collide with unrelated terms.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://coda.io/@coda/desktop
+      evidence: Coda’s official desktop page is served from coda.io/@coda/desktop and advertises the desktop app download there; the reviewed network IOC keeps the vendor-owned coda.io domain and Coda-specific keywords.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: coda.io
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: coda.io
+      match: substring
+    - pattern: coda desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://coda.io/@coda/desktop
+      evidence: Coda’s official desktop page shows the macOS package name Coda-0.5.2-universal.dmg and instructs users to drag the app to the Applications folder; retained host IOC is limited to the Coda desktop app name implied by that official installer flow.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Coda.app
+    process_names:
+    - Coda

@@ -1,0 +1,43 @@
+id: craft
+name: Craft
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- docs
+- notes
+severity: medium
+priority_score: 72
+notes: Prefer Craft-owned domains and the exact official download host; avoid generic keyword-only matching because craft is a broad English word.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.craft.do/
+      evidence: Craft’s official homepage is hosted on craft.do, and the official Homebrew cask downloads the macOS app from the exact host res.craft.do; the reviewed IOC set keeps the product domain plus the app-specific download host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: craft.do
+      match: suffix
+      role: app_brand
+    - pattern: res.craft.do
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: craft.do
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/craft.json
+      evidence: Homebrew cask installs Craft.app and removes Craft-specific Application Scripts and container paths rooted at com.lukilabs.lukiapp.Craft on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Craft.app
+    - ~/Library/Application Scripts/com.lukilabs.lukiapp.Craft*
+    - ~/Library/Containers/com.lukilabs.lukiapp.Craft*
+    bundle_ids:
+    - com.lukilabs.lukiapp.Craft
+    process_names:
+    - Craft

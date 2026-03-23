@@ -1,0 +1,37 @@
+id: line
+name: LINE
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+severity: medium
+priority_score: 73
+notes: Prefer LINE-owned domains and the exact Mac App Store app name; avoid generic line-only matching.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://line.me/en/
+      evidence: LINE’s official site is hosted on line.me, and the official macOS App Store listing identifies LINE as a Mac app from LINE Corporation; the reviewed network IOC set keeps the product-owned line.me domain and drops unverified auxiliary domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: line.me
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: line messenger
+      match: substring
+    - pattern: line mac
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://apps.apple.com/us/app/line/id539883307?mt=12
+      evidence: Apple’s official macOS App Store listing identifies LINE as available on Mac with the app name LINE; retained host IOC is limited to the standard LINE app bundle name.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/LINE.app
+    process_names:
+    - LINE

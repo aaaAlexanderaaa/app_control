@@ -1,0 +1,42 @@
+id: mastra
+name: Mastra
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: >-
+  Official Mastra documentation is served from the product-owned `mastra.ai`
+  host, and the upstream CLI package defines the product-specific `mastra`
+  command used for local development workflows.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://github.com/mastra-ai/mastra
+      evidence: >-
+        Mastra's official README links product documentation and related pages
+        on `mastra.ai`; the reviewed network IOC set keeps that exact Mastra-
+        owned host and avoids generic provider infrastructure.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: mastra.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: mastra
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/mastra-ai/mastra/blob/main/packages/cli/package.json
+      evidence: >-
+        Mastra's official CLI package declares the binary entry `"mastra":
+        "./dist/index.js"` in `packages/cli/package.json`; retained host IOC is
+        therefore limited to the product-specific `mastra` process name.
+      checked_at: '2026-03-21'
+    process_names:
+    - mastra

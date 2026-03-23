@@ -1,0 +1,42 @@
+id: convertio
+name: Convertio
+category: DOC_CONVERSION_UPLOAD
+product_shape:
+- web
+product_type:
+- document_conversion
+- file_processing
+severity: low
+priority_score: 60
+notes: Often used for quick conversions without considering data handling.
+references:
+- url: https://convertio.co/
+  kind: official_site
+  summary: Official Convertio site is served from convertio.co.
+  checked_at: '2026-03-22'
+- url: https://convertio.co/about/
+  kind: official_site
+  summary: Convertio's about page links the official Chrome Web Store URL for the Convertio extension with ID eppjkefeiehhflmgkhdooajgbkkegpcl.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://convertio.co/
+      evidence: The official Convertio service is served from convertio.co, so the reviewed network IOC keeps only the product-owned Convertio domain.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: convertio.co
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: convertio
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://convertio.co/about/
+      evidence: Convertio's official about page links the exact Chrome Web Store URL for the Convertio browser extension, which embeds the stable extension ID eppjkefeiehhflmgkhdooajgbkkegpcl.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - eppjkefeiehhflmgkhdooajgbkkegpcl

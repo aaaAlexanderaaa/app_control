@@ -1,0 +1,48 @@
+id: openfang
+name: OpenFang
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+- web
+product_type:
+- agent_os
+- desktop_agent
+- daemon
+severity: critical
+priority_score: 96
+notes: Open-source Agent Operating System built in Rust; macOS desktop app (.dmg), system tray, auto-updates, notifications, daemon, and agent spawning.
+references:
+- url: https://www.openfang.sh/
+  kind: official_site
+  summary: Official OpenFang site establishes openfang.sh as the canonical product host.
+  checked_at: '2026-03-22'
+- url: https://github.com/RightNow-AI/openfang
+  kind: official_repo
+  summary: Official OpenFang repository exposes the desktop bundle identifier and default ~/.openfang config path.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.openfang.sh/
+      evidence: OpenFang's upstream GitHub repository currently publishes https://www.openfang.sh/ as the official project homepage, so the reviewed app-brand network IOC is narrowed to openfang.sh instead of the stale openfang.ai value
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: openfang.sh
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: openfang
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/RightNow-AI/openfang
+      evidence: crates/openfang-kernel/src/config.rs loads ~/.openfang/config.toml by default and crates/openfang-desktop/tauri.conf.json sets productName OpenFang with bundle identifier ai.openfang.desktop
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.openfang
+    bundle_ids:
+    - ai.openfang.desktop
+    process_names:
+    - OpenFang

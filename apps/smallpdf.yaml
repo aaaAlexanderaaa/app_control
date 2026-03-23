@@ -1,0 +1,41 @@
+id: smallpdf
+name: Smallpdf
+category: DOC_CONVERSION_UPLOAD
+product_shape:
+- web
+- macos
+product_type:
+- document_conversion
+- pdf_tools
+severity: low
+priority_score: 60
+notes: Prefer Smallpdf-owned product and installer hosts; avoid relying on generic CDN or payment infrastructure when direct product hosts are available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://smallpdf.com/desktop
+      evidence: Smallpdf’s official desktop page embeds the macOS installer URL https://download.smallpdf.com/desktop/mac/Smallpdf.dmg in its desktopDownloads configuration; the reviewed network IOC set keeps the product domain plus the exact installer host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: smallpdf.com
+      match: suffix
+      role: app_brand
+    - pattern: download.smallpdf.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: smallpdf
+      match: substring
+    - pattern: smallpdf desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://smallpdf.com/desktop
+      evidence: Smallpdf’s official install instructions tell users to open Smallpdf.dmg, drag the Smallpdf MacOS App icon to the applications folder, and launch the app from Applications; retained host IOC is limited to the Smallpdf desktop app name implied by that guidance.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Smallpdf*.app
+    process_names:
+    - Smallpdf

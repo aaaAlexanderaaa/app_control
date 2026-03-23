@@ -1,0 +1,54 @@
+id: chatsonic
+name: Chatsonic
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- chatbot
+- writing
+severity: medium
+priority_score: 64
+notes: Chatsonic now rides on Writesonic-owned web and browser-extension surfaces, so the reviewed IOC set stays on exact Writesonic hosts and the official extension ID.
+references:
+- url: https://docs.writesonic.com/docs/chatsonic-google-chrome-extension
+  kind: official_docs
+  summary: Official Writesonic docs page for the Chatsonic Chrome extension links users to app.writesonic.com and the Chrome Web Store install flow.
+  checked_at: '2026-03-22'
+- url: https://writesonic.com/chatgpt-chrome-extension-chatsonic
+  kind: official_site
+  summary: Official Writesonic product page describes the Chatsonic Chrome extension.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/writesonic-ai-writing-seo/kchaponcodemjigejilffhfchecpgdpf
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID kchaponcodemjigejilffhfchecpgdpf and identifies Writesonic, Inc. as the developer.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.writesonic.com/docs/chatsonic-google-chrome-extension
+      evidence: The official Chatsonic extension docs are served from docs.writesonic.com and link users to app.writesonic.com, while the Chrome Web Store listing ties the extension back to writesonic.com, so the reviewed network IOC keeps only those Writesonic-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: writesonic.com
+      match: exact
+      role: app_brand
+    - pattern: docs.writesonic.com
+      match: exact
+      role: app_brand
+    - pattern: app.writesonic.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: chatsonic
+      match: substring
+    - pattern: writesonic
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.writesonic.com/docs/chatsonic-google-chrome-extension
+      evidence: The official Chatsonic extension guide links directly to the Chrome Web Store item that resolves to extension ID kchaponcodemjigejilffhfchecpgdpf, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - kchaponcodemjigejilffhfchecpgdpf

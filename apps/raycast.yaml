@@ -1,0 +1,57 @@
+id: raycast
+name: Raycast
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- launcher
+- assistant
+severity: medium
+priority_score: 74
+notes: Use Raycast-owned download and release hosts instead of shared model-provider
+  domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/r/raycast.rb
+      evidence: The official Homebrew cask for Raycast declares homepage https://raycast.com/
+        and downloads releases from https://releases.raycast.com/releases/...; the
+        reviewed network IOC set keeps those exact Raycast-owned hosts and drops configurable
+        third-party model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: raycast.com
+      match: exact
+      role: app_brand
+    - pattern: releases.raycast.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: raycast
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/r/raycast.rb
+      evidence: The official Homebrew cask installs Raycast.app and zaps the app-specific
+        ~/.config/raycast directory plus Raycast application scripts, support, caches,
+        container, cookies, HTTP storage, preferences, and WebKit paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Raycast.app
+    - ~/.config/raycast
+    - ~/Library/Application Scripts/com.raycast.macos.BrowserExtension
+    - ~/Library/Application Support/com.raycast.macos
+    - ~/Library/Caches/com.raycast.macos
+    - ~/Library/Caches/SentryCrash/Raycast
+    - ~/Library/Containers/com.raycast.macos.BrowserExtension
+    - ~/Library/Cookies/com.raycast.macos.binarycookies
+    - ~/Library/HTTPStorages/com.raycast.macos
+    - ~/Library/Preferences/com.raycast.macos.plist
+    - ~/Library/WebKit/com.raycast.macos
+    bundle_ids:
+    - com.raycast.macos
+    - com.raycast.macos.BrowserExtension
+    process_names:
+    - Raycast

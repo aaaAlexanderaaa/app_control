@@ -1,0 +1,52 @@
+id: lettabot
+name: LettaBot
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Prefer official LettaBot and Letta API hosts plus explicit CLI and repo-root artifacts from upstream setup docs; avoid broad channel-provider domains.
+references:
+- url: https://letta.bot/
+  kind: official_site
+  summary: Official LettaBot site is served from letta.bot and positions the product as a personal AI that runs on your computer.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/letta-ai/lettabot/main/README.md
+  kind: upstream_readme
+  summary: README documents cloning lettabot, linking the lettabot CLI, and the optional ~/.letta/.persist/pgdata path for the local Docker-backed Letta server.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/letta-ai/lettabot/main/SKILL.md
+  kind: upstream_source
+  summary: SKILL.md documents the lettabot onboard and lettabot server commands and the default Letta API endpoint on api.letta.com.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/letta-ai/lettabot/main/SKILL.md
+      evidence: LettaBot's official site is served from letta.bot, and the upstream setup skill defaults LETTA_BASE_URL to https://api.letta.com, so the reviewed network IOC keeps the exact LettaBot host and default Letta API endpoint.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: letta.bot
+      match: exact
+      role: app_brand
+    - pattern: api.letta.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: lettabot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/letta-ai/lettabot/main/README.md
+      evidence: The upstream README clones the project into a lettabot directory, links the lettabot CLI, and uses ~/.letta/.persist/pgdata for the optional local Letta Docker server, so the retained host IOC is limited to those explicit artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/lettabot/'
+    - ~/.letta/.persist/pgdata
+    process_names:
+    - lettabot

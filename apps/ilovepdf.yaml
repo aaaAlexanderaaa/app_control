@@ -1,0 +1,34 @@
+id: ilovepdf
+name: iLovePDF
+category: DOC_CONVERSION_UPLOAD
+product_shape:
+- web
+- macos
+product_type:
+- document_conversion
+- pdf_tools
+severity: low
+priority_score: 60
+notes: Prefer the exact iLovePDF-owned desktop host and the official macOS bundle identifier; avoid broad third-party storefront domains as primary detection anchors.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.ilovepdf.com/desktop
+      evidence: iLovePDF's official desktop page is hosted on www.ilovepdf.com/desktop, describes the Desktop App for Mac and Windows, and links the macOS build through the Mac App Store; the reviewed network IOC set keeps only the exact iLovePDF-owned product host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.ilovepdf.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: ilovepdf
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=1207332399&country=us
+      evidence: Apple's official lookup API returns the macOS app track iLovePDF - PDF Editor & Scan with seller ILOVEPDF S.L. and bundleId com.ilovepdf.www, giving a reliable host-side identifier without adding speculative local paths.
+      checked_at: '2026-03-21'
+    bundle_ids:
+    - com.ilovepdf.www

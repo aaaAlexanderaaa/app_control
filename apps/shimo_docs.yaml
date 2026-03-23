@@ -1,0 +1,43 @@
+id: shimo_docs
+name: Shimo Docs
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+product_type:
+- docs
+- collaboration
+severity: medium
+priority_score: 73
+notes: Public links remain a leakage risk, but the reviewed IOC set stays on the exact shimo.im host and the official desktop client cache path.
+references:
+- url: https://shimo.im/help/common
+  kind: official_help
+  summary: Official help center on shimo.im lists desktop-client FAQs for the new desktop app.
+  checked_at: '2026-03-21'
+- url: https://shimo.im/help/articles/AX5LMFIRAAF2Y.html
+  kind: official_help
+  summary: Official FAQ gives the exact macOS desktop client cache path under ~/Library/Application Support/com.shimo.desktop.main.
+  checked_at: '2026-03-21'
+- url: https://shimo.im/help/articles/AW2RHHK3AAYZ6.html
+  kind: official_help
+  summary: Official desktop FAQ explains how to find files created in the new Shimo desktop client.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://shimo.im/help/common
+      evidence: The official help center and desktop FAQs are served on the canonical shimo.im host, so the reviewed network IOC keeps only that exact Shimo-owned hostname.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: shimo.im
+      match: exact
+      role: app_brand
+  host:
+    status: reviewed
+    provenance:
+      url: https://shimo.im/help/articles/AX5LMFIRAAF2Y.html
+      evidence: The official desktop-client FAQ states that the macOS cache folder is /Users/<username>/Library/Application Support/com.shimo.desktop.main, so the retained host IOC is the exact user-home-normalized path ~/Library/Application Support/com.shimo.desktop.main.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/Library/Application Support/com.shimo.desktop.main

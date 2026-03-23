@@ -1,0 +1,46 @@
+id: promptlayer
+name: PromptLayer
+category: AI_OBSERVABILITY
+product_shape:
+- web
+product_type:
+- prompt_management
+- prompt_tracing
+severity: medium
+priority_score: 73
+notes: Prompt management platforms often store prompts containing internal context and examples.
+references:
+- url: https://raw.githubusercontent.com/MagnivOrg/prompt-layer-js/main/README.md
+  kind: upstream_readme
+  summary: Official PromptLayer JS README links PromptLayer on promptlayer.com and the product documentation under docs.promptlayer.com.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/MagnivOrg/prompt-layer-js/main/package.json
+  kind: upstream_source
+  summary: PromptLayer JS package.json publishes the vendor/claude-agents/trace/.claude-plugin artifact inside the official prompt-layer-js repository.
+  checked_at: '2026-03-22'
+- url: https://docs.promptlayer.com/onboarding-guides/deployment-strategies
+  kind: official_docs
+  summary: PromptLayer deployment guide documents direct SDK usage and PromptLayer API interactions for the product.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/MagnivOrg/prompt-layer-js/main/README.md
+      evidence: PromptLayer's official JS README links the product site on promptlayer.com and the documentation on docs.promptlayer.com, so the reviewed network IOC keeps the PromptLayer-owned domain family instead of generic provider traffic.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: promptlayer.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: promptlayer
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/MagnivOrg/prompt-layer-js/main/package.json
+      evidence: The official PromptLayer JS package manifest publishes vendor/claude-agents and the exact vendor/claude-agents/trace/.claude-plugin path, so the retained host IOC is limited to that explicit PromptLayer-owned artifact in the prompt-layer-js checkout.
+      checked_at: '2026-03-22'
+    paths:
+    - "*/prompt-layer-js/vendor/claude-agents/trace/.claude-plugin/"

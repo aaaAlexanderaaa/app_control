@@ -1,0 +1,57 @@
+id: lm_studio
+name: LM Studio
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- llm_runtime
+- llm_client
+severity: low
+priority_score: 35
+notes: Prefer LM Studio-owned domains and installer hosts; avoid unrelated model-provider domains such as huggingface.co for app-level detection.
+references:
+- url: https://formulae.brew.sh/api/cask/lm-studio.json
+  kind: homebrew_cask_api
+  summary: Homebrew cask API exposes LM Studio's homepage on lmstudio.ai, its installer host on installers.lmstudio.ai, and LM Studio-specific macOS artifacts.
+  checked_at: '2026-03-22'
+- url: https://lmstudio.ai/
+  kind: official_site
+  summary: Official LM Studio site is served from lmstudio.ai.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/lm-studio.json
+      evidence: The Homebrew cask exposes the LM Studio homepage on lmstudio.ai and the macOS installer on installers.lmstudio.ai, so the reviewed network IOC keeps those exact LM Studio-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: lmstudio.ai
+      match: suffix
+      role: app_brand
+    - pattern: installers.lmstudio.ai
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: lm studio
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/lm-studio.json
+      evidence: The Homebrew cask defines the LM Studio app bundle, quit identifiers, and LM Studio-specific support, ShipIt cache, HTTP storage, log, preference, and saved-state paths, so the retained host IOC is limited to those explicit macOS artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/LM Studio.app
+    - ~/Library/Application Support/LM Studio
+    - ~/Library/Caches/ai.elementlabs.lmstudio
+    - ~/Library/HTTPStorages/ai.elementlabs.lmstudio
+    - ~/Library/Logs/LM Studio
+    - ~/Library/Preferences/ai.elementlabs.lmstudio.plist
+    - ~/Library/Saved Application State/ai.elementlabs.lmstudio.savedState
+    - ~/Library/Caches/ai.elementlabs.lmstudio.ShipIt
+    bundle_ids:
+    - ai.elementlabs.lmstudio
+    - ai.elementlabs.lmstudio.helper
+    process_names:
+    - LM Studio

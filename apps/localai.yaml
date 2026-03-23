@@ -1,0 +1,36 @@
+id: localai
+name: LocalAI
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Local LLM runtime with Homebrew and DMG install paths; network IOC is limited to LocalAI-branded distribution hosts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://localai.io/installation/index.print
+      evidence: The official installation docs and homepage are served from localai.io and the binaries page documents the macOS DMG download flow there, so the reviewed network IOC set keeps only the LocalAI-branded host
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: localai.io
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: localai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-core/master/Formula/l/localai.rb
+      evidence: The Homebrew formula installs the local-ai binary, and LocalAI docs describe direct macOS DMG installation and running the local-ai binary from the command line
+      checked_at: '2026-03-21'
+    paths:
+    - /opt/homebrew/bin/local-ai
+    - /usr/local/bin/local-ai
+    process_names:
+    - local-ai

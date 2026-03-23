@@ -1,0 +1,47 @@
+id: suna
+name: Suna
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Official Suna materials currently point users from suna.so to Kortix while the upstream repo uses product-specific setup.py and start.py entrypoints; reviewed IOC keeps only those directly confirmed signals.
+references:
+- url: https://suna.so/
+  kind: official_site
+  summary: Official Suna domain redirects to the current Kortix-hosted product site.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/kortix-ai/suna/main/README.md
+  kind: official_repo
+  summary: Upstream README clones the suna repo and runs python setup.py and python start.py.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://suna.so/
+      evidence: The official Suna domain redirects to the current Kortix-hosted product site, so the reviewed network IOC set keeps exact suna.so and www.kortix.com as the confirmed Suna-owned web hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: suna.so
+      match: exact
+      role: app_brand
+    - pattern: www.kortix.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: suna
+      match: substring
+    - pattern: kortix
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/kortix-ai/suna/main/README.md
+      evidence: The official Suna README tells users to clone the suna repository and run python setup.py followed by python start.py, so the retained host IOC is limited to those repo-local bootstrap scripts.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/suna/'

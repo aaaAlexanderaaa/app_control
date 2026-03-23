@@ -1,0 +1,46 @@
+id: lunary
+name: Lunary
+category: AI_OBSERVABILITY
+product_shape:
+- web
+product_type:
+- llm_observability
+- analytics
+severity: medium
+priority_score: 73
+notes: Analytics and tracing often capture full payloads unless explicitly redacted.
+references:
+- url: https://raw.githubusercontent.com/lunary-ai/lunary-js/main/README.md
+  kind: upstream_readme
+  summary: Official Lunary JS README links lunary.ai, lunary.ai/docs/js, and the hosted app at app.lunary.ai/demo.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/lunary-ai/lunary-js/main/package.json
+  kind: upstream_source
+  summary: Lunary JS package.json exports the dist/openai.js and dist/anthropic.js files from the official lunary-js repository.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/lunary-ai/lunary-py/main/pyproject.toml
+  kind: upstream_source
+  summary: Lunary Python SDK pyproject identifies lunary.ai as the official documentation host for the Lunary package.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/lunary-ai/lunary-js/main/README.md
+      evidence: Lunary's official JS README links the website at lunary.ai, product docs under lunary.ai/docs, and the hosted app at app.lunary.ai/demo, so the reviewed network IOC keeps the Lunary-owned domain family only.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: lunary.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: lunary
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/lunary-ai/lunary-js/main/package.json
+      evidence: The official Lunary JS package manifest exports the exact dist/openai.js and dist/anthropic.js files from the lunary-js repository, so the retained host IOC is limited to those explicit Lunary SDK artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/lunary-js/'

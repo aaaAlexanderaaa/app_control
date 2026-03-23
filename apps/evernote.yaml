@@ -1,0 +1,53 @@
+id: evernote
+name: Evernote
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- notes
+- docs
+severity: medium
+priority_score: 72
+notes: Prefer Evernote-owned domains and the exact macOS download host; avoid relying on unrelated third-party infrastructure when first-party hosts are available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://evernote.com/download
+      evidence: Evernote’s official download page is hosted on evernote.com, and the official Homebrew cask downloads the macOS app from the exact host mac.desktop.evernote.com; the reviewed IOC set keeps only Evernote-owned product and download hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: evernote.com
+      match: suffix
+      role: app_brand
+    - pattern: mac.desktop.evernote.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: evernote
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/evernote.json
+      evidence: Homebrew cask installs Evernote.app, quits com.evernote.Evernote and com.evernote.EvernoteHelper, and removes Evernote-specific Application Support, caches, cookies, logs, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Evernote.app
+    - ~/Library/Application Support/Caches/evernote-client-updater
+    - ~/Library/Application Support/com.evernote.Evernote
+    - ~/Library/Application Support/com.evernote.EvernoteHelper
+    - ~/Library/Application Support/Evernote
+    - ~/Library/Caches/com.evernote.Evernote
+    - ~/Library/Cookies/com.evernote.Evernote.binarycookies
+    - ~/Library/Logs/Evernote
+    - ~/Library/Preferences/com.evernote.Evernote.plist
+    - ~/Library/Preferences/com.evernote.EvernoteHelper.plist
+    - ~/Library/Saved Application State/com.evernote.Evernote.savedState
+    bundle_ids:
+    - com.evernote.Evernote
+    - com.evernote.EvernoteHelper
+    process_names:
+    - Evernote
+    - EvernoteHelper

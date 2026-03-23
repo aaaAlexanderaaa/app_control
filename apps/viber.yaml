@@ -1,0 +1,52 @@
+id: viber
+name: Viber
+category: NON_WORK_IM
+product_shape:
+- macos
+- web
+product_type:
+- im
+severity: medium
+priority_score: 73
+notes: Personal IM outside managed channels.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/viber.json
+      evidence: Homebrew cask exposes the Viber homepage on www.viber.com and the macOS installer on download.viber.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.viber.com
+      match: exact
+      role: app_brand
+    - pattern: download.viber.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: viber
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/viber.json
+      evidence: Homebrew cask defines the Viber app bundle plus Viber-specific application-script, support, cache, container, HTTP storage, preference, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Viber.app
+    - ~/Documents/ViberDownloads
+    - ~/Library/Application Scripts/com.viber.osx.macvibershare
+    - ~/Library/Application Support/ViberPC
+    - ~/Library/Application Support/com.viber.osx
+    - ~/Library/Caches/SentryCrash/Viber
+    - ~/Library/Caches/Viber Media S.à r.l
+    - ~/Library/Caches/com.viber.osx
+    - ~/Library/Containers/com.viber.osx.macvibershare
+    - ~/Library/HTTPStorages/com.viber.osx
+    - ~/Library/Preferences/com.viber.*.plist
+    - ~/Library/Saved Application State/com.viber.osx.savedState
+    bundle_ids:
+    - com.viber.osx
+    - com.viber.osx.macvibershare
+    process_names:
+    - Viber

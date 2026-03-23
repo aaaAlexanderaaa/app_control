@@ -1,0 +1,45 @@
+id: icloud_drive
+name: iCloud Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer iCloud Drive-specific web and sync hosts over broader Apple parent domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.icloud.com/iclouddrive/
+      evidence: Apple’s official iCloud Drive web application at `www.icloud.com/iclouddrive/` initializes iCloud Drive-specific services by calling `setup.icloud.com` and preconnecting to `ckdatabasews.icloud.com` and `cvws.icloud-content.com`; the reviewed network IOC set keeps those exact iCloud Drive-related hosts and drops broader `apple.com` matching.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.icloud.com
+      match: exact
+      role: app_brand
+    - pattern: setup.icloud.com
+      match: exact
+      role: platform_service
+    - pattern: ckdatabasews.icloud.com
+      match: exact
+      role: platform_service
+    - pattern: cvws.icloud-content.com
+      match: exact
+      role: file_sync
+    keyword_patterns:
+    - pattern: icloud drive
+      match: substring
+    - pattern: cloudkit
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://support.apple.com/guide/mac-help/store-files-in-icloud-drive-mchle5a61431/26/mac/26
+      evidence: Apple’s Mac User Guide says files stored in iCloud Drive appear in the iCloud section of the Finder sidebar on Mac and that Desktop and Documents folders are moved into iCloud Drive when enabled; retained host IOC uses the backing local iCloud Drive sync root on macOS as a narrow host-side indicator.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/Library/Mobile Documents/com~apple~CloudDocs

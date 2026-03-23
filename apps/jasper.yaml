@@ -1,0 +1,45 @@
+id: jasper
+name: Jasper
+category: GENAI_CHAT
+product_shape:
+- web
+product_type:
+- writing
+- chatbot
+severity: medium
+priority_score: 63
+notes: Jasper provides an official browser extension, so the reviewed IOC set stays on Jasper-owned hosts and the exact Chrome extension ID.
+references:
+- url: https://www.jasper.ai/chrome-extension
+  kind: official_site
+  summary: Official Jasper extension page links users to the Chrome Web Store and app.jasper.ai.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/jasper-everywhere-extensi/bpiohchncadidhohcajcnoelomephkdd
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID bpiohchncadidhohcajcnoelomephkdd and identifies jasper.ai as the website.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.jasper.ai/chrome-extension
+      evidence: Jasper's official extension page is served from www.jasper.ai, links users to app.jasper.ai, and sends Chrome users to the official Web Store listing, so the reviewed network IOC keeps only those Jasper-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.jasper.ai
+      match: exact
+      role: app_brand
+    - pattern: app.jasper.ai
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: jasper
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.jasper.ai/chrome-extension
+      evidence: The official Jasper extension page links directly to the Chrome Web Store item that resolves to extension ID bpiohchncadidhohcajcnoelomephkdd, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - bpiohchncadidhohcajcnoelomephkdd

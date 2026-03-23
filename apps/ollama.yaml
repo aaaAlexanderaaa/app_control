@@ -1,0 +1,53 @@
+id: ollama
+name: Ollama
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- local_llm_runtime
+- model_download
+severity: low
+priority_score: 37
+notes: Primarily local inference; keep the reviewed network IOC set on Ollama-owned web hosts and the reviewed host IOC set on Ollama app/runtime artifacts.
+references:
+- url: https://ollama.com/
+  kind: official_site
+  summary: Ollama's official site is served from ollama.com and markets the Ollama desktop/runtime experience.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/o/ollama-app.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask installs Ollama.app, exports the bundled `ollama` binary, and zaps Ollama-specific support, cache, preference, saved-state, and WebKit paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://ollama.com/
+      evidence: Ollama's official site is served from `ollama.com`, so the reviewed network IOC set keeps only that Ollama-owned host and avoids generic GitHub release infrastructure.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: ollama.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: ollama
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/o/ollama-app.rb
+      evidence: The official Homebrew cask installs Ollama.app, exports the bundled `ollama` binary, and zaps Ollama-specific `~/.ollama`, support, cache, preference, saved-state, and WebKit paths.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Ollama.app
+    - ~/.ollama
+    - ~/Library/Application Support/Ollama
+    - ~/Library/Caches/com.electron.ollama
+    - ~/Library/Preferences/com.electron.ollama.plist
+    - ~/Library/Saved Application State/com.electron.ollama.savedState
+    - ~/Library/Webkit/com.electron.ollama
+    bundle_ids:
+    - com.electron.ollama
+    process_names:
+    - Ollama
+    - ollama

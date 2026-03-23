@@ -1,0 +1,46 @@
+id: snapdrop
+name: Snapdrop
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- p2p_file_transfer
+- webrtc
+severity: medium
+priority_score: 72
+notes: WebRTC/P2P may reduce visible file-host domains; prefer the exact snapdrop.net origin plus the upstream local-dev and self-host files for host detection.
+references:
+- url: https://raw.githubusercontent.com/RobinLinus/snapdrop/master/README.md
+  kind: upstream_readme
+  summary: Snapdrop README links the official site at snapdrop.net and the local development guide for self-hosted Snapdrop.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/RobinLinus/snapdrop/master/docs/local-dev.md
+  kind: upstream_docs
+  summary: Local development guide documents cloning snapdrop, running docker-compose, and configuring docker/fqdn.env.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/RobinLinus/snapdrop/master/docker-compose.yml
+  kind: upstream_source
+  summary: Upstream docker-compose.yml mounts docker/fqdn.env and docker/nginx/default.conf for a self-hosted Snapdrop deployment.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/RobinLinus/snapdrop/master/README.md
+      evidence: The upstream Snapdrop README links the official site at https://snapdrop.net, so the reviewed network IOC keeps only the exact Snapdrop hostname.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: snapdrop.net
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: snapdrop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/RobinLinus/snapdrop/master/docs/local-dev.md
+      evidence: Snapdrop's local development guide documents cloning the snapdrop repository and using docker-compose, while the upstream compose file explicitly references docker/fqdn.env and docker/nginx/default.conf, so the retained host IOC is limited to those exact repo-local files.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/snapdrop/'

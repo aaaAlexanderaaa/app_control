@@ -1,0 +1,43 @@
+id: lobechat
+name: LobeChat
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- llm_client
+severity: medium
+priority_score: 62
+notes: Popular open-source multi-provider AI workspace; for enterprise detection prefer exact LobeHub-owned web and desktop update hosts over generic model-provider domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://lobehub.com/downloads
+      evidence: LobeHub's official downloads page is served from lobehub.com/downloads and exposes desktop latest-release APIs on app.lobehub.com for macOS builds; the reviewed network IOC set keeps only those exact LobeHub-owned hosts and removes generic upstream model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: lobehub.com
+      match: exact
+      role: app_brand
+    - pattern: app.lobehub.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: lobechat
+      match: substring
+    - pattern: lobehub
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/lobehub.json
+      evidence: The official Homebrew cask installs LobeHub.app, and the upstream desktop build configuration sets the macOS app identifier to com.lobehub.lobehub-desktop; retained host IOC is limited to the LobeHub app bundle, process name, and official bundle identifier.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/LobeHub.app
+    bundle_ids:
+    - com.lobehub.lobehub-desktop
+    process_names:
+    - LobeHub

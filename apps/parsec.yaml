@@ -1,0 +1,45 @@
+id: parsec
+name: Parsec
+category: REMOTE_ACCESS
+product_shape:
+- macos
+product_type:
+- remote_access
+severity: medium
+priority_score: 77
+notes: Originally gaming-focused remote streaming still enables data exposure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/p/parsec.rb
+      evidence: The official Homebrew cask for Parsec declares homepage https://parsec.app/,
+        the macOS package URL https://builds.parsec.app/package/parsec-macos.pkg,
+        and a livecheck endpoint under builds.parsec.app; the reviewed network IOC
+        set keeps those exact Parsec-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: parsec.app
+      match: exact
+      role: app_brand
+    - pattern: builds.parsec.app
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: parsec
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/p/parsec.rb
+      evidence: The official Homebrew cask installs the Parsec macOS package and zaps
+        the app-specific ~/.parsec directory plus tv.parsec.www cache, HTTP storage,
+        and preferences paths, which are stable host-side Parsec artifacts.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.parsec
+    - ~/Library/Caches/tv.parsec.www
+    - ~/Library/HTTPStorages/tv.parsec.www
+    - ~/Library/Preferences/tv.parsec.www.plist
+    bundle_ids:
+    - tv.parsec.www

@@ -1,0 +1,45 @@
+id: wps_docs_kdocs
+name: WPS Docs (KDocs)
+category: COLLAB_KNOWLEDGE
+product_shape:
+- web
+- macos
+product_type:
+- docs
+- collaboration
+severity: medium
+priority_score: 73
+notes: Prefer KDocs-owned domains and the exact official download CDN host; avoid broader WPS parent domains when narrower KDocs indicators are available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.kdocs.cn/newDownload
+      evidence: KDocs’s official download page advertises the Mac client at www.kdocs.cn/newDownload, and the official Homebrew cask downloads the macOS installer from qn.cache.wpscdn.cn/kdocs/apk/kdesktopmac/...; the reviewed IOC set keeps the KDocs domain plus the exact official CDN host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: kdocs.cn
+      match: suffix
+      role: app_brand
+    - pattern: qn.cache.wpscdn.cn
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: kdocs
+      match: substring
+    - pattern: 金山文档
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/kdocs.json
+      evidence: Homebrew cask installs 金山文档.app and removes KDocs-specific preferences and saved-state data under com.kingsoft.kdocs.mac on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/金山文档.app
+    - ~/Library/Preferences/com.kingsoft.kdocs.mac.plist
+    - ~/Library/Saved Application State/com.kingsoft.kdocs.mac.savedState
+    bundle_ids:
+    - com.kingsoft.kdocs.mac
+    process_names:
+    - 金山文档

@@ -1,0 +1,25 @@
+id: gofile
+name: Gofile
+category: FILE_TRANSFER
+product_shape:
+- web
+product_type:
+- file_transfer
+- file_hosting
+severity: medium
+priority_score: 73
+notes: Anonymous upload workflows are high-risk for uncontrolled exfiltration.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:legacy-migration:2026-02-11
+      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
+      checked_at: '2026-02-11'
+    hostname_patterns:
+    - pattern: gofile.io
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: gofile
+      match: substring

@@ -1,0 +1,53 @@
+id: midjourney
+name: Midjourney
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- image_generation
+severity: medium
+priority_score: 59
+notes: Reviewed IOC stays on exact Midjourney-owned web/docs/mobile surfaces and avoids generic Discord or image-generation ecosystem domains.
+references:
+- url: https://www.midjourney.com/home
+  kind: official_site
+  summary: Official Midjourney site is served from midjourney.com.
+  checked_at: '2026-03-22'
+- url: https://docs.midjourney.com/hc/en-us/articles/27870399340173-Free-Trials
+  kind: official_docs
+  summary: Official Midjourney docs state that free trials are available in the Niji Journey app on iOS and Android.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6446376937
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for niji・journey returns bundle ID com.spellbrush.nijijourney from seller Midjourney, Inc. with seller URL https://nijijourney.com/.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.midjourney.com/home
+      evidence: Midjourney's official product site is served from www.midjourney.com, its docs are served from docs.midjourney.com, and the official Niji Journey app metadata points to nijijourney.com under Midjourney, Inc., so the reviewed network IOC set keeps only those exact Midjourney-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.midjourney.com
+      match: exact
+      role: app_brand
+    - pattern: docs.midjourney.com
+      match: exact
+      role: app_brand
+    - pattern: nijijourney.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: midjourney
+      match: substring
+    - pattern: niji journey
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6446376937
+      evidence: Apple's official lookup metadata for niji・journey returns bundle identifier com.spellbrush.nijijourney from seller Midjourney, Inc., so the retained host IOC is the exact reviewed bundle ID for Midjourney's official mobile surface.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.spellbrush.nijijourney

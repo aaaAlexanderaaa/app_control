@@ -1,0 +1,49 @@
+id: superagi
+name: SuperAGI
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Official SuperAGI docs confirm a repo-local config.yaml for self-hosting and a distinct cloud entrypoint on app.superagi.com.
+references:
+- url: https://superagi.com/
+  kind: official_site
+  summary: Official SuperAGI website is served from superagi.com.
+  checked_at: '2026-03-21'
+- url: https://superagi.com/docs/Installation/docker/
+  kind: official_docs
+  summary: Docker install docs clone the SuperAGI repo, create config.yaml from config_template.yaml, and run docker compose up --build.
+  checked_at: '2026-03-21'
+- url: https://superagi.com/docs/Installation/cloud/
+  kind: official_docs
+  summary: SuperAGI Cloud docs direct users to app.superagi.com.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://superagi.com/docs/Installation/cloud/
+      evidence: SuperAGI's official website is served from superagi.com and the official cloud setup guide directs users to app.superagi.com, so the reviewed network IOC set keeps only those exact SuperAGI-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: superagi.com
+      match: exact
+      role: app_brand
+    - pattern: app.superagi.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: superagi
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://superagi.com/docs/Installation/docker/
+      evidence: The official Docker installation guide clones the SuperAGI repository, enters the SuperAGI directory, and creates config.yaml from config_template.yaml before startup, so the retained host IOC is limited to those repo-local configuration files.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/SuperAGI/'

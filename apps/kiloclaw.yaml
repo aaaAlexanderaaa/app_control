@@ -1,0 +1,18 @@
+id: kiloclaw
+name: KiloClaw
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- desktop_agent
+- assistant
+severity: medium
+priority_score: 74
+notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (E-macOS应用/托管OpenClaw); detailed IOC review pending.
+iocs:
+  network:
+    status: draft
+    provenance:
+      url: urn:internal:archive:claw_ecosystem_full_report:2026-03-20
+      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
+      checked_at: '2026-03-20'

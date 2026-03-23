@@ -1,0 +1,46 @@
+id: runway
+name: Runway
+category: GENAI_MEDIA
+product_shape:
+- web
+- macos
+product_type:
+- video_generation
+- media_editing
+severity: medium
+priority_score: 59
+notes: Prefer Runway-owned domains and the exact official desktop package host; uploads often include internal recordings and drafts.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://runwayml.com/
+      evidence: Runway’s official site is hosted on runwayml.com, and the official Homebrew cask downloads the macOS app from the exact host runway-releases.s3.amazonaws.com; the reviewed IOC set keeps the vendor-owned product domain plus the exact installer host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: runwayml.com
+      match: suffix
+      role: app_brand
+    - pattern: runway-releases.s3.amazonaws.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: runwayml
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/runway.json
+      evidence: Homebrew cask installs Runway.app and removes Runway-specific configuration, Application Support, logs, preferences, and saved-state paths rooted at com.runwayai.runway on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Runway.app
+    - ~/.runway
+    - ~/Library/Application Support/Runway
+    - ~/Library/Logs/Runway
+    - ~/Library/Preferences/com.runwayai.runway.plist
+    - ~/Library/Saved Application State/com.runwayai.runway.savedState
+    bundle_ids:
+    - com.runwayai.runway
+    process_names:
+    - Runway

@@ -1,0 +1,44 @@
+id: osaurus
+name: Osaurus
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- mcp_server
+- macos_infra
+severity: high
+priority_score: 82
+notes: Prefer Osaurus-owned domains and app-specific bundle paths; avoid generic MLX cache locations that are not unique to Osaurus.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://osaurus.ai/
+      evidence: Osaurus’s official homepage is served from osaurus.ai and describes the product as a macOS AI harness; the reviewed network IOC keeps only the vendor-owned product domain.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: osaurus.ai
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: osaurus
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/osaurus.json
+      evidence: Homebrew cask installs Osaurus.app, quits com.dinoki.osaurus, ships the osaurus helper binary, and removes Osaurus-specific Application Support, caches, HTTP storages, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Osaurus.app
+    - ~/Library/Application Support/com.dinoki.osaurus
+    - ~/Library/Application Support/Osaurus
+    - ~/Library/Caches/com.dinoki.osaurus
+    - ~/Library/HTTPStorages/com.dinoki.osaurus
+    - ~/Library/Preferences/com.dinoki.osaurus.plist
+    - ~/Library/Saved Application State/com.dinoki.osaurus.savedState
+    bundle_ids:
+    - com.dinoki.osaurus
+    process_names:
+    - Osaurus
+    - osaurus

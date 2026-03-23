@@ -1,0 +1,34 @@
+id: openmanus
+name: OpenManus
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+- web
+product_type:
+- agent_platform
+- multi_agent_orchestration
+severity: high
+priority_score: 82
+notes: Open-source Manus replication; installation via conda/uv; supports multi-agent flows.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://openmanus.github.io/
+      evidence: OpenManus publishes its official homepage at openmanus.github.io from the upstream repository, so the reviewed network IOC set keeps that exact OpenManus-owned site and the product keyword while dropping the stale openmanus.ai draft hostname.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: openmanus.github.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: openmanus
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://github.com/FoundationAgents/OpenManus/blob/main/README.md
+      evidence: The official README tells users to clone OpenManus, create config/config.toml from config/config.example.toml, and run python main.py or python run_mcp.py / run_flow.py from the repo root, so the reviewed host IOC set keeps the repo-root config file and avoids generic python process names.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/OpenManus/config/config.toml'

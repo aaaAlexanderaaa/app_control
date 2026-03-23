@@ -1,0 +1,36 @@
+id: sourcegraph_cody
+name: Sourcegraph Cody
+category: GENAI_CODING
+product_shape:
+- web
+- macos
+product_type:
+- coding
+- assistant
+severity: high
+priority_score: 80
+notes: Cody-specific subdomains provide stronger precision than generic Sourcegraph traffic.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://sourcegraph.com/docs/cody/troubleshooting
+      evidence: Sourcegraph’s official Cody troubleshooting docs show the VS Code client requesting https://sourcegraph.com/.api/completions/stream, and the Cody install docs identify the VS Code extension as sourcegraph.cody-ai; the reviewed network IOC set therefore keeps the exact Sourcegraph Cody service host and removes shared model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: sourcegraph.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: sourcegraph cody
+      match: substring
+    - pattern: sourcegraph.cody-ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://marketplace.visualstudio.com/items?itemName=sourcegraph.cody-ai
+      evidence: The official VS Code marketplace page uses the extension identifier sourcegraph.cody-ai, and the VS Code documentation states that macOS extensions are installed under ~/.vscode/extensions.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.vscode/extensions/sourcegraph.cody-ai-*

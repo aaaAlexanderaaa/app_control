@@ -1,0 +1,50 @@
+id: kode_cli
+name: Kode CLI
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: Keep Kode IOC on official README-documented `.kode` state and AGENTS/Agent Skills hosts; do not use model-provider endpoints because they vary by user configuration.
+references:
+- url: https://raw.githubusercontent.com/shareAI-lab/Kode-Agent/main/README.md
+  kind: upstream_readme
+  summary: The official README documents the `kode` / `kwa` / `kd` / `kode-acp` commands, the `~/.kode` and `~/.kode.json` state locations, project `.kode/settings*.json` and `.mcp.json` / `.mcprc` files, and links both `agents.md` and `agentskills.io`.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/shareAI-lab/Kode-Agent/main/README.md
+      evidence: The official README links the AGENTS.md standard at `agents.md` and the Agent Skills format at `agentskills.io`, so the reviewed network IOC set keeps only those exact Kode-linked ecosystem hosts instead of broader provider or package-manager domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: agents.md
+      match: exact
+      role: app_brand
+    - pattern: agentskills.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: kode
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/shareAI-lab/Kode-Agent/main/README.md
+      evidence: The official README documents the `kode`, `kwa`, `kd`, and `kode-acp` commands, the native binary cache under `~/.kode/bin`, global config at `~/.kode.json`, project settings in `./.kode/settings*.json`, and project MCP config in `.mcp.json` or `.mcprc`.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.kode
+    - ~/.kode.json
+    - ./.kode/
+    - ./.mcp.json
+    - ./.mcprc
+    process_names:
+    - kode
+    - kwa
+    - kd
+    - kode-acp

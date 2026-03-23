@@ -1,0 +1,44 @@
+id: claap
+name: Claap
+category: SCREEN_RECORDING_SHARE
+product_shape:
+- web
+- macos
+product_type:
+- video_share
+- screen_recording
+severity: medium
+priority_score: 69
+notes: Prefer Claap-owned product, app, and installer hosts; avoid unrelated third-party infrastructure when Claap-owned hosts are available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.claap.io/whats-new/try-the-claap-desktop-app-record-any-browser-or-application
+      evidence: Claap’s official desktop announcement page is hosted on www.claap.io, states that the Claap Desktop App is available on Mac, links sign-in on app.claap.io, and exposes the Mac installer on the exact host download.claap.io.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: claap.io
+      match: suffix
+      role: app_brand
+    - pattern: app.claap.io
+      match: exact
+      role: app_brand
+    - pattern: download.claap.io
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: claap
+      match: substring
+    - pattern: claap desktop
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.claap.io/whats-new/try-the-claap-desktop-app-record-any-browser-or-application
+      evidence: Claap’s official desktop announcement identifies the product as the Claap Desktop App for Mac and links the official installer; retained host IOC is limited to the Claap desktop app name implied by that official naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Claap*.app
+    process_names:
+    - Claap

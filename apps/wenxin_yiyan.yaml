@@ -1,0 +1,58 @@
+id: wenxin_yiyan
+name: Wenxin Yiyan
+category: GENAI_CHAT
+product_shape:
+- web
+- macos
+product_type:
+- chatbot
+- writing
+severity: medium
+priority_score: 63
+notes: Prefer exact Wenxin/Yiyan product hosts and the official app bundle identifier; avoid broad Baidu parent domains for enterprise detection.
+references:
+- url: https://yiyan.baidu.com/
+  kind: official_site
+  summary: Official Wenxin product site anchors the service on yiyan.baidu.com.
+  checked_at: '2026-03-22'
+- url: https://yiyanapp.baidu.com/talk/protectionrule/ios
+  kind: official_privacy
+  summary: Official privacy page for the Wenxin app uses the product-specific yiyanapp.baidu.com host.
+  checked_at: '2026-03-22'
+- url: https://apps.apple.com/cn/app/%E6%96%87%E5%BF%83-%E7%99%BE%E5%BA%A6%E6%97%97%E4%B8%8B%E5%85%A8%E8%83%BDai%E5%8A%A9%E6%89%8B/id6446882473
+  kind: app_store
+  summary: Apple App Store page for 文心 shows the official listing and macOS compatibility metadata for Apple Silicon Macs.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6446882473&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup API returns the official 文心 listing and bundleId com.baidu.baidunewapp.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://yiyanapp.baidu.com/talk/protectionrule/ios
+      evidence: Wenxin's official web entrypoint is hosted on https://yiyan.baidu.com/, and the official app privacy page is hosted on the product-specific domain https://yiyanapp.baidu.com/...; the reviewed network IOC set keeps only those exact Wenxin hosts instead of broad baidu.com coverage.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: yiyan.baidu.com
+      match: exact
+      role: app_brand
+    - pattern: yiyanapp.baidu.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: yiyan
+      match: substring
+    - pattern: wenxin
+      match: substring
+    - pattern: 文心
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6446882473&country=cn
+      evidence: Apple's lookup API returns the official 文心 listing with bundleId com.baidu.baidunewapp, and the App Store page for track 6446882473 marks the listing as Mac-compatible on Apple Silicon Macs.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.baidu.baidunewapp

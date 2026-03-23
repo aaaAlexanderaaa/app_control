@@ -1,0 +1,78 @@
+id: box
+name: Box
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Keep Box IOC on the official firewall allowlist endpoints and Box Drive macOS pkg/zap artifacts instead of broad third-party infrastructure.
+references:
+- url: https://support.box.com/hc/en-us/articles/360043696434-Configuring-A-Firewall-For-Box-Applications-and-Services
+  kind: official_support
+  summary: Box's firewall article lists Box application upload, download, sharing, and supporting domain families used by Box apps and services.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/b/box-drive.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask downloads Box Drive from e3.boxcdn.net, installs the Box Drive pkg, and zaps Box-specific support, File Provider, container, log, and preference paths.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support.box.com/hc/en-us/articles/360043696434-Configuring-A-Firewall-For-Box-Applications-and-Services
+      evidence: Box's firewall article lists exact upload and download endpoints including `upload.app.box.com`, `upload.box.com`, `public.boxcloud.com`, and `dl.boxcloud.com`, plus Box-owned `box.com`, `box.net`, `boxcloud.com`, and `boxcdn.net` domain families used by Box applications and services.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: upload.app.box.com
+      match: exact
+      role: file_upload
+    - pattern: upload.box.com
+      match: exact
+      role: file_upload
+    - pattern: public.boxcloud.com
+      match: exact
+      role: file_share
+    - pattern: dl.boxcloud.com
+      match: exact
+      role: file_download
+    - pattern: boxcloud.com
+      match: suffix
+      role: file_transfer
+    - pattern: box.com
+      match: suffix
+      role: app_brand
+    - pattern: box.net
+      match: suffix
+      role: app_brand
+    - pattern: boxcdn.net
+      match: suffix
+      role: cdn_static
+    keyword_patterns:
+    - pattern: box drive
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/b/box-drive.rb
+      evidence: The official Homebrew cask installs the Box Drive pkg and zaps Box-specific support, File Provider, container, log, and preference paths.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Box.app
+    - ~/.Box_*
+    - ~/Library/Application Support/Box/Box
+    - ~/Library/Application Support/FileProvider/com.box.desktop.boxfileprovider
+    - ~/Library/Containers/com.box.desktop.findersyncext
+    - ~/Library/Logs/Box/Box
+    - ~/Library/Preferences/com.box.desktop.plist
+    - ~/Library/Preferences/com.box.desktop.ui.plist
+    bundle_ids:
+    - com.box.desktop
+    - com.box.desktop.findersyncext
+    - com.box.desktop.boxfileprovider
+    process_names:
+    - Box
+    - Box Drive

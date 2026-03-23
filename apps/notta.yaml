@@ -1,0 +1,51 @@
+id: notta
+name: Notta
+category: MEETING_TRANSCRIPTION
+product_shape:
+- web
+- macos
+product_type:
+- transcription
+- note_taking
+severity: medium
+priority_score: 70
+notes: Notta's official site links the App Store distribution; host IOC is therefore limited to the Apple-published bundle identifier rather than an inferred native app path.
+references:
+- url: https://www.notta.ai/en
+  kind: official_site
+  summary: Official Notta site links the web app at app.notta.ai, the help center, and the App Store distribution.
+  checked_at: '2026-03-21'
+- url: https://itunes.apple.com/lookup?id=1480649572&country=us
+  kind: official_store_api
+  summary: Apple Lookup returns bundleId com.langogo.lggtranscribe, sellerUrl https://www.notta.ai/en, and trackName Notta Transcribe Voice to Text.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.notta.ai/en
+      evidence: Notta's official site is served from www.notta.ai, links the web app on app.notta.ai, and links the official support center on support.notta.ai; the reviewed network IOC set keeps only those exact Notta-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.notta.ai
+      match: exact
+      role: app_brand
+    - pattern: app.notta.ai
+      match: exact
+      role: app_brand
+    - pattern: support.notta.ai
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: notta
+      match: substring
+    - pattern: notta ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=1480649572&country=us
+      evidence: Apple Lookup for track 1480649572 returns bundleId com.langogo.lggtranscribe and sellerUrl https://www.notta.ai/en; because this catalog already tracks Notta as macOS-capable, the retained host IOC is limited to that exact App Store bundle identifier instead of an inferred app path.
+      checked_at: '2026-03-21'
+    bundle_ids:
+    - com.langogo.lggtranscribe

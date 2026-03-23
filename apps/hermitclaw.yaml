@@ -1,0 +1,39 @@
+id: hermitclaw
+name: HermitClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Open-source autonomous research pet; upstream lacks a dedicated service domain, so reviewed IOC stays on exact HermitClaw keywords plus repo-local config and generated *_box world artifacts documented by the upstream README.
+references:
+- url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/README.md
+  kind: upstream_readme
+  summary: Upstream README documents running hermitclaw/main.py, the repo-root config.yaml, and the generated {name}_box world directory with memory_stream.jsonl.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/hermitclaw/config.py
+  kind: upstream_source
+  summary: Config loader resolves the repo-root config.yaml and the default environment path used for runtime state.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/README.md
+      evidence: Upstream materials consistently name the project HermitClaw but do not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to the exact HermitClaw keyword.
+      checked_at: '2026-03-22'
+    keyword_patterns:
+    - pattern: hermitclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/README.md
+      evidence: The upstream README tells users to run hermitclaw/main.py with a repo-root config.yaml, and states that first run creates a {name}_box directory whose memory lives in memory_stream.jsonl, so the retained host IOC is limited to those exact repo-local and generated artifacts.
+      checked_at: '2026-03-22'
+    paths:
+    - '*/hermitclaw/'
+    - '*_box/'

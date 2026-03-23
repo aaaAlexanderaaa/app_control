@@ -1,0 +1,37 @@
+id: yao
+name: Yao
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+- web
+product_type:
+- agent_runtime
+- autonomous_agent
+- event_driven
+severity: medium
+priority_score: 93
+notes: Open-source engine for autonomous agents; event-driven, proactive, self-scheduling. 7.5k GitHub stars.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://yaoapps.com
+      evidence: The upstream Yao repository and docs currently publish yaoapps.com as the official homepage and documentation domain for the runtime
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: yaoapps.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: yao
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://yaoapps.com/install.sh
+      evidence: The official install.sh sets YAO_INSTALL to $HOME/.yao by default, places the runtime at $HOME/.yao/bin/yao, and updates shell PATH entries to that location
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.yao
+    process_names:
+    - yao

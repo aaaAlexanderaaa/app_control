@@ -1,0 +1,42 @@
+id: fathom
+name: Fathom
+category: MEETING_TRANSCRIPTION
+product_shape:
+- web
+- macos
+product_type:
+- meeting_assistant
+- transcription
+severity: medium
+priority_score: 70
+notes: Prefer the current Fathom AI web domain and the exact update host; avoid using only the older fathom.video parent when a narrower current product hostname is available.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.fathom.ai/
+      evidence: Fathom’s official site currently resolves to www.fathom.ai, while the official Homebrew cask downloads the macOS app from the exact host electron-update.fathom.video; the reviewed IOC set keeps the current product hostname plus the exact desktop update host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.fathom.ai
+      match: exact
+      role: app_brand
+    - pattern: electron-update.fathom.video
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: fathom ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/fathom.json
+      evidence: Homebrew cask installs Fathom.app, quits Fathom and Fathom Helper, and removes Fathom-specific Application Support and log directories on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Fathom.app
+    - ~/Library/Application Support/Fathom
+    - ~/Library/Logs/Fathom
+    process_names:
+    - Fathom
+    - Fathom Helper

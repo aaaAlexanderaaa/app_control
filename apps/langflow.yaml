@@ -1,0 +1,50 @@
+id: langflow
+name: Langflow
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+- macos
+product_type:
+- workflow_builder
+- llm_client
+- agent_framework
+severity: medium
+priority_score: 82
+notes: Popular open-source visual agent/workflow builder; production deployments may run on custom/self-hosted domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/langflow-ai/langflow/dev/src/backend/base/langflow/services/settings/base.py
+      evidence: The official desktop page is https://www.langflow.org/desktop, docs live on https://docs.langflow.org, and upstream settings code hard-codes https://api.langflow.store plus telemetry at https://langflow.gateway.scarf.sh; the reviewed set keeps only those Langflow-specific hosts and removes generic provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.langflow.org
+      match: exact
+      role: app_brand
+    - pattern: docs.langflow.org
+      match: exact
+      role: app_brand
+    - pattern: api.langflow.store
+      match: exact
+      role: platform_service
+    - pattern: langflow.gateway.scarf.sh
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: langflow
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/l/langflow.rb
+      evidence: The Homebrew cask installs the Langflow desktop app and zaps ~/.langflow plus Langflow cache, log, preference, and WebKit paths; upstream settings code uses platformdirs.user_cache_dir("langflow", "langflow"), which maps the default config directory to ~/Library/Caches/langflow on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Langflow .app
+    - ~/.langflow
+    - ~/Library/Caches/com.Langflow
+    - ~/Library/Caches/langflow
+    - ~/Library/Logs/com.Langflow
+    - ~/Library/Preferences/com.Langflow.plist
+    - ~/Library/WebKit/com.Langflow

@@ -1,0 +1,52 @@
+id: clawlet
+name: Clawlet
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Local-first agent framework; reviewed IOC keeps the repo-published clawlet.dev docs host and the explicit ~/.clawlet workspace artifacts documented by upstream onboarding and deployment guides.
+references:
+- url: https://raw.githubusercontent.com/Kxrbx/Clawlet/main/README.md
+  kind: upstream_readme
+  summary: Upstream README documents clawlet init/onboard and the default ~/.clawlet workspace.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Kxrbx/Clawlet/main/DEPLOYMENT.md
+  kind: upstream_docs
+  summary: Deployment guide enumerates the default ~/.clawlet config, memory, heartbeat, and runtime files.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Kxrbx/Clawlet/main/docs/schemas/runtime-events.schema.json
+  kind: upstream_source
+  summary: Repo-published schema IDs are hosted on clawlet.dev, establishing a dedicated Clawlet docs host.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Kxrbx/Clawlet/main/pyproject.toml
+  kind: upstream_source
+  summary: Project metadata defines the `clawlet` CLI entrypoint.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Kxrbx/Clawlet/main/docs/schemas/runtime-events.schema.json
+      evidence: Repo-published schema IDs resolve under clawlet.dev, so the reviewed network IOC retains the exact Clawlet-owned docs host rather than broad GitHub infrastructure.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: clawlet.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: clawlet
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Kxrbx/Clawlet/main/DEPLOYMENT.md
+      evidence: Upstream deployment docs enumerate ~/.clawlet/config.yaml, HEARTBEAT.md, MEMORY.md, memory/heartbeat-state.json, and .runtime/, while project metadata defines the `clawlet` CLI entrypoint.
+      checked_at: '2026-03-22'
+    paths:
+    - ~/.clawlet/
+    process_names:
+    - clawlet

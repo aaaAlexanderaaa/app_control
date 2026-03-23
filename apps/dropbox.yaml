@@ -1,0 +1,75 @@
+id: dropbox
+name: Dropbox
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: high
+priority_score: 73
+notes: Use Dropbox's official domains article and official macOS cask for high-confidence Dropbox web/API/static/content and host artifacts.
+references:
+- url: https://help.dropbox.com/accounts-billing/security/official-domains
+  kind: official_support
+  summary: Dropbox's official domains article lists the Dropbox-owned web, API, static, and content-delivery domains that should appear in legitimate Dropbox traffic.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/d/dropbox.rb
+  kind: homebrew_cask
+  summary: The official Homebrew cask downloads Dropbox from edge.dropboxstatic.com, installs Dropbox.app, and zaps Dropbox-specific scripts, support data, containers, caches, preferences, and helper tools on macOS.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://help.dropbox.com/accounts-billing/security/official-domains
+      evidence: Dropbox's official domains article lists Dropbox-owned web, API, static, and content-delivery domains including `dropbox.com`, `dropboxapi.com`, `dropboxstatic.com`, and `dl.dropboxusercontent.com`, so the reviewed network IOC set keeps only those Dropbox-specific domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: dropbox.com
+      match: suffix
+      role: app_brand
+    - pattern: dropboxapi.com
+      match: suffix
+      role: platform_service
+    - pattern: dropboxstatic.com
+      match: suffix
+      role: cdn_static
+    - pattern: dl.dropboxusercontent.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: dropbox
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/d/dropbox.rb
+      evidence: The official Homebrew cask installs Dropbox.app and zaps the app-specific `~/.dropbox` directory plus Dropbox application scripts, support, file provider, caches, cloud storage, preferences, and helper tools on macOS.
+      checked_at: '2026-03-22'
+    paths:
+    - /Applications/Dropbox.app
+    - ~/.dropbox
+    - ~/Library/Application Scripts/*.com.getdropbox.dropbox.sync
+    - ~/Library/Application Scripts/com.dropbox.alternatenotificationservice
+    - ~/Library/Application Scripts/com.dropbox.client.crashpad
+    - ~/Library/Application Scripts/com.dropbox.foldertagger
+    - ~/Library/Application Scripts/com.getdropbox.dropbox.fileprovider
+    - ~/Library/Application Scripts/com.getdropbox.dropbox.garcon
+    - ~/Library/Application Scripts/com.getdropbox.dropbox.TransferExtension
+    - ~/Library/Application Support/Dropbox
+    - ~/Library/Application Support/DropboxElectron
+    - ~/Library/Application Support/FileProvider/com.getdropbox.dropbox.fileprovider
+    - ~/Library/Caches/com.getdropbox.dropbox
+    - ~/Library/CloudStorage/Dropbox
+    - ~/Library/Containers/com.dropbox.activityprovider
+    - ~/Library/Containers/com.getdropbox.dropbox.fileprovider
+    - ~/Library/Preferences/com.getdropbox.dropbox.plist
+    - /Library/DropboxHelperTools
+    bundle_ids:
+    - com.getdropbox.dropbox
+    - com.dropbox.activityprovider
+    - com.getdropbox.dropbox.fileprovider
+    process_names:
+    - Dropbox

@@ -1,0 +1,37 @@
+id: jianguoyun
+name: Jianguoyun
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+- webdav
+severity: medium
+priority_score: 73
+notes: Prefer Jianguoyun-owned domains and Nutstore installer naming; avoid unrelated third-party service domains.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.jianguoyun.com/s/downloads
+      evidence: Jianguoyun’s official downloads page serves the macOS client from /static/exe/installer/NutstoreOSXInstaller.dmg on jianguoyun.com and describes it as the full macOS sync client.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: jianguoyun.com
+      match: suffix
+      role: app_brand
+    keyword_patterns:
+    - pattern: jianguoyun
+      match: substring
+    - pattern: nutstore
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.jianguoyun.com/s/downloads
+      evidence: Inference from Jianguoyun’s official macOS installer name NutstoreOSXInstaller.dmg; retained host IOC is limited to the Nutstore app name implied by the installer naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Nutstore*.app

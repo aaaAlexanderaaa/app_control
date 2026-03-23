@@ -1,0 +1,49 @@
+id: agentgpt
+name: AgentGPT
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+product_type:
+- browser
+- browser_automation
+severity: high
+priority_score: 85
+notes: Browser agent project; prefer exact AgentGPT and Reworkd-owned hosts plus repo-local setup artifacts, and avoid generic provider endpoints such as api.openai.com.
+references:
+- url: https://raw.githubusercontent.com/reworkd/AgentGPT/main/README.md
+  kind: upstream_readme
+  summary: README links the official AgentGPT site and Reworkd docs, and documents cloning AgentGPT and running ./setup.sh.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/reworkd/AgentGPT/main/.env.example
+  kind: upstream_source
+  summary: Upstream repository ships a top-level .env.example used by local AgentGPT deployments.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/reworkd/AgentGPT/main/setup.sh
+  kind: upstream_source
+  summary: Setup script changes into the repo-local cli directory and starts the project bootstrap flow from there.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/reworkd/AgentGPT/main/README.md
+      evidence: The upstream README links the official AgentGPT site at https://agentgpt.reworkd.ai and the official documentation at https://reworkd.ai/docs, so the reviewed network IOC keeps only those exact Reworkd-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: agentgpt.reworkd.ai
+      match: exact
+      role: app_brand
+    - pattern: reworkd.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: agentgpt
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/reworkd/AgentGPT/main/README.md
+      evidence: The upstream setup flow clones the repository into AgentGPT, ships a top-level .env.example, and runs ./setup.sh, whose source then changes into ./cli, so the retained host IOC is limited to those exact repo-local setup artifacts.
+      checked_at: '2026-03-21'
+    paths:
+    - '*/AgentGPT/'

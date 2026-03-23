@@ -1,0 +1,43 @@
+id: kling_ai
+name: Kling AI
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- video_generation
+severity: medium
+priority_score: 59
+notes: Reviewed IOC stays on exact Kling AI product surfaces and the official 可灵AI mobile bundle identifier rather than broad Kuaishou parent domains.
+references:
+- url: https://klingai.com/
+  kind: official_site
+  summary: Official Kling AI site is served from klingai.com.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6670396916&country=cn
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for 可灵AI returns bundle ID com.kwai.kling from seller Beijing Kwai Technology Co., Ltd.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://klingai.com/
+      evidence: The official Kling AI product site is served from klingai.com, so the reviewed network IOC set keeps only that exact product host and drops broader Kuaishou parent domains.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: klingai.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: kling ai
+      match: substring
+    - pattern: 可灵AI
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6670396916&country=cn
+      evidence: Apple's official lookup metadata for 可灵AI returns bundle identifier com.kwai.kling from seller Beijing Kwai Technology Co., Ltd., so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.kwai.kling

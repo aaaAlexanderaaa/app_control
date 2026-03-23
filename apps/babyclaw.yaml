@@ -1,0 +1,55 @@
+id: babyclaw
+name: BabyClaw
+category: CLAW_FAMILY_APP
+product_shape:
+- macos
+product_type:
+- personal_agent
+- automation
+severity: critical
+priority_score: 93
+notes: Official BabyClaw docs and source agree on babyclaw.org plus ~/.config/babyclaw state; keep IOC on those exact product-owned hosts and config/workspace artifacts.
+references:
+- url: https://raw.githubusercontent.com/babyclaw/babyclaw/main/README.md
+  kind: upstream_readme
+  summary: README links the official BabyClaw install script on babyclaw.org and documents the babyclaw CLI.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/babyclaw/babyclaw/main/apps/docs/content/1.getting-started/2.installation.md
+  kind: official_docs
+  summary: Installation docs use the babyclaw.org install script and point users to docs.babyclaw.org.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/babyclaw/babyclaw/main/apps/docs/content/2.configuration/1.overview.md
+  kind: official_docs
+  summary: Configuration overview defines ~/.config/babyclaw/config.json as BabyClaw's config file.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/babyclaw/babyclaw/main/apps/docs/content/1.getting-started/3.workspace.md
+  kind: official_docs
+  summary: Workspace docs define ~/.config/babyclaw/workspace as the default BabyClaw workspace location.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/babyclaw/babyclaw/main/README.md
+      evidence: The upstream README installs BabyClaw from https://babyclaw.org/install.sh and the official docs are served from docs.babyclaw.org, so the reviewed network IOC set keeps only those exact BabyClaw-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: babyclaw.org
+      match: exact
+      role: app_brand
+    - pattern: docs.babyclaw.org
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: babyclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/babyclaw/babyclaw/main/apps/docs/content/2.configuration/1.overview.md
+      evidence: BabyClaw's official docs define ~/.config/babyclaw/config.json as the config file and ~/.config/babyclaw/workspace as the workspace directory, while the README documents the babyclaw CLI command.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/babyclaw
+    process_names:
+    - babyclaw

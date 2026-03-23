@@ -1,0 +1,51 @@
+id: grain
+name: Grain
+category: MEETING_TRANSCRIPTION
+product_shape:
+- web
+product_type:
+- meeting_recording
+- transcription
+severity: medium
+priority_score: 70
+notes: Grain is a generic token, so reviewed IOC stays on exact Grain-owned hosts and official desktop-app evidence instead of broad keyword matching.
+references:
+- url: https://support.grain.com/en/articles/8068361-grain-desktop-app-installation-guide
+  kind: official_help
+  summary: Official installation guide tells users to download the Grain macOS app from grain.com/download and launch it from the Applications folder.
+  checked_at: '2026-03-21'
+- url: https://support.grain.com/en/articles/4256610-how-can-i-contact-grain-support
+  kind: official_help
+  summary: Official support article tells desktop users to open the Grain app and use Help -> Send Log Files.
+  checked_at: '2026-03-21'
+- url: https://grain.com/download
+  kind: official_site
+  summary: Official download page is served from grain.com and distributes the Grain desktop app for Mac and Windows.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://support.grain.com/en/articles/8068361-grain-desktop-app-installation-guide
+      evidence: The official support guide serves Grain desktop help from support.grain.com, points users to grain.com/download for the app, and the same help center header links developers.grain.com, so the reviewed network IOC keeps only those exact Grain-owned hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: grain.com
+      match: exact
+      role: app_brand
+    - pattern: support.grain.com
+      match: exact
+      role: app_brand
+    - pattern: developers.grain.com
+      match: exact
+      role: app_brand
+  host:
+    status: reviewed
+    provenance:
+      url: https://support.grain.com/en/articles/8068361-grain-desktop-app-installation-guide
+      evidence: The official install guide tells Mac users to launch Grain from the Applications folder, and the official support article tells users to open the Grain app and use Help -> Send Log Files; based on that first-party wording, the retained host IOC uses the standard macOS bundle path /Applications/Grain.app and the exact app name Grain.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Grain.app
+    process_names:
+    - Grain

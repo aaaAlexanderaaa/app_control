@@ -1,0 +1,50 @@
+id: opera_browser_aria
+name: Opera Browser (Aria)
+category: AI_BROWSER_AGENT
+product_shape:
+- macos
+- web
+product_type:
+- browser
+- assistant
+severity: medium
+priority_score: 82
+notes: Prefer Opera-owned Aria product pages and the exact Opera installer host; avoid generic aria-only matching because it is ambiguous outside Opera.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.opera.com/features/opera-ai
+      evidence: Opera’s official AI feature page for Aria is served from opera.com/features/opera-ai, and the official Homebrew cask downloads the macOS browser from the exact host get.geo.opera.com; the reviewed IOC set keeps the Opera product domain plus the exact installer host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: opera.com
+      match: suffix
+      role: app_brand
+    - pattern: get.geo.opera.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: opera ai
+      match: substring
+    - pattern: opera aria
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/opera.json
+      evidence: Homebrew cask installs Opera.app and removes Opera-specific Application Support, caches, cookies, HTTP storage, preferences, and saved-state files rooted at com.operasoftware.Opera on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Opera.app
+    - ~/Library/Application Support/com.operasoftware.Opera
+    - ~/Library/Caches/com.operasoftware.Installer.Opera
+    - ~/Library/Caches/com.operasoftware.Opera
+    - ~/Library/Cookies/com.operasoftware.Opera.binarycookies
+    - ~/Library/HTTPStorages/com.operasoftware.Installer.Opera
+    - ~/Library/Preferences/com.operasoftware.Opera.plist
+    - ~/Library/Saved Application State/com.operasoftware.Opera.savedState
+    bundle_ids:
+    - com.operasoftware.Opera
+    process_names:
+    - Opera

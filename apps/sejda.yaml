@@ -1,0 +1,46 @@
+id: sejda
+name: Sejda
+category: DOC_CONVERSION_UPLOAD
+product_shape:
+- web
+- macos
+product_type:
+- document_conversion
+- pdf_tools
+severity: low
+priority_score: 60
+notes: Prefer Sejda-owned product domains and the exact official CDN host; document conversion workflows usually require full file uploads.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.sejda.com/en/desktop
+      evidence: Sejda’s official desktop page is hosted on sejda.com, and the official Homebrew cask downloads the macOS app from the exact host downloads.sejda-cdn.com; the reviewed IOC set keeps the product domain plus the exact official CDN host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: sejda.com
+      match: suffix
+      role: app_brand
+    - pattern: downloads.sejda-cdn.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: sejda
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/sejda-pdf.json
+      evidence: Homebrew cask installs Sejda PDF Desktop.app and removes Sejda-specific configuration, Application Support, preferences, and saved-state files rooted at com.sejda.sejda-desktop on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Sejda PDF Desktop.app
+    - ~/.sejda
+    - ~/.sejda-desktop
+    - ~/Library/Application Support/Sejda PDF Desktop
+    - ~/Library/Preferences/com.sejda.sejda-desktop.plist
+    - ~/Library/Saved Application State/com.sejda.sejda-desktop.savedState
+    bundle_ids:
+    - com.sejda.sejda-desktop
+    process_names:
+    - Sejda PDF Desktop

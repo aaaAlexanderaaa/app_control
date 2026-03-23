@@ -1,0 +1,47 @@
+id: pika
+name: Pika
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- video_generation
+severity: medium
+priority_score: 59
+notes: Reviewed IOC stays on exact Pika-owned web and mobile surfaces and avoids broad video-generation ecosystem domains.
+references:
+- url: https://pika.art/
+  kind: official_site
+  summary: Official Pika site is served from pika.art.
+  checked_at: '2026-03-22'
+- url: https://pika.art/acceptable-use-policy
+  kind: official_policy
+  summary: Official Pika policy page is served from pika.art and identifies the service as operated by Mellis, Inc.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6680155400
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Pikaffects by Pika returns bundle ID art.pika.ios from seller Mellis, Inc. and seller URL https://pika.art.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://pika.art/
+      evidence: Pika's official site and policy pages are served from the first-party pika.art host, and Apple's lookup metadata for the official mobile app links back to the same seller URL, so the reviewed network IOC keeps only that exact Pika-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: pika.art
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: pika art
+      match: substring
+    - pattern: pika.art
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6680155400
+      evidence: Apple's official lookup metadata for Pikaffects by Pika returns bundle identifier art.pika.ios from seller Mellis, Inc., so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - art.pika.ios

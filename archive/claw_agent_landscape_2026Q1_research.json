@@ -1,0 +1,5673 @@
+{
+  "generated_at": "2026-03-16",
+  "source_csv": "claw_agent_landscape_2026Q1_full.csv",
+  "items": {
+    "openclaw": {
+      "status": "DONE",
+      "updated_at": "2026-03-16",
+      "research": {
+        "project": "OpenClaw",
+        "app_id": "openclaw",
+        "source_records": [
+          {
+            "id": "src_github_com_openclaw_openclaw",
+            "name": "https://github.com/openclaw/openclaw",
+            "url": "https://github.com/openclaw/openclaw",
+            "source_type": "official_repo",
+            "why_it_matters": "Source referenced by claw-agent enrichment pipeline."
+          },
+          {
+            "id": "src_github_com_openclaw_openclaw_releases",
+            "name": "https://github.com/openclaw/openclaw/releases",
+            "url": "https://github.com/openclaw/openclaw/releases",
+            "source_type": "official_site",
+            "why_it_matters": "Source referenced by claw-agent enrichment pipeline."
+          }
+        ],
+        "category": "CLAW_FAMILY_APP",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "personal_agent",
+          "desktop_agent",
+          "automation"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_SUPPLY_CHAIN"
+          ],
+          "severity": "high",
+          "legacy_tags": [
+            "agent_generated_file_ops",
+            "terminal_command_context_upload",
+            "prompt_exfiltration",
+            "third_party_skill_supply_chain",
+            "messaging_platform_integration_tokens",
+            "tool_call_exfiltration",
+            "malicious_skill_execution"
+          ],
+          "priority_score": 88
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "docs.openclaw.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_openclaw_openclaw",
+                "src_github_com_openclaw_openclaw_releases"
+              ],
+              "last_verified_at": "2026-03-16",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "openclaw.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_openclaw_openclaw",
+                "src_github_com_openclaw_openclaw_releases"
+              ],
+              "last_verified_at": "2026-03-16",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "openclaw",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "ai.openclaw.mac",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.95,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Verified against the macOS app Info.plist and packaging scripts.",
+                "verification_status": "verified"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "OpenClaw",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Verified against the macOS app bundle name.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "openclaw",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Verified against official CLI install paths and onboarding flow.",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/OpenClaw.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/Applications/OpenClaw.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-16",
+                "notes": "Added during manual IOC review to widen macOS path coverage; authoritative installer evidence is still pending.",
+                "verification_status": "heuristic"
+              },
+              {
+                "value": "/opt/homebrew/bin/openclaw",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "/usr/local/bin/openclaw",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.local/bin/openclaw",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.cargo/bin/openclaw",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-16",
+                "notes": "Added during manual IOC review to widen macOS path coverage; authoritative installer evidence is still pending.",
+                "verification_status": "heuristic"
+              },
+              {
+                "value": "~/.openclaw",
+                "match": "prefix",
+                "path_type": "state_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.openclaw/workspace",
+                "match": "prefix",
+                "path_type": "workspace_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.openclaw/workspace/skills",
+                "match": "prefix",
+                "path_type": "skills_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.openclaw/openclaw.json",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.openclaw/credentials",
+                "match": "prefix",
+                "path_type": "credential_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.openclaw/.env",
+                "match": "exact",
+                "path_type": "env_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/Library/Logs/OpenClaw/diagnostics.jsonl",
+                "match": "exact",
+                "path_type": "log_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openclaw_openclaw",
+                  "src_github_com_openclaw_openclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Manually curated against official OpenClaw installer/docs during host IOC review; expanded macOS path coverage and removed repo-code symbols that were previously misclassified as IOC values.",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Personal AI assistant; can speak/listen on macOS; recommended macOS CLI wizard and daemon install; releases mention macOS app/chat UI and onboarding fixes. Manually reviewed IOC set keeps official domains (openclaw.ai, docs.openclaw.ai) plus verified macOS host paths such as /Applications/OpenClaw.app, /usr/local/bin/openclaw, /opt/homebrew/bin/openclaw, ~/.openclaw/openclaw.json, and ~/Library/Logs/OpenClaw/diagnostics.jsonl.",
+        "legacy": {
+          "fingerprints": {
+            "app_domains": [
+              "*.docs.openclaw.ai",
+              "*.openclaw.ai",
+              "docs.openclaw.ai",
+              "openclaw.ai"
+            ],
+            "file_domains": [],
+            "keywords": [
+              "openclaw"
+            ],
+            "provider_domains": [],
+            "confidence": "high"
+          },
+          "data_leakage_risks": [
+            "agent_generated_file_ops",
+            "terminal_command_context_upload",
+            "prompt_exfiltration",
+            "third_party_skill_supply_chain",
+            "messaging_platform_integration_tokens",
+            "tool_call_exfiltration",
+            "malicious_skill_execution"
+          ]
+        },
+        "confidence": "medium",
+        "evidence_summary": "Personal AI assistant; can speak/listen on macOS; recommended macOS CLI wizard and daemon install; releases mention macOS app/chat UI and onboarding fixes.",
+        "source_ids": [
+          "src_github_com_openclaw_openclaw",
+          "src_github_com_openclaw_openclaw_releases"
+        ],
+        "verification_status": "verified",
+        "scoring": {
+          "method": "weighted_sum",
+          "suggested_threshold": 0.82,
+          "notes": "Calibrated on 2026-03-16 from claw-agent CSV seed URLs plus repo/site IOC scan; max_score=19.0, high_precision_signals=1, provider_weight=0, host_weight=10.9, file_weight=0."
+        }
+      }
+    },
+    "zeroclaw": {
+      "status": "DONE",
+      "updated_at": "2026-03-16",
+      "research": {
+        "project": "ZeroClaw",
+        "app_id": "zeroclaw",
+        "source_records": [
+          {
+            "id": "src_zeroclaw_labs_github_repo",
+            "name": "ZeroClaw official GitHub repository",
+            "url": "https://github.com/zeroclaw-labs/zeroclaw",
+            "source_type": "official_repo",
+            "why_it_matters": "Canonical repository documents ZeroClaw features, local runtime claims, official website, and warns against impersonating domains."
+          },
+          {
+            "id": "src_github_com_zeroclaw_labs_zeroclaw_releases",
+            "name": "https://github.com/zeroclaw-labs/zeroclaw/releases",
+            "url": "https://github.com/zeroclaw-labs/zeroclaw/releases",
+            "source_type": "official_site",
+            "why_it_matters": "Source referenced by claw-agent enrichment pipeline."
+          }
+        ],
+        "category": "CLAW_FAMILY_APP",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "personal_agent",
+          "agent_runtime",
+          "automation"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_SUPPLY_CHAIN"
+          ],
+          "severity": "high",
+          "legacy_tags": [
+            "local_agent_runtime",
+            "prompt_exfiltration",
+            "credentials_for_multi_provider_runtime",
+            "plugin_or_tool_supply_chain"
+          ],
+          "priority_score": 86
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "zeroclawlabs.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_zeroclaw_labs_github_repo",
+                "src_github_com_zeroclaw_labs_zeroclaw_releases"
+              ],
+              "last_verified_at": "2026-03-16",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "zeroclawlabs.cn",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_zeroclaw_labs_github_repo",
+                "src_github_com_zeroclaw_labs_zeroclaw_releases"
+              ],
+              "last_verified_at": "2026-03-16",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "zeroclaw",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "zeroclaw-labs",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "zeroclaw",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Verified against the official CLI command name and install path (~/.cargo/bin/zeroclaw).",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.cargo/bin/zeroclaw",
+                "match": "prefix",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/.secret_key",
+                "match": "prefix",
+                "path_type": "secret_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/auth-profiles.json",
+                "match": "prefix",
+                "path_type": "credential_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/models",
+                "match": "prefix",
+                "path_type": "model_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/models/piper",
+                "match": "prefix",
+                "path_type": "model_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/models/piper/en_US-lessac-medium.onnx",
+                "match": "prefix",
+                "path_type": "model_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/workspace",
+                "match": "prefix",
+                "path_type": "workspace_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/workspace/config.toml",
+                "match": "prefix",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zeroclaw/workspace/skills",
+                "match": "prefix",
+                "path_type": "skills_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.zfunc/_zeroclaw",
+                "match": "prefix",
+                "path_type": "shell_completion",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_zeroclaw_labs_github_repo",
+                  "src_github_com_zeroclaw_labs_zeroclaw_releases"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Manually curated against official ZeroClaw repo/docs during host IOC review; kept first-party runtime indicators and removed README badge/social-link artifacts from hostname IOC values.",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Fast, small, fully autonomous AI assistant/runtime OS; macOS prerequisites documented; native static binary and daemon/service install. Manually reviewed IOC set keeps first-party runtime indicators and removes README badge/social-link artifacts from hostname matching.",
+        "legacy": {
+          "fingerprints": {
+            "app_domains": [
+              "*.zeroclawlabs.ai",
+              "*.zeroclawlabs.cn",
+              "zeroclawlabs.ai",
+              "zeroclawlabs.cn"
+            ],
+            "file_domains": [],
+            "keywords": [
+              "zeroclaw",
+              "zeroclaw-labs"
+            ],
+            "provider_domains": [],
+            "confidence": "high"
+          },
+          "data_leakage_risks": [
+            "local_agent_runtime",
+            "prompt_exfiltration",
+            "credentials_for_multi_provider_runtime",
+            "plugin_or_tool_supply_chain"
+          ]
+        },
+        "confidence": "high",
+        "evidence_summary": "Fast, small, fully autonomous AI assistant/runtime OS; macOS prerequisites documented; native static binary and daemon/service install.",
+        "source_ids": [
+          "src_zeroclaw_labs_github_repo",
+          "src_github_com_zeroclaw_labs_zeroclaw_releases"
+        ],
+        "verification_status": "verified",
+        "scoring": {
+          "method": "weighted_sum",
+          "suggested_threshold": 0.82,
+          "notes": "Calibrated on 2026-03-16 from claw-agent CSV seed URLs plus repo/site IOC scan; max_score=13.5, high_precision_signals=2, provider_weight=0, host_weight=5.1, file_weight=0."
+        }
+      }
+    },
+    "hermes_agent": {
+      "status": "DONE",
+      "updated_at": "2026-03-16",
+      "research": {
+        "project": "Hermes Agent",
+        "app_id": "hermes_agent",
+        "source_records": [
+          {
+            "id": "src_github_com_nousresearch_hermes_agent",
+            "name": "https://github.com/NousResearch/hermes-agent",
+            "url": "https://github.com/NousResearch/hermes-agent",
+            "source_type": "official_repo",
+            "why_it_matters": "Source referenced by claw-agent enrichment pipeline."
+          }
+        ],
+        "category": "CLAW_FAMILY_APP",
+        "product_shape": [
+          "macos",
+          "web"
+        ],
+        "product_type": [
+          "personal_agent",
+          "desktop_agent",
+          "automation"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_SUPPLY_CHAIN"
+          ],
+          "severity": "high",
+          "legacy_tags": [
+            "agent_generated_file_ops",
+            "prompt_exfiltration",
+            "plugin_or_tool_supply_chain"
+          ],
+          "priority_score": 84
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "hermes-agent.nousresearch.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_nousresearch_hermes_agent"
+              ],
+              "last_verified_at": "2026-03-16",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "hermes agent",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "hermes",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "hermes-agent",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "nousresearch",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "hermes",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Verified against the official installer symlink target (~/.local/bin/hermes).",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.local/bin/hermes",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes",
+                "match": "prefix",
+                "path_type": "state_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/config.yaml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/.env",
+                "match": "exact",
+                "path_type": "env_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/SOUL.md",
+                "match": "exact",
+                "path_type": "persona_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/memories/MEMORY.md",
+                "match": "exact",
+                "path_type": "memory_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/memories/USER.md",
+                "match": "exact",
+                "path_type": "memory_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/skills",
+                "match": "prefix",
+                "path_type": "skills_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/skills/openclaw-imports",
+                "match": "prefix",
+                "path_type": "skills_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/skins",
+                "match": "prefix",
+                "path_type": "skins_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/state.db",
+                "match": "exact",
+                "path_type": "database_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/hermes-agent",
+                "match": "prefix",
+                "path_type": "install_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.hermes/logs/gateway.log",
+                "match": "exact",
+                "path_type": "log_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_nousresearch_hermes_agent"
+                ],
+                "last_verified_at": "2026-03-16",
+                "notes": "Manually verified against official project materials during IOC review.",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Manually curated against official project materials during host IOC review; removed code symbols, README badges, and unrelated external links that were previously misclassified as IOC values.",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Self-improving agent with learning loop, persistent memory, and scheduled automations; quick install supports Linux/macOS/WSL2. Manually reviewed IOC set keeps the official docs host and verified local state paths such as ~/.local/bin/hermes, ~/.hermes/config.yaml, ~/.hermes/.env, ~/.hermes/state.db, and ~/.hermes/logs/gateway.log.",
+        "legacy": {
+          "fingerprints": {
+            "app_domains": [
+              "*.hermes-agent.nousresearch.com",
+              "hermes-agent.nousresearch.com"
+            ],
+            "file_domains": [],
+            "keywords": [
+              "hermes agent",
+              "hermes",
+              "hermes-agent",
+              "nousresearch"
+            ],
+            "provider_domains": [],
+            "confidence": "high"
+          },
+          "data_leakage_risks": [
+            "agent_generated_file_ops",
+            "prompt_exfiltration",
+            "plugin_or_tool_supply_chain"
+          ]
+        },
+        "confidence": "high",
+        "evidence_summary": "Self-improving agent with learning loop, persistent memory, and scheduled automations; quick install supports Linux/macOS/WSL2.",
+        "source_ids": [
+          "src_github_com_nousresearch_hermes_agent"
+        ],
+        "verification_status": "verified",
+        "scoring": {
+          "method": "weighted_sum",
+          "suggested_threshold": 0.82,
+          "notes": "Calibrated on 2026-03-16 from claw-agent CSV seed URLs plus repo/site IOC scan; max_score=15.6, high_precision_signals=1, provider_weight=0, host_weight=7.5, file_weight=0."
+        }
+      }
+    },
+    "clawx": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "ClawX",
+        "app_id": "clawx",
+        "source_records": [
+          {
+            "id": "src_github_com_valuecell_ai_clawx",
+            "name": "ClawX GitHub Repository",
+            "url": "https://github.com/ValueCell-ai/ClawX",
+            "source_type": "official_repo",
+            "why_it_matters": "Official ClawX desktop GUI for OpenClaw agents"
+          }
+        ],
+        "category": "CLAW_FAMILY_APP",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_agent",
+          "gui_wrapper"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 82
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "openclaw.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "backend_dependency",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_github_com_valuecell_ai_clawx"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "clawx",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "ai.valuecell.clawx",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.95,
+                "source_ids": [
+                  "src_github_com_valuecell_ai_clawx"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Inferred from Electron/Tauri app naming conventions for ValueCell-ai",
+                "verification_status": "inferred"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "ClawX",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_valuecell_ai_clawx"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/ClawX.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_valuecell_ai_clawx"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.clawx",
+                "match": "prefix",
+                "path_type": "state_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Desktop GUI wrapper for OpenClaw; uses OpenClaw backend domains",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Desktop app that turns OpenClaw CLI orchestration into a GUI desktop experience",
+        "confidence": "medium",
+        "evidence_summary": "Desktop GUI for OpenClaw agents; distributed as macOS DMG",
+        "source_ids": [
+          "src_github_com_valuecell_ai_clawx"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "aionui": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "AionUi",
+        "app_id": "aionui",
+        "source_records": [
+          {
+            "id": "src_github_com_iofficeai_aionui",
+            "name": "AionUi GitHub Repository",
+            "url": "https://github.com/iOfficeAI/AionUi",
+            "source_type": "official_repo",
+            "why_it_matters": "Free open-source Cowork desktop app with built-in agent engine"
+          }
+        ],
+        "category": "AI_DESKTOP_ASSISTANT",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_agent",
+          "multi_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 85
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "aionui",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "iofficeai",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.iofficeai.aionui",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.9,
+                "source_ids": [
+                  "src_github_com_iofficeai_aionui"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Inferred from standard reverse-DNS naming conventions",
+                "verification_status": "inferred"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "AionUi",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_iofficeai_aionui"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/AionUi.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_iofficeai_aionui"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.aionui",
+                "match": "prefix",
+                "path_type": "state_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Free open-source Cowork desktop app with built-in agent engine",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Free open-source Cowork desktop app; ships with complete agent engine; no CLI setup required",
+        "confidence": "medium",
+        "evidence_summary": "Desktop multi-agent app with built-in agent engine",
+        "source_ids": [
+          "src_github_com_iofficeai_aionui"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "openfang": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "OpenFang",
+        "app_id": "openfang",
+        "source_records": [
+          {
+            "id": "src_github_com_rightnow_ai_openfang",
+            "name": "OpenFang GitHub Repository",
+            "url": "https://github.com/RightNow-AI/openfang",
+            "source_type": "official_repo",
+            "why_it_matters": "Open-source Agent Operating System built in Rust"
+          }
+        ],
+        "category": "AI_DESKTOP_ASSISTANT",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "agent_os",
+          "desktop_app",
+          "daemon"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_SUPPLY_CHAIN"
+          ],
+          "severity": "high",
+          "priority_score": 87
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "openfang.sh",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_rightnow_ai_openfang"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "www.openfang.sh",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_rightnow_ai_openfang"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "openfang",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "rightnow-ai",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.rightnowai.openfang",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.9,
+                "source_ids": [
+                  "src_github_com_rightnow_ai_openfang"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Inferred from Tauri/Electron app naming conventions",
+                "verification_status": "inferred"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "OpenFang",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_rightnow_ai_openfang"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "openfang",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_rightnow_ai_openfang"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/OpenFang.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_rightnow_ai_openfang"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.openfang",
+                "match": "prefix",
+                "path_type": "state_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_rightnow_ai_openfang"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "/usr/local/bin/openfang",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_rightnow_ai_openfang"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Agent OS with macOS desktop app (.dmg), system tray, auto-updates, daemon",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Open-source Agent Operating System built in Rust; macOS desktop app with daemon and agent spawning",
+        "confidence": "high",
+        "evidence_summary": "Full agent OS with macOS desktop app, daemon, and WebChat",
+        "source_ids": [
+          "src_github_com_rightnow_ai_openfang"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "opencode": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "OpenCode",
+        "app_id": "opencode",
+        "source_records": [
+          {
+            "id": "src_github_com_sst_opencode",
+            "name": "OpenCode GitHub Repository",
+            "url": "https://github.com/sst/opencode",
+            "source_type": "official_repo",
+            "why_it_matters": "Open-source coding agent in terminal by SST team"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "coding_agent",
+          "terminal",
+          "tui"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 88
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "opencode.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_sst_opencode"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "opencode",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "opencode",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_sst_opencode"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.config/opencode",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_sst_opencode"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.config/opencode/opencode.json",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_sst_opencode"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "/opt/homebrew/bin/opencode",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_sst_opencode"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "/usr/local/bin/opencode",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Terminal/TUI coding agent with config in ~/.config/opencode/",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Open-source coding agent focused on terminal/TUI with local execution",
+        "confidence": "high",
+        "evidence_summary": "Terminal coding agent with global config at ~/.config/opencode/opencode.json",
+        "source_ids": [
+          "src_github_com_sst_opencode"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "gemini_cli": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Gemini CLI",
+        "app_id": "gemini_cli",
+        "source_records": [
+          {
+            "id": "src_github_com_google_gemini_cli",
+            "name": "Gemini CLI GitHub Repository",
+            "url": "https://github.com/google-gemini/gemini-cli",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Google Gemini CLI for terminal AI agent"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "coding_agent",
+          "terminal",
+          "cli"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 90
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "generativelanguage.googleapis.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_google_gemini_cli"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "aiplatform.googleapis.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_github_com_google_gemini_cli"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "gemini",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "gemini-cli",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "gemini",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_google_gemini_cli"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.gemini",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_google_gemini_cli"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.gemini/settings.json",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_google_gemini_cli"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "/opt/homebrew/bin/gemini",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_google_gemini_cli"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Google's official Gemini CLI with config in ~/.gemini/",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Open-source AI agent in terminal from Google; uses Gemini API endpoints",
+        "confidence": "high",
+        "evidence_summary": "Official Google Gemini CLI for terminal; config at ~/.gemini/settings.json",
+        "source_ids": [
+          "src_github_com_google_gemini_cli"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "openhands": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "OpenHands",
+        "app_id": "openhands",
+        "source_records": [
+          {
+            "id": "src_github_com_all_hands_ai_openhands",
+            "name": "OpenHands GitHub Repository",
+            "url": "https://github.com/All-Hands-AI/OpenHands",
+            "source_type": "official_repo",
+            "why_it_matters": "Official OpenHands coding agent repository"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "coding_agent",
+          "local_gui",
+          "cli",
+          "sdk"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 88
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "openhands",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "all-hands-ai",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "openhands",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_all_hands_ai_openhands"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.openhands",
+                "match": "prefix",
+                "path_type": "state_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_all_hands_ai_openhands"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.openhands/settings.json",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_all_hands_ai_openhands"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Open source platform for software development agents; local GUI + CLI + SDK",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Open source platform for software development agents; runs locally on macOS",
+        "confidence": "high",
+        "evidence_summary": "Coding agent with local GUI, CLI, and SDK; config at ~/.openhands/",
+        "source_ids": [
+          "src_github_com_all_hands_ai_openhands"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "open_interpreter": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Open Interpreter",
+        "app_id": "open_interpreter",
+        "source_records": [
+          {
+            "id": "src_github_com_openinterpreter_open_interpreter",
+            "name": "Open Interpreter GitHub Repository",
+            "url": "https://github.com/OpenInterpreter/open-interpreter",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Open Interpreter natural-language computer interface"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "computer_interface",
+          "automation"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_REMOTE_CONTROL"
+          ],
+          "severity": "high",
+          "priority_score": 92
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "open-interpreter",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "interpreter",
+              "match": "substring",
+              "weight": 0.1,
+              "precision": "low"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "interpreter",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_openinterpreter_open_interpreter"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.config/open-interpreter",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openinterpreter_open_interpreter"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.config/open-interpreter/default.yaml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openinterpreter_open_interpreter"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.local/share/open-interpreter",
+                "match": "prefix",
+                "path_type": "data_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_openinterpreter_open_interpreter"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Natural-language computer interface with auto-run mode; config at ~/.config/open-interpreter/",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Runs on your computer from terminal; supports interpreter -y / auto_run for reduced confirmation flows",
+        "confidence": "high",
+        "evidence_summary": "CLI natural-language computer interface; config at ~/.config/open-interpreter/",
+        "source_ids": [
+          "src_github_com_openinterpreter_open_interpreter"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "goose": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Goose",
+        "app_id": "goose",
+        "source_records": [
+          {
+            "id": "src_github_com_block_goose",
+            "name": "Goose GitHub Repository",
+            "url": "https://github.com/block/goose",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Block Goose AI agent for desktop and terminal"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_agent",
+          "cli",
+          "coding_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 86
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "block.github.io",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "docs_host",
+              "precision": "medium",
+              "weight": 0.7,
+              "source_ids": [
+                "src_github_com_block_goose"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "goose",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "block-goose",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.block.goose",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.95,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Verified from Homebrew cask formula block-goose",
+                "verification_status": "verified"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "Goose",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/Goose.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.config/goose",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Open-source AI agent with desktop app and CLI; bundle ID com.block.goose",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Open-source AI agent with desktop app and CLI; positioned as extensible coding/workflow agent",
+        "confidence": "high",
+        "evidence_summary": "Desktop app + CLI coding agent; bundle ID com.block.goose; config at ~/.config/goose/",
+        "source_ids": [
+          "src_github_com_block_goose"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "continue_cli": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Continue",
+        "app_id": "continue_cli",
+        "source_records": [
+          {
+            "id": "src_github_com_continuedev_continue",
+            "name": "Continue GitHub Repository",
+            "url": "https://github.com/continuedev/continue",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Continue CLI and IDE extension for coding agent"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "ide_extension",
+          "coding_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 85
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "continue.dev",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_continuedev_continue"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "api.continue.dev",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_github_com_continuedev_continue"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "continue",
+              "match": "substring",
+              "weight": 0.1,
+              "precision": "low"
+            },
+            {
+              "pattern": "continuedev",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "cn",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_continuedev_continue"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Continue CLI binary name",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.continue",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_continuedev_continue"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.continue/config.yaml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_continuedev_continue"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.continue/permissions.yaml",
+                "match": "exact",
+                "path_type": "permissions_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_continuedev_continue"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Terminal coding agent with headless mode; config at ~/.continue/",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Continue CLI is a terminal-based coding agent; repo also mentions TUI mode and headless mode for background agents",
+        "confidence": "high",
+        "evidence_summary": "CLI + IDE coding agent; config at ~/.continue/config.yaml; domains continue.dev",
+        "source_ids": [
+          "src_github_com_continuedev_continue"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "swe_agent": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "SWE-agent",
+        "app_id": "swe_agent",
+        "source_records": [
+          {
+            "id": "src_github_com_swe_agent_swe_agent",
+            "name": "SWE-agent GitHub Repository",
+            "url": "https://github.com/SWE-agent/SWE-agent",
+            "source_type": "official_repo",
+            "why_it_matters": "Official SWE-agent autonomous software engineering agent"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "coding_agent",
+          "automation"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_GITHUB_ACCESS"
+          ],
+          "severity": "high",
+          "priority_score": 88
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "api.github.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "medium",
+              "weight": 0.7,
+              "source_ids": [
+                "src_github_com_swe_agent_swe_agent"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "swe-agent",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "sweagent",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "sweagent",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_swe_agent_swe_agent"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/SWE-agent/config/",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_swe_agent_swe_agent"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/SWE-agent/config/default.yaml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_swe_agent_swe_agent"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Autonomous software engineering agent that fixes GitHub issues; config in repo directory",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Autonomous software engineering agent that automatically fixes GitHub issues",
+        "confidence": "high",
+        "evidence_summary": "CLI coding agent for GitHub issue fixing; config at ~/SWE-agent/config/",
+        "source_ids": [
+          "src_github_com_swe_agent_swe_agent"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "aider": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Aider",
+        "app_id": "aider",
+        "source_records": [
+          {
+            "id": "src_github_com_aider_ai_aider",
+            "name": "Aider GitHub Repository",
+            "url": "https://github.com/Aider-AI/aider",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Aider terminal pair-programming agent"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "coding_agent",
+          "pair_programming"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 84
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "aider.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_aider_ai_aider"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "aider",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "aider",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_aider_ai_aider"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.aider.conf.yml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_aider_ai_aider"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.aider.model.settings.yml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_aider_ai_aider"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": ".aider.conf.yml",
+                "match": "exact",
+                "path_type": "project_config",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_aider_ai_aider"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Terminal pair-programming agent; config file ~/.aider.conf.yml (no directory)",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Terminal coding agent with install helper and auto-commit workflow",
+        "confidence": "high",
+        "evidence_summary": "CLI pair-programming agent; config at ~/.aider.conf.yml; domain aider.ai",
+        "source_ids": [
+          "src_github_com_aider_ai_aider"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "cline": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Cline",
+        "app_id": "cline",
+        "source_records": [
+          {
+            "id": "src_github_com_cline_cline",
+            "name": "Cline GitHub Repository",
+            "url": "https://github.com/cline/cline",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Cline autonomous coding agent VS Code extension"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "ide_extension",
+          "coding_agent",
+          "automation"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 87
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "cline.bot",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_cline_cline"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "cline",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.cline",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_cline_cline"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.cline/data/settings/cline_mcp_settings.json",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_cline_cline"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/",
+                "match": "prefix",
+                "path_type": "vscode_storage",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_cline_cline"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "VS Code extension autonomous coding agent; config at ~/.cline/ and VS Code globalStorage",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Autonomous coding agent in IDE; can create/edit files, execute commands, and use browser",
+        "confidence": "high",
+        "evidence_summary": "VS Code extension coding agent; config at ~/.cline/ and VS Code globalStorage",
+        "source_ids": [
+          "src_github_com_cline_cline"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "browser_use": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "browser-use",
+        "app_id": "browser_use",
+        "source_records": [
+          {
+            "id": "src_github_com_browser_use_browser_use",
+            "name": "browser-use GitHub Repository",
+            "url": "https://github.com/browser-use/browser-use",
+            "source_type": "official_repo",
+            "why_it_matters": "Official browser-use AI agent browser automation library"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "browser_automation",
+          "agent_framework"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 85
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "browser-use.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_browser_use_browser_use"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "browser-use",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "browser_use",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "browser-use",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_browser_use_browser_use"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.config/browser-use",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_browser_use_browser_use"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "AI-agent-oriented browser automation with CLI; Python library",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "AI-agent-oriented browser automation with CLI that keeps browser running between commands",
+        "confidence": "high",
+        "evidence_summary": "CLI browser automation agent; domain browser-use.com",
+        "source_ids": [
+          "src_github_com_browser_use_browser_use"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "ui_tars_desktop": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "UI-TARS-desktop",
+        "app_id": "ui_tars_desktop",
+        "source_records": [
+          {
+            "id": "src_github_com_bytedance_ui_tars_desktop",
+            "name": "UI-TARS-desktop GitHub Repository",
+            "url": "https://github.com/bytedance/UI-TARS-desktop",
+            "source_type": "official_repo",
+            "why_it_matters": "Official ByteDance UI-TARS multimodal GUI agent desktop app"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_agent",
+          "gui_agent",
+          "multimodal"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_SCREEN_CAPTURE"
+          ],
+          "severity": "high",
+          "priority_score": 90
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "seed.bytedance.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_bytedance_ui_tars_desktop"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "bytedance.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "org_domain",
+              "precision": "medium",
+              "weight": 0.7,
+              "source_ids": [
+                "src_github_com_bytedance_ui_tars_desktop"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "ui-tars",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "uitars",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.bytedance.uitars",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.9,
+                "source_ids": [
+                  "src_github_com_bytedance_ui_tars_desktop"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Inferred from Electron/Tauri app naming conventions",
+                "verification_status": "inferred"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "UI-TARS",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_bytedance_ui_tars_desktop"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/UI-TARS.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_bytedance_ui_tars_desktop"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.ui-tars",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "ByteDance multimodal GUI agent; requires Screen Recording and Accessibility permissions",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "General multimodal AI agent stack; ships with CLI and Web UI; part of local device computer-use story",
+        "confidence": "high",
+        "evidence_summary": "Desktop GUI agent from ByteDance; bundle ID likely com.bytedance.uitars",
+        "source_ids": [
+          "src_github_com_bytedance_ui_tars_desktop"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "cua": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "CUA (Computer-Use Agent)",
+        "app_id": "cua",
+        "source_records": [
+          {
+            "id": "src_github_com_trycua_cua",
+            "name": "CUA GitHub Repository",
+            "url": "https://github.com/trycua/cua",
+            "source_type": "official_repo",
+            "why_it_matters": "Official CUA computer-use agent framework for desktop automation"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "computer_use",
+          "desktop_sandbox",
+          "agent_framework"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_VM_ESCAPE"
+          ],
+          "severity": "high",
+          "priority_score": 88
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "cua.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_trycua_cua"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "trycua",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "cua-computer",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "lume",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_trycua_cua"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.lume",
+                "match": "prefix",
+                "path_type": "vm_storage",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_trycua_cua"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.local/bin/lume",
+                "match": "exact",
+                "path_type": "cli_binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_trycua_cua"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/Library/LaunchAgents/ai.cua.lume.plist",
+                "match": "exact",
+                "path_type": "launch_agent",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_trycua_cua"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Computer-use agent infrastructure; uses Lume for macOS VMs; config at ~/.lume/",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Open-source infrastructure for computer-use agents; supports full desktops including macOS",
+        "confidence": "high",
+        "evidence_summary": "Computer-use agent framework with Lume VM; config at ~/.lume/",
+        "source_ids": [
+          "src_github_com_trycua_cua"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "anythingllm": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "AnythingLLM",
+        "app_id": "anythingllm",
+        "source_records": [
+          {
+            "id": "src_github_com_mintplex_labs_anythingllm",
+            "name": "AnythingLLM GitHub Repository",
+            "url": "https://github.com/Mintplex-Labs/anything-llm",
+            "source_type": "official_repo",
+            "why_it_matters": "Official AnythingLLM desktop app for local AI workspace"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_app",
+          "workspace_agent",
+          "agent_builder"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 85
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "anythingllm.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_mintplex_labs_anythingllm"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "useanything.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_github_com_mintplex_labs_anythingllm"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "anythingllm",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.anythingllm",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.95,
+                "source_ids": [
+                  "src_github_com_mintplex_labs_anythingllm"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "AnythingLLM",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_mintplex_labs_anythingllm"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/AnythingLLM.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_mintplex_labs_anythingllm"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/Library/Application Support/AnythingLLM",
+                "match": "prefix",
+                "path_type": "data_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_mintplex_labs_anythingllm"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Desktop app for Mac/Windows/Linux; includes no-code AI agent builder; bundle ID com.anythingllm",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Desktop app for Mac/Windows/Linux; includes no-code AI agent builder, custom AI agents, and agents inside workspace",
+        "confidence": "high",
+        "evidence_summary": "Desktop app with bundle ID com.anythingllm; data at ~/Library/Application Support/AnythingLLM",
+        "source_ids": [
+          "src_github_com_mintplex_labs_anythingllm"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "autogpt": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "AutoGPT",
+        "app_id": "autogpt",
+        "source_records": [
+          {
+            "id": "src_github_com_significant_gravitas_autogpt",
+            "name": "AutoGPT GitHub Repository",
+            "url": "https://github.com/Significant-Gravitas/AutoGPT",
+            "source_type": "official_repo",
+            "why_it_matters": "Official AutoGPT autonomous agent platform"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "platform",
+          "cli",
+          "web",
+          "autonomous_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_SUPPLY_CHAIN"
+          ],
+          "severity": "high",
+          "priority_score": 90
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "autogpt",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "auto-gpt",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "autogpt",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_significant_gravitas_autogpt"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/AutoGPT/.env",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_significant_gravitas_autogpt"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/AutoGPT/ai_settings.yaml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_significant_gravitas_autogpt"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/AutoGPT/plugins_config.yaml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_significant_gravitas_autogpt"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/AutoGPT/auto_gpt_workspace/",
+                "match": "prefix",
+                "path_type": "workspace_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_significant_gravitas_autogpt"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Classic autonomous agent platform; config in repo root directory",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "One of the canonical autonomous-agent projects; still recently updated",
+        "confidence": "high",
+        "evidence_summary": "Platform/CLI autonomous agent; config at ~/AutoGPT/.env and ai_settings.yaml",
+        "source_ids": [
+          "src_github_com_significant_gravitas_autogpt"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "crewai": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "crewAI",
+        "app_id": "crewai",
+        "source_records": [
+          {
+            "id": "src_github_com_crewaiinc_crewai",
+            "name": "crewAI GitHub Repository",
+            "url": "https://github.com/crewAIInc/crewAI",
+            "source_type": "official_repo",
+            "why_it_matters": "Official crewAI multi-agent framework"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "framework",
+          "multi_agent",
+          "orchestration"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 86
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "crewai.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_crewaiinc_crewai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "crewai",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "crewai",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_crewaiinc_crewai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/Library/Application Support/CrewAI/",
+                "match": "prefix",
+                "path_type": "data_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_crewaiinc_crewai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.env",
+                "match": "exact",
+                "path_type": "env_file",
+                "precision": "low",
+                "weight": 0.3,
+                "source_ids": [
+                  "src_github_com_crewaiinc_crewai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Multi-agent framework; persistent storage at ~/Library/Application Support/CrewAI/",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Large multi-agent framework focused on autonomous agents",
+        "confidence": "high",
+        "evidence_summary": "Multi-agent framework; data at ~/Library/Application Support/CrewAI/",
+        "source_ids": [
+          "src_github_com_crewaiinc_crewai"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "atomic_bot": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Atomic Bot",
+        "app_id": "atomic_bot",
+        "source_records": [
+          {
+            "id": "src_atomicbot_ai",
+            "name": "Atomic Bot Official Site",
+            "url": "https://atomicbot.ai/",
+            "source_type": "official_site",
+            "why_it_matters": "Official Atomic Bot one-click OpenClaw macOS app"
+          }
+        ],
+        "category": "CLAW_FAMILY_APP",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_agent",
+          "one_click_installer"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 88
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "atomicbot.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_atomicbot_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "openclaw.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "backend_dependency",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_atomicbot_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "atomicbot",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "atomic bot",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "ai.atomicbot.mac",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.9,
+                "source_ids": [
+                  "src_atomicbot_ai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Inferred from naming conventions",
+                "verification_status": "inferred"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "Atomic Bot",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_atomicbot_ai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/Atomic Bot.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_atomicbot_ai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.atomicbot",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "One-click OpenClaw macOS app; wraps OpenClaw agent",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "One-click OpenClaw macOS app; Product Hunt and vendor site say it gets to a running local OpenClaw agent in ~60 seconds",
+        "confidence": "high",
+        "evidence_summary": "One-click OpenClaw installer; domain atomicbot.ai; uses OpenClaw backend",
+        "source_ids": [
+          "src_atomicbot_ai"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "katclaw": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "KatClaw",
+        "app_id": "katclaw",
+        "source_records": [
+          {
+            "id": "src_katclaw_ai",
+            "name": "KatClaw Official Site",
+            "url": "https://katclaw.ai/",
+            "source_type": "official_site",
+            "why_it_matters": "Official KatClaw one-click OpenClaw installer and manager for macOS"
+          }
+        ],
+        "category": "CLAW_FAMILY_APP",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_agent",
+          "one_click_installer",
+          "dashboard"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 87
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "katclaw.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_katclaw_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "openclaw.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "backend_dependency",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_katclaw_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "katclaw",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "ai.katclaw.mac",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.9,
+                "source_ids": [
+                  "src_katclaw_ai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Inferred from naming conventions",
+                "verification_status": "inferred"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "KatClaw",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_katclaw_ai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/KatClaw.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_katclaw_ai"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.katclaw",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Native Mac app that turns OpenClaw into one-click setup and control surface",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Native Mac app that turns OpenClaw into one-click setup and control surface",
+        "confidence": "high",
+        "evidence_summary": "One-click OpenClaw installer and manager; domain katclaw.ai",
+        "source_ids": [
+          "src_katclaw_ai"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "clawapp": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "ClawApp",
+        "app_id": "clawapp",
+        "source_records": [
+          {
+            "id": "src_clawapp_saharaai_com",
+            "name": "ClawApp Official Site",
+            "url": "https://clawapp.saharaai.com/",
+            "source_type": "official_site",
+            "why_it_matters": "Official ClawApp by Sahara AI for OpenClaw management"
+          }
+        ],
+        "category": "CLAW_FAMILY_APP",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_agent",
+          "agent_manager",
+          "gui_wrapper"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 86
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "clawapp.saharaai.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_clawapp_saharaai_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "saharaai.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "org_domain",
+              "precision": "medium",
+              "weight": 0.7,
+              "source_ids": [
+                "src_clawapp_saharaai_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "openclaw.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "backend_dependency",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_clawapp_saharaai_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "clawapp",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "saharaai",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.saharaai.clawapp",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.9,
+                "source_ids": [
+                  "src_clawapp_saharaai_com"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "Inferred from naming conventions",
+                "verification_status": "inferred"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "ClawApp",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_clawapp_saharaai_com"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/ClawApp.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_clawapp_saharaai_com"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.clawapp",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "macOS desktop app for OpenClaw bots; guided install and local agent management",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "macOS desktop app for OpenClaw bots; guided install and local agent management",
+        "confidence": "high",
+        "evidence_summary": "Sahara AI ClawApp for OpenClaw; domain clawapp.saharaai.com",
+        "source_ids": [
+          "src_clawapp_saharaai_com"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "openai_codex": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "OpenAI Codex App for macOS",
+        "app_id": "openai_codex",
+        "source_records": [
+          {
+            "id": "src_openai_com_codex",
+            "name": "OpenAI Codex App Official Page",
+            "url": "https://openai.com/index/introducing-the-codex-app/",
+            "source_type": "official_site",
+            "why_it_matters": "Official OpenAI Codex macOS app for multi-agent coding workflows"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_app",
+          "coding_agent",
+          "multi_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 92
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "api.openai.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_openai_com_codex"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "openai.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_openai_com_codex"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "persistent.oaistatic.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "download_host",
+              "precision": "high",
+              "weight": 0.85,
+              "source_ids": [
+                "src_openai_com_codex"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "codex",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "openai-codex",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.openai.codex",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.95,
+                "source_ids": [
+                  "src_openai_com_codex"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "Codex",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_openai_com_codex"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [
+              {
+                "value": "2DC432GLL2",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.9,
+                "source_ids": [
+                  "src_openai_com_codex"
+                ],
+                "last_verified_at": "2026-03-19",
+                "notes": "OpenAI, L.L.C. Team ID",
+                "verification_status": "verified"
+              }
+            ],
+            "directory_paths": [
+              {
+                "value": "/Applications/Codex.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_openai_com_codex"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "/Applications/Codex.app/Contents/MacOS/Codex",
+                "match": "exact",
+                "path_type": "binary",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_openai_com_codex"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/Library/Application Support/Codex",
+                "match": "prefix",
+                "path_type": "data_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_openai_com_codex"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.codex",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_openai_com_codex"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Native macOS app for multi-agent coding workflows; bundle ID com.openai.codex; team ID 2DC432GLL2",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Native macOS app for multi-agent coding workflows and long-running tasks",
+        "confidence": "high",
+        "evidence_summary": "Official OpenAI Codex app; bundle ID com.openai.codex; team ID 2DC432GLL2; uses api.openai.com",
+        "source_ids": [
+          "src_openai_com_codex"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "perplexity_agent": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Perplexity Personal Computer",
+        "app_id": "perplexity_agent",
+        "source_records": [
+          {
+            "id": "src_perplexity_ai",
+            "name": "Perplexity AI Official Site",
+            "url": "https://www.perplexity.ai/",
+            "source_type": "official_site",
+            "why_it_matters": "Official Perplexity AI site; Mac-based 24/7 AI agent concept"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "hosted_agent",
+          "mac_mini",
+          "24_7_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 85
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "api.perplexity.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_perplexity_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "perplexity.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_perplexity_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "pplx.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_perplexity_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "docs.perplexity.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "docs_host",
+              "precision": "high",
+              "weight": 0.85,
+              "source_ids": [
+                "src_perplexity_ai"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "perplexity",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "pplx",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Perplexity's Mac-based 24/7 AI agent concept; waitlist product, not open source",
+            "host_signal_status": "unavailable"
+          }
+        },
+        "notes": "Perplexity's Mac-based 24/7 AI agent concept; waitlist product, not open source",
+        "confidence": "medium",
+        "evidence_summary": "Hosted agent service; domains perplexity.ai, api.perplexity.ai, pplx.ai",
+        "source_ids": [
+          "src_perplexity_ai"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "anthropic_claude": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Anthropic Claude API",
+        "app_id": "anthropic_claude",
+        "source_records": [
+          {
+            "id": "src_anthropic_com",
+            "name": "Anthropic Official Site",
+            "url": "https://www.anthropic.com/",
+            "source_type": "official_site",
+            "why_it_matters": "Official Anthropic site for Claude API"
+          }
+        ],
+        "category": "AI_PROVIDER",
+        "product_shape": [
+          "macos",
+          "web"
+        ],
+        "product_type": [
+          "api_provider",
+          "llm_provider"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_PROMPT_EXFIL",
+            "R_CREDENTIAL_EXPOSURE"
+          ],
+          "severity": "medium",
+          "priority_score": 75
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "api.anthropic.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_anthropic_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "anthropic.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_anthropic_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "claude.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_anthropic_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "platform.claude.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "console",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_anthropic_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "docs.anthropic.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "docs_host",
+              "precision": "high",
+              "weight": 0.85,
+              "source_ids": [
+                "src_anthropic_com"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "anthropic",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "claude",
+              "match": "substring",
+              "weight": 0.1,
+              "precision": "low"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "API provider; no local macOS app",
+            "host_signal_status": "unavailable"
+          }
+        },
+        "notes": "Primary Claude API provider; used by many claw-family agents",
+        "confidence": "high",
+        "evidence_summary": "API provider domains: api.anthropic.com, claude.ai, platform.claude.com",
+        "source_ids": [
+          "src_anthropic_com"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "block_goose": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Goose (Block)",
+        "app_id": "block_goose",
+        "source_records": [
+          {
+            "id": "src_github_com_block_goose",
+            "name": "Goose GitHub Repository",
+            "url": "https://github.com/block/goose",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Block Goose AI agent desktop app and CLI"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_app",
+          "cli",
+          "coding_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 86
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "block.github.io",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "docs_host",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_github_com_block_goose"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "goose",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            },
+            {
+              "pattern": "block-goose",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [
+              {
+                "value": "com.block.goose",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.95,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "process_names": [
+              {
+                "value": "Goose",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/Goose.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              },
+              {
+                "value": "~/.config/goose",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_block_goose"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Open-source AI agent with desktop app and CLI; bundle ID com.block.goose",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Open-source AI agent with desktop app and CLI; positioned as extensible coding/workflow agent",
+        "confidence": "high",
+        "evidence_summary": "Desktop app + CLI; bundle ID com.block.goose; config at ~/.config/goose/",
+        "source_ids": [
+          "src_github_com_block_goose"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "roo_code": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Roo Code",
+        "app_id": "roo_code",
+        "source_records": [
+          {
+            "id": "src_github_com_roocodeinc_roo_code",
+            "name": "Roo Code GitHub Repository",
+            "url": "https://github.com/RooCodeInc/Roo-Code",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Roo Code VS Code extension autonomous coding agent"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "ide_extension",
+          "coding_agent",
+          "multi_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 85
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "roocode.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "roo code",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "rooveterinaryinc",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/Library/Application Support/Code/User/globalStorage/rooveterinaryinc.roo-cline/",
+                "match": "prefix",
+                "path_type": "vscode_storage",
+                "precision": "medium",
+                "weight": 0.45,
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "VS Code extension; config at VS Code globalStorage",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "AI-powered autonomous coding agent / multi-agent dev team inside editor",
+        "confidence": "high",
+        "evidence_summary": "VS Code extension; config at ~/Library/Application Support/Code/User/globalStorage/rooveterinaryinc.roo-cline/",
+        "source_ids": [
+          "src_github_com_roocodeinc_roo_code"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "automa": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Automa",
+        "app_id": "automa",
+        "source_records": [
+          {
+            "id": "src_github_com_automaapp_automa",
+            "name": "Automa GitHub Repository",
+            "url": "https://github.com/AutomaApp/automa",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Automa browser automation extension"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "browser_extension",
+          "automation"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 82
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "automa.app",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "automa",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [],
+            "chrome_extension_ids": [
+              {
+                "value": "infppggnoaenmfagbfknfkancpbljcca",
+                "match": "exact",
+                "precision": "high",
+                "weight": 0.95,
+                "verification_status": "verified"
+              }
+            ],
+            "safari_extension_bundle_ids": [],
+            "notes": "Browser automation extension; Chrome extension ID infppggnoaenmfagbfknfkancpbljcca",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "Popular open-source browser automation extension",
+        "confidence": "high",
+        "evidence_summary": "Chrome extension ID: infppggnoaenmfagbfknfkancpbljcca; domain automa.app",
+        "source_ids": [
+          "src_github_com_automaapp_automa"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "skyvern": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Skyvern",
+        "app_id": "skyvern",
+        "source_records": [
+          {
+            "id": "src_github_com_skyvern_ai_skyvern",
+            "name": "Skyvern GitHub Repository",
+            "url": "https://github.com/Skyvern-AI/skyvern",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Skyvern AI browser-workflow automation platform"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "browser_automation",
+          "workflow_platform"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 84
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "skyvern.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "api.skyvern.com",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.9,
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "skyvern",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.skyvern",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "AI browser-workflow automation platform; often cloud-managed",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "AI browser-workflow automation platform; strong agentic workflow fit, often cloud-managed",
+        "confidence": "high",
+        "evidence_summary": "Browser automation platform; domains skyvern.com, api.skyvern.com",
+        "source_ids": [
+          "src_github_com_skyvern_ai_skyvern"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "composio": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Composio",
+        "app_id": "composio",
+        "source_records": [
+          {
+            "id": "src_github_com_composiohq_composio",
+            "name": "Composio GitHub Repository",
+            "url": "https://github.com/ComposioHQ/composio",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Composio agent tooling/integration platform"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "tooling_layer",
+          "integration_platform"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 83
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "backend.composio.dev",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "api_provider",
+              "precision": "high",
+              "weight": 0.95,
+              "source_ids": [
+                "src_github_com_composiohq_composio"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "composio.dev",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.9,
+              "source_ids": [
+                "src_github_com_composiohq_composio"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "docs.composio.dev",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "docs_host",
+              "precision": "high",
+              "weight": 0.85,
+              "source_ids": [
+                "src_github_com_composiohq_composio"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "platform.composio.dev",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "dashboard",
+              "precision": "high",
+              "weight": 0.85,
+              "source_ids": [
+                "src_github_com_composiohq_composio"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            },
+            {
+              "pattern": "connect.composio.dev",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "mcp_gateway",
+              "precision": "high",
+              "weight": 0.85,
+              "source_ids": [
+                "src_github_com_composiohq_composio"
+              ],
+              "last_verified_at": "2026-03-19",
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "composio",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.config/composio",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "source_ids": [
+                  "src_github_com_composiohq_composio"
+                ],
+                "last_verified_at": "2026-03-19",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Agent tooling/integration platform; unified API for 1000+ toolkits",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Popular action/tooling substrate for agents",
+        "confidence": "high",
+        "evidence_summary": "Agent tooling platform; domains composio.dev, backend.composio.dev",
+        "source_ids": [
+          "src_github_com_composiohq_composio"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "agenticseek": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "AgenticSeek",
+        "app_id": "agenticseek",
+        "source_records": [
+          {
+            "id": "src_github_com_fosowl_agenticseek",
+            "name": "AgenticSeek GitHub Repository",
+            "url": "https://github.com/Fosowl/agenticSeek",
+            "source_type": "official_repo",
+            "why_it_matters": "Official AgenticSeek local voice-enabled autonomous AI agent"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "local_agent",
+          "voice_agent",
+          "coding_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 85
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "agenticseek",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "agenticseek",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/agenticSeek/config.ini",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45
+              },
+              {
+                "value": "~/agenticSeek/.env",
+                "match": "exact",
+                "path_type": "env_file",
+                "precision": "medium",
+                "weight": 0.45
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Local voice-enabled AI agent; config at ~/agenticSeek/config.ini",
+            "host_signal_status": "verified"
+          }
+        },
+        "notes": "100% local Manus-style assistant; autonomous browsing, coding, planning",
+        "confidence": "high",
+        "evidence_summary": "Local voice agent; config at ~/agenticSeek/config.ini",
+        "source_ids": [
+          "src_github_com_fosowl_agenticseek"
+        ],
+        "verification_status": "verified"
+      }
+    },
+    "openmanus": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "OpenManus",
+        "app_id": "openmanus",
+        "source_records": [
+          {
+            "id": "src_github_com_foundationagents_openmanus",
+            "name": "OpenManus GitHub Repository",
+            "url": "https://github.com/FoundationAgents/OpenManus",
+            "source_type": "official_repo",
+            "why_it_matters": "Official OpenManus general-purpose open agent platform"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "python_app",
+          "multi_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 83
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "openmanus",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            },
+            {
+              "pattern": "foundationagents",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "python",
+                "match": "exact",
+                "precision": "low",
+                "weight": 0.3,
+                "notes": "Python running OpenManus main.py",
+                "verification_status": "inferred"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/OpenManus/config/config.toml",
+                "match": "exact",
+                "path_type": "config_file",
+                "precision": "medium",
+                "weight": 0.45,
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Open-source agent platform; installation via conda/uv; run main.py",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Open-source agent platform / Manus replication; installation via conda/uv",
+        "confidence": "high",
+        "evidence_summary": "CLI agent platform; config at ~/OpenManus/config/config.toml",
+        "source_ids": [
+          "src_github_com_foundationagents_openmanus"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "upsonic": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Upsonic",
+        "app_id": "upsonic",
+        "source_records": [
+          {
+            "id": "src_github_com_upsonic_upsonic",
+            "name": "Upsonic GitHub Repository",
+            "url": "https://github.com/Upsonic/Upsonic",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Upsonic agent framework for regulated industries"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "framework",
+          "enterprise_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 80
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "upsonic.ai",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "upsonic",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/Library/Application Support/CrewAI/",
+                "match": "prefix",
+                "path_type": "data_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "notes": "CrewAI/Upsonic shared storage",
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Agent framework with strong enterprise positioning",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Agent framework with strong enterprise positioning",
+        "confidence": "high",
+        "evidence_summary": "Enterprise agent framework; domain upsonic.ai",
+        "source_ids": [
+          "src_github_com_upsonic_upsonic"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "yao": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Yao",
+        "app_id": "yao",
+        "source_records": [
+          {
+            "id": "src_github_com_yaoapp_yao",
+            "name": "Yao GitHub Repository",
+            "url": "https://github.com/YaoApp/yao",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Yao autonomous agent runtime/engine"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "runtime",
+          "cli",
+          "web"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 79
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "yaoapp",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "yao",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Open-source engine for autonomous agents; event-driven, proactive, self-scheduling",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Open-source engine for autonomous agents; event-driven, proactive, self-scheduling",
+        "confidence": "high",
+        "evidence_summary": "Agent runtime/engine; CLI process yao",
+        "source_ids": [
+          "src_github_com_yaoapp_yao"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "ruflo": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Ruflo",
+        "app_id": "ruflo",
+        "source_records": [
+          {
+            "id": "src_github_com_ruvnet_ruflo",
+            "name": "Ruflo GitHub Repository",
+            "url": "https://github.com/ruvnet/ruflo",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Ruflo agent orchestration for Claude-style agents"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "orchestration"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 81
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "ruflo",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "ruflo",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Agent orchestration project with significant star traction",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Agent orchestration for Claude-style agents",
+        "confidence": "high",
+        "evidence_summary": "CLI orchestration agent; process ruflo",
+        "source_ids": [
+          "src_github_com_ruvnet_ruflo"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "pentagi": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Pentagi",
+        "app_id": "pentagi",
+        "source_records": [
+          {
+            "id": "src_github_com_vxcontrol_pentagi",
+            "name": "Pentagi GitHub Repository",
+            "url": "https://github.com/vxcontrol/pentagi",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Pentagi autonomous AI agents for pentesting"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "security_runtime"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL",
+            "R_SUPPLY_CHAIN"
+          ],
+          "severity": "high",
+          "priority_score": 88
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "pentagi",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "pentagi",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "Autonomous agent system for offensive security / pentesting",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "Autonomous agent system for offensive security / pentesting",
+        "confidence": "high",
+        "evidence_summary": "CLI security agent; process pentagi",
+        "source_ids": [
+          "src_github_com_vxcontrol_pentagi"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "osaurus": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Osaurus",
+        "app_id": "osaurus",
+        "source_records": [
+          {
+            "id": "src_github_com_osaurus_ai_osaurus",
+            "name": "Osaurus GitHub Repository",
+            "url": "https://github.com/osaurus-ai/osaurus",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Osaurus AI edge infrastructure for macOS MCP server"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "mcp_server",
+          "macos_infra"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 82
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "osaurus",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "osaurus",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "~/.osaurus",
+                "match": "prefix",
+                "path_type": "config_dir",
+                "precision": "medium",
+                "weight": 0.45,
+                "verification_status": "inferred"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "AI edge infrastructure for macOS; full MCP server",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "AI edge infrastructure for macOS; full MCP server that lets AI agents access installed tools",
+        "confidence": "high",
+        "evidence_summary": "MCP server for macOS; config at ~/.osaurus",
+        "source_ids": [
+          "src_github_com_osaurus_ai_osaurus"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "superset": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "Superset",
+        "app_id": "superset",
+        "source_records": [
+          {
+            "id": "src_github_com_superset_sh_superset",
+            "name": "Superset GitHub Repository",
+            "url": "https://github.com/superset-sh/superset",
+            "source_type": "official_repo",
+            "why_it_matters": "Official Superset IDE for AI agents"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "desktop_ide",
+          "coding_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 78
+        },
+        "network": {
+          "hostname_patterns": [
+            {
+              "pattern": "superset.sh",
+              "match": "suffix",
+              "match_on": [
+                "dns",
+                "tls_sni"
+              ],
+              "role": "app_brand",
+              "precision": "high",
+              "weight": 0.95,
+              "verification_status": "verified"
+            }
+          ],
+          "keyword_patterns": [
+            {
+              "pattern": "superset",
+              "match": "substring",
+              "weight": 0.2,
+              "precision": "medium"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "Superset",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [
+              {
+                "value": "/Applications/Superset.app",
+                "match": "exact",
+                "path_type": "app_bundle",
+                "precision": "medium",
+                "weight": 0.45,
+                "verification_status": "verified"
+              }
+            ],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "IDE for the AI-agents era; markets running multiple agents locally",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "IDE for the AI-agents era; markets running multiple agents locally on your machine",
+        "confidence": "high",
+        "evidence_summary": "Desktop IDE; domain superset.sh; app at /Applications/Superset.app",
+        "source_ids": [
+          "src_github_com_superset_sh_superset"
+        ],
+        "verification_status": "partial"
+      }
+    },
+    "pi_mono": {
+      "status": "DONE",
+      "updated_at": "2026-03-19",
+      "research": {
+        "project": "pi-mono",
+        "app_id": "pi_mono",
+        "source_records": [
+          {
+            "id": "src_github_com_badlogic_pi_mono",
+            "name": "pi-mono GitHub Repository",
+            "url": "https://github.com/badlogic/pi-mono",
+            "source_type": "official_repo",
+            "why_it_matters": "Official pi-mono AI agent toolkit with coding agent CLI"
+          }
+        ],
+        "category": "AI_AGENT_FRAMEWORK",
+        "product_shape": [
+          "macos"
+        ],
+        "product_type": [
+          "cli",
+          "tui",
+          "web_ui",
+          "coding_agent"
+        ],
+        "risk_profile": {
+          "risks": [
+            "R_AGENT_AUTOMATION",
+            "R_CREDENTIAL_EXPOSURE",
+            "R_PROMPT_EXFIL"
+          ],
+          "severity": "high",
+          "priority_score": 79
+        },
+        "network": {
+          "hostname_patterns": [],
+          "keyword_patterns": [
+            {
+              "pattern": "pi-mono",
+              "match": "substring",
+              "weight": 0.3,
+              "precision": "high"
+            }
+          ]
+        },
+        "host": {
+          "macos": {
+            "bundle_ids": [],
+            "process_names": [
+              {
+                "value": "pi-mono",
+                "match": "exact",
+                "precision": "medium",
+                "weight": 0.6,
+                "verification_status": "verified"
+              }
+            ],
+            "team_ids": [],
+            "directory_paths": [],
+            "chrome_extension_ids": [],
+            "safari_extension_bundle_ids": [],
+            "notes": "AI agent toolkit with coding agent CLI, TUI and web UI libraries",
+            "host_signal_status": "partial"
+          }
+        },
+        "notes": "AI agent toolkit with coding agent CLI, unified LLM API, TUI and web UI libraries",
+        "confidence": "high",
+        "evidence_summary": "CLI/TUI agent toolkit; process pi-mono",
+        "source_ids": [
+          "src_github_com_badlogic_pi_mono"
+        ],
+        "verification_status": "partial"
+      }
+    }
+  }
+}

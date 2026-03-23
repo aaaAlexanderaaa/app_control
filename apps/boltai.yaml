@@ -1,0 +1,43 @@
+id: boltai
+name: BoltAI
+category: AI_DESKTOP_ASSISTANT
+product_shape:
+- macos
+product_type:
+- desktop_client
+- chatbot
+severity: low
+priority_score: 60
+notes: Prefer BoltAI-owned domains and update hosts; avoid shared model-provider domains for enterprise detection.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/boltai.json
+      evidence: Homebrew cask exposes the BoltAI homepage on boltai.com and the macOS updater host on updates.boltai.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: boltai.com
+      match: suffix
+      role: app_brand
+    - pattern: updates.boltai.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: boltai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/boltai.json
+      evidence: Homebrew cask defines the BoltAI app bundle and BoltAI-specific application-script, container, and saved-state paths.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/BoltAI 2.app
+    - ~/Library/Application Scripts/co.podzim.boltai-mobile
+    - ~/Library/Containers/co.podzim.boltai-mobile
+    - ~/Library/Saved Application State/co.podzim.boltai-mobile.savedState
+    bundle_ids:
+    - co.podzim.boltai-mobile
+    process_names:
+    - BoltAI

@@ -1,0 +1,42 @@
+id: hastebin
+name: Hastebin
+category: PASTE_SHARING
+product_shape:
+- web
+product_type:
+- paste_sharing
+- code_snippet
+severity: medium
+priority_score: 73
+notes: Pasting code/logs can leak secrets; network signal is high precision via hastebin.com.
+references:
+- url: https://hastebin.com/
+  kind: official_site
+  summary: Official Hastebin service is served from hastebin.com.
+  checked_at: '2026-03-22'
+- url: https://raw.githubusercontent.com/toptal/haste-client/master/README.md
+  kind: upstream_readme
+  summary: Toptal's official Haste client README documents the haste CLI, default Haste server at hastebin.com, and the matching share server URL.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://hastebin.com/
+      evidence: The official Hastebin service is served from hastebin.com, so the reviewed network IOC keeps only that exact Hastebin hostname.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: hastebin.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: hastebin
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/toptal/haste-client/master/README.md
+      evidence: Toptal's official Haste client README documents the haste command-line client for Hastebin, so the retained host IOC is the exact haste process name.
+      checked_at: '2026-03-22'
+    process_names:
+    - haste

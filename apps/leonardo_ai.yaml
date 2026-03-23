@@ -1,0 +1,42 @@
+id: leonardo_ai
+name: Leonardo AI
+category: GENAI_MEDIA
+product_shape:
+- web
+product_type:
+- image_generation
+- media_editing
+severity: medium
+priority_score: 59
+notes: Keep Leonardo AI IOC on the exact Leonardo web host and the official app bundle identifier.
+references:
+- url: https://leonardo.ai/
+  kind: official_site
+  summary: Official Leonardo AI site is served from leonardo.ai.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=1662773014
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for Leonardo.Ai - Image Generator returns bundle ID ai.leonardo.Leonardo from seller Leonardo Interactive Pty Ltd.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://leonardo.ai/
+      evidence: The official Leonardo AI product site is served from leonardo.ai, so the reviewed network IOC set keeps only that exact Leonardo-owned host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: leonardo.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: leonardo ai
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=1662773014
+      evidence: Apple's official lookup metadata for Leonardo.Ai - Image Generator returns bundle identifier ai.leonardo.Leonardo from seller Leonardo Interactive Pty Ltd., so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - ai.leonardo.Leonardo

@@ -1,0 +1,48 @@
+id: forgecode
+name: ForgeCode
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- cli_agent
+severity: high
+priority_score: 85
+notes: ForgeCode's reviewed IOC stays on the exact forgecode.dev host and the source-documented ~/.config/forge/history artifact, avoiding generic home-directory .env indicators.
+references:
+- url: https://forgecode.dev/docs/
+  kind: official_docs
+  summary: Official docs live on forgecode.dev and document the ForgeCode CLI install and usage surface.
+  checked_at: '2026-03-21'
+- url: https://forgecode.dev/docs/environment-configuration/
+  kind: official_docs
+  summary: Environment configuration docs define FORGE_HISTORY_FILE=~/.config/forge/history.
+  checked_at: '2026-03-21'
+- url: https://forgecode.dev/docs/cli-reference/
+  kind: official_docs
+  summary: CLI reference documents the forge command.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://forgecode.dev/docs/
+      evidence: ForgeCode's official documentation and CLI install surface are published on forgecode.dev, so the reviewed network IOC set keeps only that exact first-party host.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: forgecode.dev
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: forgecode
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://forgecode.dev/docs/environment-configuration/
+      evidence: ForgeCode's official environment configuration page defines FORGE_HISTORY_FILE=~/.config/forge/history, and the CLI reference documents the forge command, so the reviewed host IOC is limited to that exact history path and process name.
+      checked_at: '2026-03-21'
+    paths:
+    - ~/.config/forge/history
+    process_names:
+    - forge

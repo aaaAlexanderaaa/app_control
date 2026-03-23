@@ -1,0 +1,47 @@
+id: v0
+name: v0
+category: GENAI_CODING
+product_shape:
+- web
+product_type:
+- coding
+- ui_generator
+severity: medium
+priority_score: 78
+notes: Reviewed IOC stays on Vercel's exact v0 web and mobile entrypoints and avoids broad Vercel-wide parent-domain matching.
+references:
+- url: https://v0.dev/
+  kind: official_site
+  summary: Official v0 product site is served from v0.dev.
+  checked_at: '2026-03-22'
+- url: https://itunes.apple.com/lookup?id=6745097949
+  kind: apple_lookup_api
+  summary: Apple lookup metadata for v0 returns bundle ID com.vercel.v0 from seller Vercel, Inc and seller URL https://v0.app.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://v0.dev/
+      evidence: The official v0 web product is served from v0.dev, and Apple's lookup metadata for the official mobile app links back to the first-party seller URL https://v0.app, so the reviewed network IOC set keeps only those exact Vercel-owned v0 hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: v0.dev
+      match: exact
+      role: app_brand
+    - pattern: v0.app
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: v0.dev
+      match: substring
+    - pattern: vercel v0
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6745097949
+      evidence: Apple's official lookup metadata for v0 returns bundle identifier com.vercel.v0 from seller Vercel, Inc, so the retained host IOC is the exact reviewed bundle ID.
+      checked_at: '2026-03-22'
+    bundle_ids:
+    - com.vercel.v0

@@ -1,0 +1,51 @@
+id: cursor
+name: Cursor
+category: GENAI_CODING
+product_shape:
+- macos
+product_type:
+- coding
+- ide
+severity: high
+priority_score: 78
+notes: Official docs describe data collection and network egress patterns for AI requests.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/cursor.rb
+      evidence: The Homebrew cask sets the official homepage to https://www.cursor.com/, downloads the app from https://downloads.cursor.com/..., and checks for updates at https://api2.cursor.sh/updates/...; the reviewed network IOC set keeps those Cursor-specific hosts and drops shared model-provider domains.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.cursor.com
+      match: exact
+      role: app_brand
+    - pattern: downloads.cursor.com
+      match: exact
+      role: file_download
+    - pattern: api2.cursor.sh
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: cursor.sh
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/cursor.rb
+      evidence: The Homebrew cask installs Cursor.app and zaps ~/.cursor, ~/.cursor-tutor, Cursor updater/application-support, cache, ShipIt, HTTP storage, log, preferences, and saved-state paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Cursor.app
+    - ~/.cursor
+    - ~/.cursor-tutor
+    - ~/Library/Application Support/Caches/cursor-updater
+    - ~/Library/Application Support/Cursor
+    - ~/Library/Caches/com.todesktop.*
+    - ~/Library/Caches/com.todesktop.*.ShipIt
+    - ~/Library/HTTPStorages/com.todesktop.*
+    - ~/Library/Logs/Cursor
+    - ~/Library/Preferences/ByHost/com.todesktop.*.ShipIt.*.plist
+    - ~/Library/Preferences/com.todesktop.*.plist
+    - ~/Library/Saved Application State/com.todesktop.*.savedState
+    - ~/Library/Saved Application State/todesktop.com.ToDesktop-Installer.savedState

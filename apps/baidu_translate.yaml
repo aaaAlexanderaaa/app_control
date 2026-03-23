@@ -1,0 +1,47 @@
+id: baidu_translate
+name: Baidu Translate
+category: TRANSLATION
+product_shape:
+- web
+product_type:
+- translation
+severity: low
+priority_score: 55
+notes: Reviewed IOC stays on fanyi.baidu.com and the official Baidu Translate Chrome extension ID published on Baidu's plugin install page.
+references:
+- url: https://fanyi.baidu.com/
+  kind: official_site
+  summary: Official Baidu Translate product site is served from fanyi.baidu.com and advertises the product's web and desktop surfaces.
+  checked_at: '2026-03-22'
+- url: https://fanyi.baidu.com/static/webpage/pluginPage.html
+  kind: official_docs
+  summary: Official Baidu Translate plugin install page tells users to install the Chrome extension from the Chrome Web Store.
+  checked_at: '2026-03-22'
+- url: https://chrome.google.com/webstore/detail/%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91%EF%BC%9A%E7%BD%91%E9%A1%B5%E7%BF%BB%E8%AF%91%E3%80%81%E6%B5%B7%E6%B7%98%E7%A5%9E%E5%99%A8/edhchknefojhifoiebpcbkhcjlkkklci?hl=zh-CN
+  kind: chrome_web_store
+  summary: Chrome Web Store URL embedded by Baidu's official plugin page resolves to extension ID edhchknefojhifoiebpcbkhcjlkkklci.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://fanyi.baidu.com/
+      evidence: Baidu's official Translate product and plugin install pages are both served from fanyi.baidu.com, so the reviewed network IOC keeps only that exact product host instead of broader baidu.com coverage.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: fanyi.baidu.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: baidu fanyi
+      match: substring
+    - pattern: 百度翻译
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://fanyi.baidu.com/static/webpage/pluginPage.html
+      evidence: Baidu's official Chrome plugin install page links users to the Chrome Web Store item that resolves to extension ID edhchknefojhifoiebpcbkhcjlkkklci, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - edhchknefojhifoiebpcbkhcjlkkklci

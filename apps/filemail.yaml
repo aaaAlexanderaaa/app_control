@@ -1,0 +1,39 @@
+id: filemail
+name: Filemail
+category: FILE_TRANSFER
+product_shape:
+- web
+- macos
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: Prefer Filemail-owned product pages and official installer redirect targets; avoid unrelated third-party infrastructure except the exact installer host.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.filemail.com/apps/mac-desktop
+      evidence: Filemail’s official macOS desktop page is hosted on www.filemail.com, uses Filemail-branded assets on filemail.b-cdn.net, and redirects the Mac installer link to the exact download host filemailprod.blob.core.windows.net.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: www.filemail.com
+      match: exact
+      role: app_brand
+    - pattern: filemail.b-cdn.net
+      match: exact
+      role: platform_service
+    - pattern: filemailprod.blob.core.windows.net
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: filemail
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.filemail.com/apps/mac-desktop
+      evidence: Inference from Filemail’s official desktop app page and the published macOS installer name Filemail_Desktop_Setup_macos.dmg; retained host IOC is limited to the Filemail desktop app name implied by the official naming.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Filemail*.app

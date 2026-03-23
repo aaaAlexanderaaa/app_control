@@ -1,0 +1,61 @@
+id: quark_cloud_drive
+name: Quark Cloud Drive
+category: CLOUD_STORAGE
+product_shape:
+- web
+- macos
+product_type:
+- cloud_drive
+- sync
+severity: medium
+priority_score: 73
+notes: Prefer exact Quark Cloud Drive service and download hosts from Quark's official page and client APIs; avoid broad quark.cn parent matching.
+references:
+- url: https://pan.quark.cn/
+  kind: official_site
+  summary: Official Quark Cloud Drive page advertises the desktop client and macOS download option.
+  checked_at: '2026-03-21'
+- url: https://pan.quark.cn/api/client_version
+  kind: official_api
+  summary: Official client version API returns current Quark Cloud Drive macOS package URLs on download.quark.cn and pdds.quark.cn.
+  checked_at: '2026-03-21'
+- url: https://pan.quark.cn/api/desktop_buwang_config
+  kind: official_api
+  summary: Official desktop download API returns darwin download routes that redirect to QuarkCloudDriveMac DMGs on umcdn.quark.cn.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://pan.quark.cn/api/client_version
+      evidence: Quark's official cloud-drive page and APIs expose the product host pan.quark.cn, the download broker download.quark.cn, and current macOS package hosts pdds.quark.cn and umcdn.quark.cn for Quark Cloud Drive desktop builds; the reviewed network IOC set keeps only those exact cloud-drive hosts.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: pan.quark.cn
+      match: exact
+      role: app_brand
+    - pattern: download.quark.cn
+      match: exact
+      role: file_download
+    - pattern: pdds.quark.cn
+      match: exact
+      role: file_download
+    - pattern: umcdn.quark.cn
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: quarkclouddrive
+      match: substring
+    - pattern: quark cloud drive
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://pan.quark.cn/api/desktop_buwang_config
+      evidence: The official Quark desktop download APIs publish darwin installers named QuarkCloudDriveMac_v3.6.0_...dmg and QuarkCloudDrive_v3.24.0_...dmg; retained host IOC is therefore limited to those installer-backed app and process names.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/QuarkCloudDrive*.app
+    process_names:
+    - QuarkCloudDrive
+    - QuarkCloudDriveMac

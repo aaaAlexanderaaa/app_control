@@ -1,0 +1,49 @@
+id: zamzar
+name: Zamzar
+category: DOC_CONVERSION_UPLOAD
+product_shape:
+- web
+product_type:
+- document_conversion
+- file_processing
+severity: low
+priority_score: 60
+notes: Zamzar offers an official browser extension and developer/API surface, so the reviewed IOC set stays on exact Zamzar-owned hosts and the official extension ID.
+references:
+- url: https://www.zamzar.com/
+  kind: official_site
+  summary: Official Zamzar site is served from www.zamzar.com and links to Zamzar-owned product surfaces.
+  checked_at: '2026-03-22'
+- url: https://www.zamzar.com/tools/
+  kind: official_site
+  summary: Official Zamzar tools page documents browser-based conversion workflows and links to the developer portal.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/zamzar-convert-files/dhkddichhdneakoipnkclldommdcplil?hl=en
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID dhkddichhdneakoipnkclldommdcplil and Zamzar-owned support contacts.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://www.zamzar.com/tools/
+      evidence: Zamzar's official site is served from www.zamzar.com and links to the Zamzar developer portal on developers.zamzar.com, so the reviewed network IOC keeps only those exact Zamzar-owned hosts.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: www.zamzar.com
+      match: exact
+      role: app_brand
+    - pattern: developers.zamzar.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: zamzar
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/zamzar-convert-files/dhkddichhdneakoipnkclldommdcplil?hl=en
+      evidence: The official Chrome Web Store listing for Zamzar uses the stable extension identifier dhkddichhdneakoipnkclldommdcplil, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - dhkddichhdneakoipnkclldommdcplil

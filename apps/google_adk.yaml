@@ -1,0 +1,53 @@
+id: google_adk
+name: Google ADK
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- macos
+product_type:
+- agent_framework
+- automation
+severity: high
+priority_score: 84
+notes: Keep Google ADK IOC on the exact ADK docs host and the source-defined .adk session/artifact paths instead of broad Google infrastructure or generic .env files.
+references:
+- url: https://raw.githubusercontent.com/google/adk-python/main/README.md
+  kind: upstream_readme
+  summary: README links the official Google ADK documentation on google.github.io/adk-docs and shows the adk CLI workflow.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/google/adk-python/main/pyproject.toml
+  kind: upstream_metadata
+  summary: pyproject.toml registers the adk console script.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/google/adk-python/main/src/google/adk/cli/utils/local_storage.py
+  kind: upstream_source
+  summary: Local storage source defines .adk/session.db and .adk/artifacts for local ADK state.
+  checked_at: '2026-03-21'
+- url: https://raw.githubusercontent.com/google/adk-python/main/src/google/adk/cli/cli_create.py
+  kind: upstream_source
+  summary: Project creation code writes an agent-local .env file but leaves persistent ADK state under .adk.
+  checked_at: '2026-03-21'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/google/adk-python/main/README.md
+      evidence: The upstream README points users to the official ADK documentation on google.github.io/adk-docs, so the reviewed network IOC set keeps only the exact google.github.io host used by Google ADK docs.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: google.github.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: google adk
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/google/adk-python/main/src/google/adk/cli/utils/local_storage.py
+      evidence: Google ADK's local storage source explicitly writes sessions to .adk/session.db and artifacts under .adk/artifacts, while pyproject.toml defines the adk CLI entry point.
+      checked_at: '2026-03-21'
+    paths:
+    - .adk/session.db
+    - .adk/artifacts
+    process_names:
+    - adk

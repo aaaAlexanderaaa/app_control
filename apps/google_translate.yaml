@@ -1,0 +1,43 @@
+id: google_translate
+name: Google Translate
+category: TRANSLATION
+product_shape:
+- web
+product_type:
+- translation
+severity: low
+priority_score: 55
+notes: Reviewed IOC stays on translate.google.com and the official Google Translate Chrome extension, avoiding broad Google-wide domains.
+references:
+- url: https://translate.google.com/
+  kind: official_site
+  summary: Official Google Translate web app is served from translate.google.com.
+  checked_at: '2026-03-22'
+- url: https://chromewebstore.google.com/detail/google-translate/aapbdbdomjkkjkaonfhkkikfgjllcleb
+  kind: chrome_web_store
+  summary: Chrome Web Store listing exposes extension ID aapbdbdomjkkjkaonfhkkikfgjllcleb and identifies translate.google.com as the website.
+  checked_at: '2026-03-22'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://translate.google.com/
+      evidence: The official Google Translate web app is served from translate.google.com, and the Chrome Web Store listing for the official extension also points back to translate.google.com, so the reviewed network IOC keeps only that exact product host.
+      checked_at: '2026-03-22'
+    hostname_patterns:
+    - pattern: translate.google.com
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: google translate
+      match: substring
+    - pattern: translate.google
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://chromewebstore.google.com/detail/google-translate/aapbdbdomjkkjkaonfhkkikfgjllcleb
+      evidence: The official Chrome Web Store listing for Google Translate uses the stable extension identifier aapbdbdomjkkjkaonfhkkikfgjllcleb, so the retained host IOC is the exact reviewed Chrome extension ID.
+      checked_at: '2026-03-22'
+    chrome_extension_ids:
+    - aapbdbdomjkkjkaonfhkkikfgjllcleb

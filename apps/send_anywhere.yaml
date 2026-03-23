@@ -1,0 +1,46 @@
+id: send_anywhere
+name: Send Anywhere
+category: FILE_TRANSFER
+product_shape:
+- web
+- macos
+product_type:
+- file_transfer
+severity: medium
+priority_score: 73
+notes: Prefer Send Anywhere-owned service and update hosts rather than unrelated third-party CDN or analytics infrastructure.
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://send-anywhere.com/
+      evidence: Send Anywhere’s official homepage references the file-transfer service under send-anywhere.com and defines the feed endpoint https://feed.send-anywhere.com/api; the official Homebrew cask downloads the macOS installer from update.send-anywhere.com.
+      checked_at: '2026-03-21'
+    hostname_patterns:
+    - pattern: send-anywhere.com
+      match: suffix
+      role: app_brand
+    - pattern: feed.send-anywhere.com
+      match: exact
+      role: platform_service
+    - pattern: update.send-anywhere.com
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: send-anywhere
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://formulae.brew.sh/api/cask/send-anywhere.json
+      evidence: Homebrew cask installs Send Anywhere.app and zaps the Send Anywhere-specific Application Support, log, and preference paths on macOS.
+      checked_at: '2026-03-21'
+    paths:
+    - /Applications/Send Anywhere.app
+    - ~/Library/Application Support/Send Anywhere
+    - ~/Library/Logs/Send Anywhere
+    - ~/Library/Preferences/com.estmob.osx.sendanywhere.plist
+    bundle_ids:
+    - com.estmob.osx.sendanywhere
+    process_names:
+    - Send Anywhere
