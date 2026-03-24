@@ -48,16 +48,13 @@ This repository is the internal source of truth for high-risk or unmanaged appli
 - `make build-canary` — generate reviewed-plus canary artifacts.
 - `make build-by-category-prod` — generate validated per-category ES|QL and host artifacts.
 - `make build-by-category-canary` — generate reviewed-plus per-category artifacts.
-- `make research-homebrew APP=<id>` — research IoCs from Homebrew metadata.
-- `make research-crtsh DOMAIN=<domain>` — discover subdomains via crt.sh.
-- `make research-app APP=<id>` — run full app research pipeline.
-- `scripts/catalog/*`, `scripts/generate/*`, `scripts/research/*` — stable human-friendly wrappers.
+- `make research APP=<id>` — run full app research pipeline (Homebrew + crt.sh + quality assessment).
+- `scripts/catalog/*`, `scripts/generate/*`, `scripts/research` — stable human-friendly wrappers.
 
 ## Documentation
 
 - `docs/PROJECT_STANDARD.md` — this file; repository governance and layout rules.
-- `docs/QUALITY_STANDARDS.md` — what makes a good IoC, app YAML, category, and project state.
-- `docs/APP_ANALYSIS_PLAYBOOK.md` — standardized process for researching new applications.
+- `docs/QUALITY_STANDARDS.md` — quality bar (IoC, app, category, project) and standardized analysis process.
 
 ## Definition of "Repository-Ready" for Internal Use
 

@@ -59,28 +59,25 @@ tools/
   validate.py                # validate all app files against schema
   migrate.py                 # one-time migration from old catalog JSON
   status.py                  # coverage and status breakdown report
-  research_homebrew.py       # Homebrew cask/formula IoC research
-  research_crtsh.py          # crt.sh subdomain discovery
-  research_app.py            # unified app research pipeline
+  research.py                # IoC research (Homebrew, crt.sh, full pipeline)
 
 scripts/
   app-control                # single wrapper for the unified CLI
   catalog/                   # supported catalog operations
   generate/                  # supported artifact generation entrypoints
   enrich/                    # supported enrichment entrypoints
-  research/                  # app analysis and research entrypoints
+  research                   # IoC research entrypoint
 
 docs/
   PROJECT_STANDARD.md        # repository governance and layout rules
-  QUALITY_STANDARDS.md       # IoC, app, category, and project quality bar
-  APP_ANALYSIS_PLAYBOOK.md   # standardized app research process
+  QUALITY_STANDARDS.md       # quality bar and analysis process
 
 output/                      # generated detection artifacts (gitignored)
 archive/                     # legacy monolithic catalog and research data
 scratch/                     # temporary experiments only; promote or delete
 ```
 
-For repository rules and what belongs in each path, see `docs/PROJECT_STANDARD.md`. For quality criteria, see `docs/QUALITY_STANDARDS.md`. For the standardized app analysis process, see `docs/APP_ANALYSIS_PLAYBOOK.md`.
+For repository rules and what belongs in each path, see `docs/PROJECT_STANDARD.md`. For quality criteria and the standardized analysis process, see `docs/QUALITY_STANDARDS.md`.
 
 ## Supported Commands
 
@@ -112,26 +109,24 @@ scripts/generate/category-alerts --min-status reviewed --output-dir output
 
 ### Research Commands
 
-Standardized analysis tools for researching new or existing apps (see `docs/APP_ANALYSIS_PLAYBOOK.md`):
+Standardized analysis tools for researching new or existing apps (see `docs/QUALITY_STANDARDS.md`):
 
 ```bash
-# Research a single app via Homebrew metadata (host + network IoCs)
-make research-homebrew APP=cursor
-scripts/research/homebrew --app cursor
-
-# Discover subdomains via Certificate Transparency logs
-make research-crtsh DOMAIN=cursor.sh
-scripts/research/crtsh --domain cursor.sh
-
 # Full research pipeline (Homebrew + crt.sh + quality assessment)
-make research-app APP=cursor
-scripts/research/app --app cursor
+make research APP=cursor
+scripts/research --app cursor
+
+# Homebrew only
+make research APP=cursor SOURCE=homebrew
+
+# crt.sh subdomain discovery only
+make research DOMAIN=cursor.sh SOURCE=crtsh
 
 # List all known Homebrew mappings
-scripts/research/homebrew --list-known
+scripts/research --list-known
 
-# Output as JSON for downstream processing
-scripts/research/app --app cursor --format json
+# JSON output for downstream processing
+scripts/research --app cursor --format json
 ```
 
 ## IOC Status Lifecycle

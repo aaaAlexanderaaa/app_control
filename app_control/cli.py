@@ -22,9 +22,7 @@ COMMANDS: dict[str, tuple[str, str, str]] = {
     "export-iocs": ("tools.export_ioc_list", "main", "Export IOC data in markdown or JSON."),
     "export-metadata": ("tools.export_app_metadata", "main", "Export app category and priority metadata."),
     "recompute-priority": ("tools.recompute_priority_scores", "main", "Recompute priority_score from governance risk bands."),
-    "research-homebrew": ("tools.research_homebrew", "main", "Research IoCs from Homebrew cask/formula metadata."),
-    "research-crtsh": ("tools.research_crtsh", "main", "Discover subdomains via crt.sh Certificate Transparency."),
-    "research-app": ("tools.research_app", "main", "Run full app research pipeline."),
+    "research": ("tools.research", "main", "Research IoC candidates (Homebrew, crt.sh, or full pipeline)."),
 }
 
 

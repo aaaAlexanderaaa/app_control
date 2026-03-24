@@ -1,6 +1,6 @@
 # Quality Standards
 
-This document defines the quality bar for every artifact in the catalog: individual IoCs, app YAML files, categories, and the project as a whole. "Acceptable" means the artifact passes validation; "excellent" means it actively makes the catalog more reliable and actionable.
+This document defines the quality bar for every artifact in the catalog and the standardized process for producing them. "Acceptable" means the artifact passes validation; "excellent" means it actively makes the catalog more reliable and actionable.
 
 ## What Makes a Good IoC
 
@@ -60,13 +60,60 @@ This document defines the quality bar for every artifact in the catalog: individ
 
 - **Self-documenting.** A new agent or analyst can read the README, understand the quality bar, author a new app YAML, and know whether their work meets the standard — without asking anyone.
 
-## Applying These Standards
+---
 
-When authoring or reviewing an app YAML:
+## Analysis Process
 
-1. Run `make validate` — this is the minimum bar.
-2. Check each IoC against Uniqueness, Resilience, Independence, and Signal-to-noise.
-3. Verify provenance depth: prefer multi-source corroboration over single-URL evidence.
-4. Document intentional omissions in the `notes` field.
-5. Confirm the app does not duplicate patterns owned by another app in the category.
-6. Use `make status` to verify your change does not regress project-level quality metrics.
+The `app-control research` command automates the mechanical parts of app analysis. This section documents the decision logic so that results can be reviewed and manual steps filled in where automation cannot reach.
+
+### Research Sources by Installation Method
+
+| Installation method | Host IoC source | Network IoC source |
+|--------------------|----------------|-------------------|
+| Homebrew cask/formula | `research --source homebrew` | `research --source homebrew` + `--source crtsh` |
+| GitHub / `curl \| sh` | Manual: parse install script for paths | Manual: extract URLs from source |
+| DMG / PKG (closed-source) | Manual: BOM extraction (`lsbom`) | `research --source crtsh` on vendor domain |
+| Web-only | N/A | `research --source crtsh` on vendor domain |
+
+### Host IoC Decision Tree
+
+```
+Homebrew cask/formula available?
+├─ YES → app-control research --app <id> --source homebrew
+│        Extracts: /Applications/*.app, /opt/homebrew/bin/*, bundle IDs,
+│        uninstall paths, zap paths — all from explicit cask declarations.
+├─ Open source (GitHub/cargo/go/pip)?
+│  └─ Search repo for: ~/.appname, LaunchAgents, launchctl, XDG paths
+│     Check: install.sh, Makefile, setup.py post-install hooks
+│     Check: Cargo.toml [[bin]], Go main packages, console_scripts
+└─ Closed-source DMG/PKG?
+   ├─ Query Hybrid Analysis / OTX by hash (existing reports only)
+   └─ For PKGs: static unpack BOM → lsbom for file manifest
+```
+
+### Network IoC Decision Tree
+
+```
+Official firewall/security docs exist?
+├─ YES → highest-quality source; use directly
+└─ NO
+   ├─ Homebrew metadata → extracts homepage, download URL, appcast
+   ├─ crt.sh CT logs → app-control research --domain <domain> --source crtsh
+   │  Enumerates subdomains, classifies by relevance (api/telemetry/auth = high-value)
+   ├─ Source code search → hardcoded URLs, SUFeedURL, telemetry endpoints
+   └─ Confidence filter before recording:
+      ├─ Shared CDN (Cloudflare/AWS/Akamai) → exclude or mark cdn_static
+      ├─ Shared provider (api.openai.com) → mark ai_service_provider
+      ├─ Generic infra (*.googleapis.com without app prefix) → exclude
+      └─ App-exclusive (brand in domain, vendor-owned) → include ✓
+```
+
+### Checklist Before Commit
+
+1. `make validate` passes.
+2. Network IoCs: at least one `app_brand` hostname with `exact` or `suffix` match.
+3. Host IoCs: at least one path or bundle ID from direct evidence (not heuristic).
+4. Provenance URL is reachable and supports the claims.
+5. `notes` field explains intentional omissions.
+6. No duplicate hostnames with other apps in the same category.
+7. Self-check against Uniqueness, Resilience, Independence, Signal-to-noise.
