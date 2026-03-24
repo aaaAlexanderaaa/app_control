@@ -4,7 +4,7 @@ CATEGORY ?=
 CATEGORY_ARG := $(if $(strip $(CATEGORY)),--category $(CATEGORY),)
 CLI := $(PYTHON) -m app_control.cli
 
-.PHONY: help check validate status build-prod build-canary build-network-prod build-network-canary build-host-prod build-host-canary build-by-category-prod build-by-category-canary clean-output
+.PHONY: help check validate status build-prod build-canary build-network-prod build-network-canary build-host-prod build-host-canary build-by-category-prod build-by-category-canary clean-output research-homebrew research-crtsh research-app
 
 help:
 	@printf '%s\n' \
@@ -16,6 +16,13 @@ help:
 	  '  make build-by-category-prod       Generate validated per-category artifacts' \
 	  '  make build-by-category-canary     Generate reviewed+ per-category artifacts' \
 	  '  make build-prod CATEGORY=GENAI_CODING' \
+	  '' \
+	  'Research commands:' \
+	  '  make research-homebrew APP=cursor  Research IoCs from Homebrew metadata' \
+	  '  make research-crtsh DOMAIN=cursor.sh  Discover subdomains via crt.sh' \
+	  '  make research-app APP=cursor      Run full app research pipeline' \
+	  '' \
+	  'Other:' \
 	  '  python3 -m app_control.cli status' \
 	  '  scripts/app-control status' \
 	  '  make clean-output                 Remove generated artifacts from output/'
@@ -58,3 +65,22 @@ build-by-category-canary:
 
 clean-output:
 	rm -f $(OUTPUT_DIR)/*.esql $(OUTPUT_DIR)/*.sh $(OUTPUT_DIR)/*.md $(OUTPUT_DIR)/*.json
+
+# ── Research commands ──────────────────────────────────────────
+# Usage: make research-homebrew APP=cursor
+#        make research-crtsh DOMAIN=cursor.sh
+#        make research-app APP=cursor
+
+APP ?=
+DOMAIN ?=
+APP_ARG := $(if $(strip $(APP)),--app $(APP),)
+DOMAIN_ARG := $(if $(strip $(DOMAIN)),--domain $(DOMAIN),)
+
+research-homebrew:
+	$(CLI) research-homebrew $(APP_ARG)
+
+research-crtsh:
+	$(CLI) research-crtsh $(DOMAIN_ARG)
+
+research-app:
+	$(CLI) research-app $(APP_ARG)
