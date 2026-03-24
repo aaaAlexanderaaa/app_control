@@ -252,8 +252,22 @@ SHARED_CDN_SUFFIXES = {
     "amazonaws.com", "s3.amazonaws.com",
 }
 
+SHARED_HOSTING_EXACT = {
+    "github.com", "raw.githubusercontent.com", "objects.githubusercontent.com",
+    "codeload.github.com", "ghcr.io",
+    "pypi.org", "files.pythonhosted.org",
+    "registry.npmjs.org", "npmjs.com",
+    "crates.io", "static.crates.io",
+    "proxy.golang.org", "sum.golang.org",
+    "rubygems.org", "api.rubygems.org",
+    "dl.google.com", "storage.googleapis.com",
+    "download.docker.com", "registry.hub.docker.com",
+}
+
 
 def _is_shared_cdn(domain: str) -> bool:
+    if domain in SHARED_HOSTING_EXACT:
+        return True
     for suffix in SHARED_CDN_SUFFIXES:
         if domain == suffix or domain.endswith("." + suffix):
             return True
