@@ -14,11 +14,11 @@ This repository is the internal source of truth for high-risk or unmanaged appli
 - `apps/` — current catalog records, one YAML per application.
 - `schemas/` — frozen schema contracts for current catalog data.
 - `app_control/` — shared library and unified CLI entrypoint for supported operations.
-- `tools/` — catalog maintenance and validation implementations.
+- `tools/` — catalog maintenance, validation, enrichment, and research implementations.
 - `generators/` — detection artifact generators.
 - `scripts/` — shell wrappers for supported operator entrypoints.
 - `pyproject.toml` — packaging and console-entry metadata for internal installation.
-- `docs/` — governance, workflow, and repository standards.
+- `docs/` — governance, workflow, quality standards, and analysis playbooks.
 - `output/` — generated artifacts only; never hand-edit and never treat as source data.
 - `archive/` — historical or superseded material kept for traceability only.
 - `scratch/` — the only acceptable location for one-off experiments or temporary utilities.
@@ -48,7 +48,13 @@ This repository is the internal source of truth for high-risk or unmanaged appli
 - `make build-canary` — generate reviewed-plus canary artifacts.
 - `make build-by-category-prod` — generate validated per-category ES|QL and host artifacts.
 - `make build-by-category-canary` — generate reviewed-plus per-category artifacts.
-- `scripts/catalog/*` and `scripts/generate/*` — stable human-friendly wrappers around implementation scripts.
+- `make research APP=<id>` — run full app research pipeline (Homebrew + crt.sh + quality assessment).
+- `scripts/catalog/*`, `scripts/generate/*`, `scripts/research` — stable human-friendly wrappers.
+
+## Documentation
+
+- `docs/PROJECT_STANDARD.md` — this file; repository governance and layout rules.
+- `docs/QUALITY_STANDARDS.md` — quality bar (IoC, app, category, project) and standardized analysis process.
 
 ## Definition of "Repository-Ready" for Internal Use
 
