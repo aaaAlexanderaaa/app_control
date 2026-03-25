@@ -8,7 +8,12 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Microclaw's reviewed IOC stays on the exact microclaw.ai host and the source-backed ~/.microclaw data, working, and allowlist artifacts rather than loopback UI addresses or generic shell tooling.
+notes: >-
+  Microclaw's reviewed IOC stays on the exact `microclaw.ai` host and the
+  source-backed `~/.microclaw` data, working, and allowlist artifacts.
+  Excluded `localhost`, `127.0.0.1`, and generic shell tooling because they
+  are loopback or non-product-specific surfaces rather than stable Microclaw
+  service indicators.
 references:
 - url: https://raw.githubusercontent.com/microclaw/microclaw/main/README.md
   kind: upstream_readme

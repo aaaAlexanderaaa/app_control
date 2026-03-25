@@ -11,9 +11,14 @@ severity: critical
 priority_score: 95
 notes: >-
   ZeroClaw positions itself as a local private AI assistant and its official
-  repo explicitly warns against zeroclaw.org and zeroclaw.net impersonation;
-  use zeroclawlabs.ai and zeroclawlabs.cn as the trusted brand domains.
-  Reviewed IOC keeps first-party runtime indicators only.
+  repo explicitly warns against `zeroclaw.org` and `zeroclaw.net`
+  impersonation; manual re-review of the upstream README and current web
+  property confirms the trusted web surface is `zeroclawlabs.ai` and the exact
+  `www.zeroclawlabs.ai` host, while `zeroclawlabs.cn` no longer presents
+  ZeroClaw branding. Reviewed IOC keeps only those first-party runtime
+  indicators. Excluded `zeroclawlabs.cn`, `github.com`, and package or
+  distribution infrastructure because they no longer present consistent
+  ZeroClaw ownership or are shared surfaces.
 references:
 - url: https://github.com/zeroclaw-labs/zeroclaw
   kind: official_repo
@@ -29,16 +34,18 @@ iocs:
     provenance:
       url: https://zeroclawlabs.ai/
       evidence: >-
-        Official ZeroClaw web properties are served from `zeroclawlabs.ai` and
-        `zeroclawlabs.cn`, which the project treats as trusted first-party
-        brand domains.
+        The official ZeroClaw repository and current website identify
+        `zeroclawlabs.ai` as the trusted web property, and current web
+        resolution lands on the exact `www.zeroclawlabs.ai` host; the reviewed
+        network IOC therefore keeps only those consistent first-party ZeroClaw
+        surfaces.
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: zeroclawlabs.ai
-      match: suffix
+      match: exact
       role: app_brand
-    - pattern: zeroclawlabs.cn
-      match: suffix
+    - pattern: www.zeroclawlabs.ai
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: zeroclaw

@@ -9,18 +9,21 @@ product_type:
 severity: critical
 priority_score: 93
 notes: >-
-  macOS desktop app for OpenClaw bots from Sahara AI. Reviewed host IOC is
-  not yet retained because current evidence only re-validates the transient
-  download artifact name, not a stable install or runtime indicator.
+  macOS desktop app for OpenClaw bots from Sahara AI. DMG re-review confirms
+  the stable `Claw App.app` bundle name and bundle ID, so host IOC now keeps
+  only direct package metadata and the exact first-party product host.
+  Excluded `localhost` transport exceptions and embedded install helper assets
+  because they are local internals rather than stable ClawApp ownership
+  signals.
 references:
 - url: https://clawapp.saharaai.com/
   kind: official_site
-  summary: Official ClawApp site establishes clawapp.saharaai.com as the first-party host and links the current macOS download artifact.
-  checked_at: '2026-03-22'
-- url: https://api.github.com/repos/SaharaLabsAI/Claw_app/releases/latest
-  kind: github_release_api
-  summary: GitHub release metadata explicitly lists the current ClawApp macOS DMG asset name.
-  checked_at: '2026-03-22'
+  summary: Official ClawApp site establishes clawapp.saharaai.com as the first-party host and links the current macOS DMG.
+  checked_at: '2026-03-24'
+- url: https://github.com/SaharaLabsAI/Claw_app/releases/download/v0.0.2/Claw.App-0.0.2-arm64.dmg
+  kind: official_download_asset
+  summary: Official GitHub release DMG expands to `Claw App.app` and its Info.plist sets bundle ID `com.sorin.clawdbot`.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
@@ -29,7 +32,7 @@ iocs:
       evidence: >-
         Official ClawApp site identifies ClawApp as a macOS desktop app for
         OpenClaw bots on the exact `clawapp.saharaai.com` host.
-      checked_at: '2026-03-22'
+      checked_at: '2026-03-24'
     hostname_patterns:
     - pattern: clawapp.saharaai.com
       match: exact
@@ -38,13 +41,19 @@ iocs:
     - pattern: clawapp
       match: substring
   host:
-    status: draft
+    status: reviewed
     provenance:
-      url: https://api.github.com/repos/SaharaLabsAI/Claw_app/releases/latest
+      url: https://github.com/SaharaLabsAI/Claw_app/releases/download/v0.0.2/Claw.App-0.0.2-arm64.dmg
       evidence: >-
-        The latest official ClawApp release still only re-validates the
-        transient `Claw.App-0.0.2-arm64.dmg` download artifact. Because no
-        stable app-install path, bundle identifier, process name, or local
-        state location was confirmed, the reviewed host IOC was withdrawn
-        pending stronger validation.
-      checked_at: '2026-03-23'
+        The official v0.0.2 ClawApp DMG contains `Claw App.app`, and its
+        Info.plist sets `CFBundleIdentifier=com.sorin.clawdbot` and
+        `CFBundleExecutable=Claw App`, so the reviewed host IOC keeps only
+        those stable bundle artifacts.
+      checked_at: '2026-03-24'
+    paths:
+    - /Applications/Claw App.app
+    - ~/Applications/Claw App.app
+    bundle_ids:
+    - com.sorin.clawdbot
+    process_names:
+    - Claw App

@@ -8,7 +8,7 @@ product_type:
 - agent_runtime
 - autonomous_agent
 - event_driven
-severity: medium
+severity: high
 priority_score: 93
 notes: Open-source engine for autonomous agents; event-driven, proactive, self-scheduling. 7.5k GitHub stars.
 iocs:

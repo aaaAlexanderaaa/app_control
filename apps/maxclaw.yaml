@@ -2,17 +2,51 @@ id: maxclaw
 name: MaxClaw
 category: CLAW_FAMILY_APP
 product_shape:
-- macos
+- web
 product_type:
 - personal_agent
 - automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (D-中国变体/移动端); detailed IOC review pending.
+notes: >-
+  MaxClaw is MiniMax's official agent surface on `agent.minimax.io`. Keep IOC
+  on that exact hosted agent endpoint and the exact product keyword only.
+  Excluded the broader MiniMax mobile bundle and generic MiniMax parent
+  properties because current public materials do not expose a MaxClaw-specific
+  bundle ID, install path, or local runtime artifact.
+references:
+- url: https://agent.minimax.io/activity/max-claw
+  kind: official_site
+  summary: Official MiniMax MaxClaw activity page is hosted on agent.minimax.io.
+  checked_at: '2026-03-24'
+- url: https://itunes.apple.com/lookup?id=6742651446
+  kind: app_store_lookup
+  summary: Apple lookup metadata returns track name `MiniMax - Your AI Agent` with bundle ID `com.minimax.ai`, showing the mobile client is shared rather than MaxClaw-specific.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: urn:internal:archive:claw_ecosystem_full_report:2026-03-20
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://agent.minimax.io/activity/max-claw
+      evidence: >-
+        Official MiniMax materials publish MaxClaw on the exact
+        `agent.minimax.io` agent host, so the reviewed network IOC keeps only
+        that exact first-party surface and the exact MaxClaw keyword.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: agent.minimax.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: max[- ]?claw
+      match: regex
+  host:
+    status: reviewed
+    provenance:
+      url: https://itunes.apple.com/lookup?id=6742651446
+      evidence: >-
+        Apple lookup metadata exposes bundle ID `com.minimax.ai` for the wider
+        MiniMax client, not a MaxClaw-specific runtime. Because the public
+        MaxClaw page does not publish a distinct install path, bundle ID, or
+        local state path, the reviewed host IOC remains intentionally omitted.
+      checked_at: '2026-03-24'

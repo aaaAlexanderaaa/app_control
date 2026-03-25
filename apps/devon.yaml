@@ -8,23 +8,37 @@ product_type:
 - cli_agent
 severity: high
 priority_score: 85
-notes: Open-source pair programmer; reviewed IOC stays on exact Devon CLI/UI names and exact Devon install/runtime artifacts from the upstream README.
+notes: >-
+  Manual review of Devon's README, install script, `.devon.config`, and server
+  code confirms the shipped `devon_agent`, `devon-tui`, and `devon-ui`
+  commands plus local checkpoint and database artifacts. Excluded GitHub,
+  Discord, npm/PyPI registries, and model-provider endpoints as shared or
+  operator-selected infrastructure because upstream docs do not expose a
+  dedicated Devon-owned service host.
 references:
 - url: https://raw.githubusercontent.com/entropy-research/Devon/main/README.md
   kind: upstream_readme
   summary: Upstream README documents pipx install devon_agent, npx devon-ui, npm install -g devon-tui, and use of the DEVON_TELEMETRY_DISABLED variable.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
 - url: https://raw.githubusercontent.com/entropy-research/Devon/main/.devon.config
   kind: upstream_source
   summary: Upstream repository root contains the exact .devon.config runtime artifact.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/entropy-research/Devon/main/install.sh
+  kind: upstream_source
+  summary: Install script explicitly installs devon_agent, devon-tui, and devon-ui.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/entropy-research/Devon/main/devon_agent/server.py
+  kind: upstream_source
+  summary: Server code defaults the local database to ./devon_environment.db when no db_path is provided.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
       url: https://raw.githubusercontent.com/entropy-research/Devon/main/README.md
-      evidence: The upstream README consistently uses the exact Devon runtime names devon-ui, devon-tui, and devon_agent, and references the DEVON_TELEMETRY_DISABLED flag for outbound telemetry control, so the reviewed network IOC is limited to those exact Devon identifiers.
-      checked_at: '2026-03-22'
+      evidence: Devon's upstream docs consistently use the exact runtime names devon-ui, devon-tui, and devon_agent, but do not expose a dedicated first-party service host, so the reviewed network IOC remains limited to those exact identifiers and excludes shared package, community, and model-provider infrastructure.
+      checked_at: '2026-03-24'
     keyword_patterns:
     - pattern: devon-ui
       match: substring
@@ -35,11 +49,15 @@ iocs:
   host:
     status: reviewed
     provenance:
-      url: https://raw.githubusercontent.com/entropy-research/Devon/main/README.md
-      evidence: The upstream README installs devon_agent, devon-ui, and devon-tui, while the repository root contains the exact .devon.config file, so the retained host IOC is limited to those explicit Devon artifacts.
-      checked_at: '2026-03-22'
+      url: https://raw.githubusercontent.com/entropy-research/Devon/main/install.sh
+      evidence: Devon's install script explicitly installs devon_agent, devon-tui, and devon-ui, the repo root contains the exact .devon.config artifact, event handling writes checkpoint_*.jsonl files locally, and server.py defaults the session database to ./devon_environment.db.
+      checked_at: '2026-03-24'
     paths:
     - '*/Devon/'
+    - '*/Devon/.devon.config'
+    - checkpoint_*.jsonl
+    - devon_environment.db
     process_names:
+    - devon_agent
     - devon-ui
     - devon-tui

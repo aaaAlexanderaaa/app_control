@@ -8,11 +8,66 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (A-Claw核心/研究); detailed IOC review pending.
+notes: >-
+  Angel Claw is an open-source multi-tenant agent OS published as the
+  `angel-claw` package and CLI. Manual re-review of the upstream README,
+  package metadata, deployment guide, and source-backed skill registry code
+  found strong local host artifacts under `~/.angelclaw` and `/opt/angel-claw`,
+  but no dedicated first-party service domain. The reviewed source only
+  exposed shared OpenClaw or ClawHub and Brave endpoints, so the network IOC
+  intentionally stays on the exact AngelClaw package and product keywords.
+  Excluded `github.com`, `raw.githubusercontent.com`, `pypi.org`, `pepy.tech`,
+  `clawhub.ai`, `auth.clawdhub.com`, and `api.search.brave.com` as network
+  IOCs because they are shared code, package, registry, or downstream search
+  infrastructure rather than AngelClaw-owned service domains.
+references:
+- url: https://raw.githubusercontent.com/Abdur-rahmaanJ/angel-claw/stable/README.md
+  kind: upstream_readme
+  summary: Upstream README documents `pip install angel-claw`, the `angel-claw` CLI, and persistent user data under `~/.angelclaw/users/{user_id}`.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/Abdur-rahmaanJ/angel-claw/stable/pyproject.toml
+  kind: upstream_source
+  summary: Package metadata defines the canonical `angel-claw` distribution name and console script entry point.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/Abdur-rahmaanJ/angel-claw/stable/docs/deployment.md
+  kind: upstream_source
+  summary: Deployment guide documents `/opt/angel-claw`, `angel-claw-web.service`, `angel-claw-worker.service`, and backups of `~/.angelclaw`.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/Abdur-rahmaanJ/angel-claw/stable/src/angel_claw/skills/core.py
+  kind: upstream_source
+  summary: Source-backed skill registry code calls shared ClawHub and Brave endpoints rather than an AngelClaw-owned service domain.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: https://github.com/angelclaw/angelclaw
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://raw.githubusercontent.com/Abdur-rahmaanJ/angel-claw/stable/src/angel_claw/skills/core.py
+      evidence: >-
+        Upstream package metadata, README, and skill-registry source publish
+        AngelClaw as the `angel-claw` package and CLI but only expose shared
+        ClawHub and Brave service endpoints rather than an AngelClaw-owned
+        domain, so the reviewed network IOC remains limited to exact AngelClaw
+        package and product keywords.
+      checked_at: '2026-03-24'
+    keyword_patterns:
+    - pattern: angel-claw
+      match: substring
+    - pattern: angel claw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/Abdur-rahmaanJ/angel-claw/stable/docs/deployment.md
+      evidence: >-
+        The upstream README and deployment guide document persistent state
+        under `~/.angelclaw`, user-specific content under
+        `~/.angelclaw/users/`, and machine-wide deployments rooted at
+        `/opt/angel-claw`, while package metadata defines the `angel-claw` CLI
+        entry point.
+      checked_at: '2026-03-24'
+    paths:
+    - ~/.angelclaw/
+    - ~/.angelclaw/users/
+    - /opt/angel-claw/
+    process_names:
+    - angel-claw

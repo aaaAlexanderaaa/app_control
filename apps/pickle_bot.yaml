@@ -8,39 +8,51 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Personal AI assistant with pluggable skills; upstream lacks a dedicated product domain, so reviewed IOC stays on exact Pickle-Bot keywords plus the explicit ~/.pickle-bot configuration and workspace artifacts documented by upstream docs.
+notes: >-
+  The historical GitHub repository linked by pickle-bot's package metadata now
+  returns 404, so this re-review is rebased on the reachable PyPI source
+  distribution for version 1.0.3. That source distribution still documents the
+  explicit `~/.pickle-bot` configuration and workspace layout. Excluded
+  GitHub and files.pythonhosted.org as network IOCs because they are shared
+  code-hosting/package-delivery infrastructure, and upstream no longer exposes
+  a dedicated Pickle-Bot service domain.
 references:
-- url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/README.md
-  kind: upstream_readme
-  summary: Upstream README documents pickle-bot init/chat/server and the official GitHub home.
-  checked_at: '2026-03-22'
-- url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/docs/configuration.md
-  kind: upstream_docs
-  summary: Configuration docs enumerate the ~/.pickle-bot directory, config.user.yaml, config.runtime.yaml, agents, skills, and crons.
-  checked_at: '2026-03-22'
-- url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/pyproject.toml
-  kind: upstream_source
-  summary: Project metadata defines the package name pickle-bot and the `pickle-bot` CLI entrypoint.
-  checked_at: '2026-03-22'
+- url: https://pypi.org/pypi/pickle-bot/json
+  kind: pypi_metadata
+  summary: PyPI metadata for pickle-bot 1.0.3 still points to the historical GitHub repository, which now returns 404.
+  checked_at: '2026-03-24'
+- url: https://files.pythonhosted.org/packages/f0/24/5165be6547aa78354be3eeeb25d0ea6f9aaa00c8884c34bb3ba1b96e754d/pickle_bot-1.0.3.tar.gz
+  kind: pypi_source_distribution
+  summary: Source distribution contains README.md, docs/configuration.md, and pyproject.toml with the pickle-bot CLI and ~/.pickle-bot workspace layout.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
-      url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/pyproject.toml
-      evidence: Upstream materials consistently name the project pickle-bot but do not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to exact Pickle-Bot keywords rather than shared GitHub or package-registry infrastructure.
-      checked_at: '2026-03-22'
+      url: https://files.pythonhosted.org/packages/f0/24/5165be6547aa78354be3eeeb25d0ea6f9aaa00c8884c34bb3ba1b96e754d/pickle_bot-1.0.3.tar.gz
+      evidence: The reachable pickle-bot source distribution still names the project and CLI but does not expose a dedicated first-party service host, so the reviewed network IOC stays on exact Pickle-Bot keywords and excludes shared GitHub and package-delivery infrastructure.
+      checked_at: '2026-03-24'
     keyword_patterns:
     - pattern: "pickle-bot"
       match: substring
     - pattern: "pickle bot"
       match: substring
+    - pattern: picklebot
+      match: substring
   host:
     status: reviewed
     provenance:
-      url: https://raw.githubusercontent.com/zane-chen/pickle-bot/main/docs/configuration.md
-      evidence: Upstream configuration docs enumerate ~/.pickle-bot/config.user.yaml, ~/.pickle-bot/config.runtime.yaml, ~/.pickle-bot/agents/, ~/.pickle-bot/skills/, and ~/.pickle-bot/crons/, while project metadata defines the `pickle-bot` CLI entrypoint.
-      checked_at: '2026-03-22'
+      url: https://files.pythonhosted.org/packages/f0/24/5165be6547aa78354be3eeeb25d0ea6f9aaa00c8884c34bb3ba1b96e754d/pickle_bot-1.0.3.tar.gz
+      evidence: The pickle-bot 1.0.3 source distribution's configuration guide enumerates ~/.pickle-bot/config.user.yaml, ~/.pickle-bot/config.runtime.yaml, ~/.pickle-bot/agents/, ~/.pickle-bot/skills/, ~/.pickle-bot/crons/, ~/.pickle-bot/memories/, and ~/.pickle-bot/history/sessions/, while pyproject.toml defines the `pickle-bot` CLI entrypoint.
+      checked_at: '2026-03-24'
     paths:
-    - ~/.pickle-bot/
+    - ~/.pickle-bot/config.user.yaml
+    - ~/.pickle-bot/config.runtime.yaml
+    - ~/.pickle-bot/agents/
+    - ~/.pickle-bot/skills/
+    - ~/.pickle-bot/crons/
+    - ~/.pickle-bot/memories/
+    - ~/.pickle-bot/history/sessions/
     process_names:
     - pickle-bot
+    - picklebot

@@ -8,23 +8,38 @@ product_type:
 - agentic_coding
 severity: high
 priority_score: 89
-notes: Cloud coding agent workflows can move complete repositories and secrets externally.
+notes: >-
+  Cloud coding agent workflows can move complete repositories and secrets
+  externally. Manual review of the official Devin landing page and product docs
+  keeps only exact Devin-owned web/application hosts and excludes Mintlify,
+  Ashby, CloudFront, GTM, LinkedIn, and broader Cognition corporate surfaces
+  as shared SaaS, analytics, recruiting, or company-wide infrastructure.
+references:
+- url: https://devin.ai/
+  kind: official_site
+  summary: Official Devin landing page is served from devin.ai and links users to official Cognition and Devin documentation surfaces.
+  checked_at: '2026-03-24'
+- url: https://docs.devin.ai/get-started/devin-intro
+  kind: official_docs
+  summary: Official product docs tell users to access Devin at app.devin.ai and describe the embedded tools exposed in the Devin web application.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: urn:internal:legacy-migration:2026-02-11
-      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
-      checked_at: '2026-02-11'
+      url: https://docs.devin.ai/get-started/devin-intro
+      evidence: Official Devin docs direct users to sign in at app.devin.ai, while the landing page and docs are served from devin.ai and docs.devin.ai, so the reviewed network IOC keeps only those exact Devin-owned hosts and excludes Mintlify, CDN, analytics, recruiting, and broader Cognition corporate infrastructure.
+      checked_at: '2026-03-24'
     hostname_patterns:
-    - pattern: cognition.ai
-      match: suffix
-      role: app_brand
     - pattern: devin.ai
-      match: suffix
+      match: exact
+      role: app_brand
+    - pattern: app.devin.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.devin.ai
+      match: exact
       role: app_brand
     keyword_patterns:
-    - pattern: devin
-      match: substring
-    - pattern: cognition
+    - pattern: devin ai
       match: substring

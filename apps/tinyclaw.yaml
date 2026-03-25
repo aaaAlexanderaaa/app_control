@@ -11,8 +11,12 @@ severity: critical
 priority_score: 96
 notes: >-
   TinyClaw is now distributed from the TinyAGI repository and
-  tinyagicompany.com. Reviewed IOC is limited to the official TinyOffice host,
-  TinyAGI/TinyClaw keywords, and documented `~/.tinyagi` runtime paths.
+  `tinyagicompany.com`. Reviewed IOC is limited to the official TinyOffice
+  host, the exact `tinyagicompany.com` and `www.tinyagicompany.com` company
+  surfaces, TinyAGI/TinyClaw keywords, and documented `~/.tinyagi` runtime
+  paths. Excluded `github.com`, raw GitHub, and model-provider endpoints
+  because they are shared code-hosting or downstream infrastructure rather
+  than TinyClaw-owned service domains.
 references:
 - url: https://github.com/TinyAGI/tinyagi
   kind: official_repo
@@ -29,15 +33,19 @@ iocs:
       url: https://github.com/TinyAGI/tinyagi
       evidence: >-
         The official TinyAGI repository identifies TinyClaw as the former name
-        and links `office.tinyagicompany.com` plus `tinyagicompany.com` as
-        first-party TinyAGI surfaces.
+        and links `office.tinyagicompany.com` plus `tinyagicompany.com`, while
+        current web resolution lands on the exact `www.tinyagicompany.com`
+        host for the company site.
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: office.tinyagicompany.com
       match: exact
       role: app_brand
     - pattern: tinyagicompany.com
-      match: suffix
+      match: exact
+      role: app_brand
+    - pattern: www.tinyagicompany.com
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: tinyclaw

@@ -60,6 +60,22 @@ This document defines the quality bar for every artifact in the catalog and the 
 
 - **Self-documenting.** A new agent or analyst can read the README, understand the quality bar, author a new app YAML, and know whether their work meets the standard — without asking anyone.
 
+## Automated Quality Audit
+
+Use `make quality` or `python3 -m app_control.cli quality` to run the catalog-wide
+IOC quality audit. The audit is a structural review of the current YAML entries,
+not a substitute for external research. It scores every app and both IOC groups
+against the standards above and reports:
+
+- overall app grades (`excellent`, `good`, `acceptable`, `needs_work`)
+- per-group quality for network and host IOC coverage
+- defense-in-depth coverage across network plus host
+- placeholder, legacy-migration, inferred, keyword-only, and shared-infra-only
+  weak spots that should be prioritized for review
+
+`make status` includes the condensed quality summary so coverage, workflow state,
+and IOC quality can be reviewed together.
+
 ---
 
 ## Analysis Process

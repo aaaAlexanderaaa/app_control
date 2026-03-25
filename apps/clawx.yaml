@@ -10,8 +10,11 @@ severity: critical
 priority_score: 93
 notes: >-
   Desktop GUI wrapper for OpenClaw agents with scheduling and management from
-  desktop. Reviewed host IOC keeps only ClawX-specific macOS app, bundle, and
-  process artifacts documented in upstream source.
+  desktop. Manual re-review of the official site, linked China mirror, and
+  Electron metadata confirms exact brand hosts plus ClawX-specific macOS app,
+  bundle, and process artifacts. Excluded `github.com`, `api.github.com`, and
+  raw GitHub asset hosts as network IOCs because they are shared code or
+  release-distribution surfaces rather than ClawX-owned service domains.
 references:
 - url: https://claw-x.com
   kind: official_site
@@ -40,10 +43,10 @@ iocs:
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: claw-x.com
-      match: suffix
+      match: exact
       role: app_brand
     - pattern: clawx.com.cn
-      match: suffix
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: clawx

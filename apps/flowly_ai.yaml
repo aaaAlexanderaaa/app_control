@@ -2,17 +2,57 @@ id: flowly_ai
 name: Flowly AI
 category: CLAW_FAMILY_APP
 product_shape:
+- web
 - macos
 product_type:
 - personal_agent
 - workflow_automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (A-Claw核心/工作流); detailed IOC review pending.
+notes: >-
+  Flowly's first-party control plane lives on `useflowlyapp.com`, and official
+  copy says local mode is only available in the Flowly Desktop app. Keep IOC
+  on the branded web host plus the exact hosted control-plane endpoint.
+  Excluded Telegram, Discord, and cloud-provider infrastructure because they
+  are third-party channels, and current public materials do not publish a
+  stable desktop bundle ID or install path.
+references:
+- url: https://useflowlyapp.com/en
+  kind: official_site
+  summary: Official Flowly site markets one-click assistant deployment and desktop local mode on useflowlyapp.com.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/flowly-ai/flowly-docs/main/quickstart.mdx
+  kind: official_docs
+  summary: Official docs reference the Flowly service and desktop-assisted local workflow.
+  checked_at: '2026-03-24'
 iocs:
   network:
+    status: reviewed
+    provenance:
+      url: https://useflowlyapp.com/en
+      evidence: >-
+        Official Flowly product pages are served from `useflowlyapp.com`, and
+        the site also references the exact `flowly-app.fly.dev` hosted control
+        plane, so the reviewed network IOC keeps those two first-party Flowly
+        surfaces only.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: useflowlyapp.com
+      match: exact
+      role: app_brand
+    - pattern: flowly-app.fly.dev
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: flowly
+      match: substring
+  host:
     status: draft
     provenance:
-      url: https://github.com/flowly-ai/flowly
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://useflowlyapp.com/en
+      evidence: >-
+        Official Flowly copy confirms that local mode exists in a Flowly
+        Desktop app, but no public DMG, bundle ID, install path, or local
+        state directory was published, so the reviewed host IOC remains
+        intentionally omitted pending direct desktop-package evidence.
+      checked_at: '2026-03-24'

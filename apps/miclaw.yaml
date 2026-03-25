@@ -2,17 +2,59 @@ id: miclaw
 name: MiClaw
 category: CLAW_FAMILY_APP
 product_shape:
-- macos
+- web
 product_type:
 - personal_agent
 - automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (D-中国变体/手机Agent); detailed IOC review pending.
+notes: >-
+  MiClaw is Xiaomi's phone-first MiMo agent beta rather than a macOS app.
+  Manual re-review found the published rollout surface on Xiaomi Community plus
+  secondary coverage describing HyperOS delivery to supported Xiaomi 17
+  devices after beta approval. Because the current schema has no mobile-only
+  shape, this record uses `web` to reflect the official community and rollout
+  surface rather than inventing a new enum. Keep IOC conservative on the exact
+  Xiaomi Community host plus the MiClaw keyword only; omitted host IOC because
+  current public material does not expose a standalone package name, bundle
+  ID, or stable on-disk path.
+references:
+- url: https://new.c.mi.com/global/post/2153772
+  kind: official_community
+  summary: Official Xiaomi Community post is the first-party rollout surface for Xiaomi Miclaw beta access.
+  checked_at: '2026-03-24'
+- url: https://xiaomitime.com/xiaomi-miclaw-global-beta-opens-how-to-apply-for-the-mimo-ai-agent-93915/
+  kind: secondary_report
+  summary: Secondary coverage states Xiaomi Miclaw is delivered through a HyperOS beta update on supported Xiaomi 17 devices after approval.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: urn:internal:archive:claw_ecosystem_full_report:2026-03-20
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://new.c.mi.com/global/post/2153772
+      evidence: >-
+        Xiaomi's first-party Community post is the official public rollout
+        surface for MiClaw beta access; because no dedicated MiClaw domain is
+        published, the reviewed network IOC keeps the exact Xiaomi Community
+        host together with the exact MiClaw keyword only.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: new.c.mi.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: miclaw
+      match: substring
+    - pattern: xiaomi miclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://xiaomitime.com/xiaomi-miclaw-global-beta-opens-how-to-apply-for-the-mimo-ai-agent-93915/
+      evidence: >-
+        Current public rollout material describes MiClaw as a Xiaomi phone
+        beta delivered via system update after approval, but does not publish a
+        standalone app package name, bundle identifier, extension ID, or
+        stable filesystem path, so the reviewed host IOC remains intentionally
+        omitted.
+      checked_at: '2026-03-24'

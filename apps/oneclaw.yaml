@@ -11,9 +11,12 @@ severity: critical
 priority_score: 93
 notes: >-
   OneClaw provides a one-click OpenClaw installer for macOS with browser,
-  file, and report automation workflows. Reviewed host IOC keeps only
-  OneClaw-specific macOS app, bundle, process, and local-state artifacts
-  documented in upstream source.
+  file, and report automation workflows. Manual re-review confirmed exact
+  `oneclaw.cn` and `www.oneclaw.cn` web surfaces plus OneClaw-specific macOS
+  app, bundle, process, and local-state artifacts documented in upstream
+  source. Excluded GitHub release/CDN hosts and generic browser-automation
+  provider endpoints because they are shared distribution or downstream
+  infrastructure rather than OneClaw-owned service domains.
 references:
 - url: https://oneclaw.cn/
   kind: official_site
@@ -38,11 +41,15 @@ iocs:
       url: https://oneclaw.cn/
       evidence: >-
         Official OneClaw site identifies OneClaw as a one-click macOS
-        OpenClaw installer on the `oneclaw.cn` brand domain.
+        OpenClaw installer on the branded `oneclaw.cn` root and exact
+        `www.oneclaw.cn` host.
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: oneclaw.cn
-      match: suffix
+      match: exact
+      role: app_brand
+    - pattern: www.oneclaw.cn
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: oneclaw

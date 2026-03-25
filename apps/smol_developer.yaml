@@ -8,23 +8,29 @@ product_type:
 - agentic_coding
 severity: high
 priority_score: 85
-notes: Open-source prompt-to-code agent; reviewed IOC stays on exact `smol developer` package names and repo-local prompt/API artifacts.
+notes: >-
+  Manual review of Smol Developer's README and pyproject metadata shows no
+  dedicated first-party service domain. Excluded GitHub, E2B, Modal,
+  Anthropic/OpenAI endpoints, and social/video links as shared or third-party
+  infrastructure; retained exact Smol Developer project keywords plus the
+  repo-local prompt, shared-dependency, and API artifacts documented by
+  upstream.
 references:
 - url: https://raw.githubusercontent.com/smol-ai/developer/main/readme.md
   kind: upstream_readme
   summary: Upstream readme documents cloning developer, running main.py, using prompt.md, and starting smol_dev/api.py.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
 - url: https://raw.githubusercontent.com/smol-ai/developer/main/pyproject.toml
   kind: upstream_source
   summary: Upstream project metadata defines the package name smol_dev and the `api` script entrypoint.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
       url: https://raw.githubusercontent.com/smol-ai/developer/main/pyproject.toml
-      evidence: Upstream materials consistently use the exact names smol developer and smol_dev for the project and package, and do not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to those exact project keywords.
-      checked_at: '2026-03-22'
+      evidence: Upstream materials consistently use the exact names smol developer and smol_dev for the project and package, and do not expose a dedicated first-party service host, so the reviewed network IOC remains limited to those exact project keywords and excludes shared GitHub, E2B, Modal, and model-provider infrastructure.
+      checked_at: '2026-03-24'
     keyword_patterns:
     - pattern: smol developer
       match: substring
@@ -34,9 +40,10 @@ iocs:
     status: reviewed
     provenance:
       url: https://raw.githubusercontent.com/smol-ai/developer/main/readme.md
-      evidence: The upstream readme tells users to run main.py from the developer repository root, use prompt.md, and start smol_dev/api.py, so the retained host IOC is limited to those exact repo-local artifacts.
-      checked_at: '2026-03-22'
+      evidence: The upstream readme tells users to run main.py from the developer repository root, use prompt.md for the spec, and start smol_dev/api.py, while the documented workflow writes and reuses shared_dependencies.md for cross-file planning.
+      checked_at: '2026-03-24'
     paths:
     - '*/developer/main.py'
     - '*/developer/prompt.md'
+    - '*/developer/shared_dependencies.md'
     - '*/developer/smol_dev/api.py'

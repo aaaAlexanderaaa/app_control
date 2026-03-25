@@ -8,11 +8,20 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (A-Claw核心/性能优先); detailed IOC review pending.
+notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (A-Claw核心/性能优先); manual re-review on 2026-03-24 found the cited GitHub repository unavailable and `shrew.ai` parked for sale, so detailed IOC review remains blocked pending authoritative upstream recovery.
+references:
+- url: https://github.com/shrew-ai/shrew
+  kind: historical_source
+  summary: Historical repository URL currently returns 404 and no longer provides recoverable IOC evidence.
+  checked_at: '2026-03-24'
+- url: https://shrew.ai/
+  kind: historical_domain
+  summary: The shrew.ai domain currently redirects to a parked domain-sale page rather than an active product property.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: draft
     provenance:
       url: https://github.com/shrew-ai/shrew
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; manual re-review found the cited GitHub repository unavailable and the shrew.ai domain parked, so no trustworthy first-party IOC source is currently available.
+      checked_at: '2026-03-24'

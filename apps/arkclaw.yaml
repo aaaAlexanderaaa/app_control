@@ -2,17 +2,52 @@ id: arkclaw
 name: ArkClaw
 category: CLAW_FAMILY_APP
 product_shape:
-- macos
+- web
 product_type:
 - personal_agent
 - automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (D-中国变体/飞书集成); detailed IOC review pending.
+notes: >-
+  ArkClaw is Volcengine's official agent experience surfaced through
+  Volcengine product and console pages, including Feishu-oriented onboarding.
+  Keep IOC conservative on the exact Volcengine console host plus the exact
+  ArkClaw keyword. Excluded broader Volcengine and Feishu infrastructure
+  because those hosts are shared, and current public material does not expose
+  a distinct local package, extension ID, or stable host artifact.
+references:
+- url: https://www.volcengine.com/product/arkclaw
+  kind: official_site
+  summary: Official Volcengine product page introduces ArkClaw on the Ark platform.
+  checked_at: '2026-03-24'
+- url: https://console.volcengine.com/ark/region:ark+cn-beijing/experience/claw
+  kind: official_console
+  summary: Official Volcengine console exposes the ArkClaw experience flow on console.volcengine.com.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: urn:internal:archive:claw_ecosystem_full_report:2026-03-20
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://console.volcengine.com/ark/region:ark+cn-beijing/experience/claw
+      evidence: >-
+        Official Volcengine product and console pages place ArkClaw on the
+        exact `console.volcengine.com` host under the Ark service, so the
+        reviewed network IOC keeps that exact first-party console surface and
+        the exact ArkClaw keyword while omitting broader Volcengine hosts.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: console.volcengine.com
+      match: exact
+      role: platform_service
+    keyword_patterns:
+    - pattern: arkclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://www.volcengine.com/product/arkclaw
+      evidence: >-
+        Official ArkClaw material describes cloud and Feishu workflows but does
+        not publish a desktop app, mobile bundle, extension ID, or local
+        runtime path, so the reviewed host IOC remains intentionally omitted.
+      checked_at: '2026-03-24'

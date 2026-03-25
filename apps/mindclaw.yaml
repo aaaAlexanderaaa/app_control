@@ -9,14 +9,30 @@ product_type:
 - messaging_gateway
 severity: critical
 priority_score: 96
-notes: Elephas positions MindClaw as a secure native Mac agent that runs continuously on your Mac and can be messaged from Telegram.
+notes: >-
+  Elephas positions MindClaw as a secure native Mac agent that runs
+  continuously on your Mac and can be messaged from Telegram. Manual re-review
+  of the official landing page confirms the 24/7 local-Mac positioning,
+  drag-to-Applications install, and Telegram relay workflow. Kept IOC on the
+  exact Elephas-hosted MindClaw surface plus the MindClaw app path; excluded
+  broader Elephas pages and third-party Telegram / Cloudflare relay
+  infrastructure because they are shared and not MindClaw-exclusive.
+references:
+- url: https://elephas.app/mindclaw
+  kind: official_site
+  summary: Official MindClaw landing page describes a secure native Mac agent that runs 24/7 locally, is installed into Applications, and is controlled from Telegram.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
       url: https://elephas.app/mindclaw
-      evidence: Official MindClaw page on elephas.app describes the product as a native Mac agent service with Telegram relay support
-      checked_at: '2026-03-20'
+      evidence: >-
+        The official MindClaw landing page is hosted on `elephas.app` and
+        identifies MindClaw as a native Mac agent with Telegram relay support,
+        so the reviewed network IOC keeps that exact first-party host together
+        with the MindClaw keyword.
+      checked_at: '2026-03-24'
     hostname_patterns:
     - pattern: elephas.app
       match: exact
@@ -28,8 +44,12 @@ iocs:
     status: reviewed
     provenance:
       url: https://elephas.app/mindclaw
-      evidence: Official MindClaw page describes a native Mac app that users drag into Applications, supporting the retained MindClaw bundle and process name
-      checked_at: '2026-03-20'
+      evidence: >-
+        The official MindClaw page tells users to drag the native app into
+        Applications and states the agents run locally on the user's Mac, so
+        the retained host IOC is limited to the exact MindClaw app path and
+        process name.
+      checked_at: '2026-03-24'
     paths:
     - /Applications/MindClaw.app
     - ~/Applications/MindClaw.app

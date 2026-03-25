@@ -11,9 +11,13 @@ severity: critical
 priority_score: 96
 notes: >-
   OpenClaw is the reference claw-family personal agent with ClawHub skills,
-  remote messaging control, and local automation. Reviewed IOC keeps only
-  first-party OpenClaw and ClawHub network surfaces plus explicit local app,
-  CLI, state, and log artifacts from the upstream repository.
+  remote messaging control, and local automation. Manual re-review confirmed
+  exact `openclaw.ai`, `docs.openclaw.ai`, `clawhub.ai`, and redirecting
+  `clawhub.com` first-party surfaces plus explicit local app, CLI, state, and
+  log artifacts from the upstream repository. Excluded `github.com`,
+  `raw.githubusercontent.com`, and model-provider endpoints because they are
+  shared code-hosting or downstream AI infrastructure rather than OpenClaw-
+  owned service domains.
 references:
 - url: https://docs.openclaw.ai/tools/clawhub
   kind: official_docs
@@ -36,16 +40,16 @@ iocs:
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: clawhub.ai
-      match: suffix
+      match: exact
       role: app_brand
     - pattern: clawhub.com
-      match: suffix
+      match: exact
       role: app_brand
     - pattern: docs.openclaw.ai
-      match: suffix
+      match: exact
       role: app_brand
     - pattern: openclaw.ai
-      match: suffix
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: clawhub

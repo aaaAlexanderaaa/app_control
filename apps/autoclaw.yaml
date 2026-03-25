@@ -12,8 +12,11 @@ priority_score: 95
 notes: >-
   Zhipu / AutoGLM ships AutoClaw as a one-click local OpenClaw desktop app for
   macOS and Windows with preloaded skills, browser automation, and model
-  hot-swap. Reviewed host IOC is kept conservative and limited to the branded
-  macOS desktop app path.
+  hot-swap. Manual re-review of the official site confirms the product is
+  served from the exact `autoclaws.org` host. Excluded broader `zhipuai.cn`,
+  App Store search surfaces, and model-provider endpoints because they are
+  shared vendor or downstream infrastructure. Reviewed host IOC is kept
+  conservative and limited to the branded macOS desktop app path.
 references:
 - url: https://autoclaws.org/zh/
   kind: official_site
@@ -30,7 +33,7 @@ iocs:
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: autoclaws.org
-      match: suffix
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: autoclaw

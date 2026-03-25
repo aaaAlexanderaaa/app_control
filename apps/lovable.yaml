@@ -8,18 +8,36 @@ product_type:
 - app_generator
 severity: high
 priority_score: 80
-notes: High precision on lovable brand domains.
+notes: >-
+  Manual review of Lovable's official site and docs keeps only exact
+  Lovable-owned web hosts and excludes Mintlify/CDN infrastructure plus
+  user-generated `*.lovable.app` preview deployments, which are product output
+  rather than the Lovable builder service itself.
+references:
+- url: https://lovable.dev/
+  kind: official_site
+  summary: Official Lovable site is served from lovable.dev and markets Lovable as an AI app builder.
+  checked_at: '2026-03-24'
+- url: https://docs.lovable.dev/introduction/welcome
+  kind: official_docs
+  summary: Official docs are served from docs.lovable.dev and describe Lovable as a full-stack AI development platform.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: urn:internal:legacy-migration:2026-02-11
-      evidence: 'Migrated from catalog. Original source_ids: src_internal_legacy_migration_2026_02_11'
-      checked_at: '2026-02-11'
+      url: https://docs.lovable.dev/introduction/welcome
+      evidence: Lovable's official site and documentation are served from lovable.dev and docs.lovable.dev, so the reviewed network IOC keeps those exact Lovable-owned hosts and excludes Mintlify/CDN infrastructure plus user-generated `*.lovable.app` preview deployments.
+      checked_at: '2026-03-24'
     hostname_patterns:
     - pattern: lovable.dev
-      match: suffix
+      match: exact
+      role: app_brand
+    - pattern: docs.lovable.dev
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: lovable
+      match: substring
+    - pattern: lovable dev
       match: substring

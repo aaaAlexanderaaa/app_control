@@ -8,33 +8,50 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Lightweight single-binary bot; upstream does not expose a dedicated product host, so reviewed IOC stays on exact Picobot keywords plus the documented ~/.picobot config, workspace, and database artifacts.
+notes: >-
+  Manual source review of Picobot's README, quick-start guide, configuration
+  reference, and Go entrypoint confirms explicit `~/.picobot` config,
+  workspace, and WhatsApp database artifacts. Excluded GitHub, Docker Hub,
+  model-provider endpoints, and local MCP/server URLs as shared or
+  operator-supplied infrastructure because upstream does not expose a dedicated
+  Picobot service domain.
 references:
 - url: https://raw.githubusercontent.com/louisho5/picobot/main/README.md
   kind: upstream_readme
   summary: Upstream README documents picobot onboard, gateway, and the ~/.picobot config and workspace layout.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/louisho5/picobot/main/docs/HOW_TO_START.md
+  kind: upstream_docs
+  summary: Quick-start guide documents ~/.picobot/config.json, ~/.picobot/workspace/, and the picobot onboard/agent/gateway commands.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/louisho5/picobot/main/docs/CONFIG.md
+  kind: upstream_docs
+  summary: Configuration reference documents ~/.picobot/config.json, ~/.picobot/workspace, workspace memory files, and MCP server configuration.
+  checked_at: '2026-03-24'
 - url: https://raw.githubusercontent.com/louisho5/picobot/main/cmd/picobot/main.go
   kind: upstream_source
   summary: CLI source defines the picobot command and the default ~/.picobot/whatsapp.db path.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
-      url: https://raw.githubusercontent.com/louisho5/picobot/main/README.md
-      evidence: Upstream materials consistently name the project Picobot but do not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to the exact Picobot keyword.
-      checked_at: '2026-03-22'
+      url: https://raw.githubusercontent.com/louisho5/picobot/main/docs/HOW_TO_START.md
+      evidence: Upstream Picobot materials consistently name the project but do not expose a dedicated first-party service host, so the reviewed network IOC stays on the exact Picobot keyword and excludes GitHub, Docker Hub, OpenRouter/OpenAI, and example MCP endpoints as shared or operator-supplied infrastructure.
+      checked_at: '2026-03-24'
     keyword_patterns:
     - pattern: picobot
       match: substring
   host:
     status: reviewed
     provenance:
-      url: https://raw.githubusercontent.com/louisho5/picobot/main/README.md
-      evidence: The upstream README documents picobot onboard creating ~/.picobot config and workspace files, and CLI source defaults WhatsApp state to ~/.picobot/whatsapp.db, so the retained host IOC is limited to those explicit Picobot artifacts and the picobot process name.
-      checked_at: '2026-03-22'
+      url: https://raw.githubusercontent.com/louisho5/picobot/main/docs/CONFIG.md
+      evidence: Picobot's configuration and quick-start docs document ~/.picobot/config.json, ~/.picobot/workspace/, ~/.picobot/workspace/memory/, and the onboard-created bootstrap files, while the CLI entrypoint defaults WhatsApp state to ~/.picobot/whatsapp.db.
+      checked_at: '2026-03-24'
     paths:
-    - ~/.picobot/
+    - ~/.picobot/config.json
+    - ~/.picobot/workspace/
+    - ~/.picobot/workspace/memory/
+    - ~/.picobot/whatsapp.db
     process_names:
     - picobot

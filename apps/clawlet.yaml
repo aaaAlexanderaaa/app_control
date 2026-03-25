@@ -8,7 +8,12 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Local-first agent framework; reviewed IOC keeps the repo-published clawlet.dev docs host and the explicit ~/.clawlet workspace artifacts documented by upstream onboarding and deployment guides.
+notes: >-
+  Local-first agent framework; reviewed IOC keeps the repo-published
+  `clawlet.dev` docs host and the explicit `~/.clawlet` workspace artifacts
+  documented by upstream onboarding and deployment guides. Excluded
+  `github.com`, `raw.githubusercontent.com`, and generic model-provider
+  endpoints because they are shared code-hosting or downstream infrastructure.
 references:
 - url: https://raw.githubusercontent.com/Kxrbx/Clawlet/main/README.md
   kind: upstream_readme

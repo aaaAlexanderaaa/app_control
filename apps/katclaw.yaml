@@ -10,8 +10,12 @@ severity: critical
 priority_score: 94
 notes: >-
   Native Mac installer that turns OpenClaw into a one-click setup and control
-  surface. Reviewed host IOC keeps only the KatClaw app-install location and
-  running process documented by the official macOS install flow.
+  surface. Manual re-review confirmed the product is served from the exact
+  `katclaw.ai` host and the official macOS install flow. Excluded generic
+  OpenClaw upstream and model-provider endpoints because they are shared
+  downstream infrastructure. Reviewed host IOC keeps only the KatClaw
+  app-install location and running process documented by the official macOS
+  install flow.
 references:
 - url: https://katclaw.ai/
   kind: official_site
@@ -32,7 +36,7 @@ iocs:
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: katclaw.ai
-      match: suffix
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: katclaw

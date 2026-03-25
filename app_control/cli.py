@@ -9,9 +9,15 @@ from typing import TextIO
 COMMANDS: dict[str, tuple[str, str, str]] = {
     "validate": ("tools.validate", "main", "Validate catalog YAML files."),
     "status": ("tools.status", "main", "Report catalog coverage and readiness."),
+    "quality": ("tools.quality", "main", "Audit IOC quality across the catalog."),
     "migrate": ("tools.migrate", "main", "Migrate archived JSON catalog into YAML app records."),
     "generate-network": ("generators.esql_rules", "main", "Generate network ES|QL rules."),
     "generate-host": ("generators.jamf_scan", "main", "Generate host scan script."),
+    "generate-claw-macos-installable": (
+        "tools.generate_claw_macos_installable_alerts",
+        "main",
+        "Generate ES|QL and host scan artifacts for macOS-installable CLAW apps.",
+    ),
     "generate-category-alerts": (
         "tools.generate_category_alerts",
         "main",

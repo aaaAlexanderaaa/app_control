@@ -4,17 +4,19 @@ CATEGORY ?=
 CATEGORY_ARG := $(if $(strip $(CATEGORY)),--category $(CATEGORY),)
 CLI := $(PYTHON) -m app_control.cli
 
-.PHONY: help check validate status build-prod build-canary build-network-prod build-network-canary build-host-prod build-host-canary build-by-category-prod build-by-category-canary clean-output research
+.PHONY: help check validate status quality build-prod build-canary build-network-prod build-network-canary build-host-prod build-host-canary build-by-category-prod build-by-category-canary build-claw-macos-canary clean-output research
 
 help:
 	@printf '%s\n' \
 	  'Supported commands:' \
 	  '  make validate                     Validate catalog YAML files' \
 	  '  make status                       Report catalog coverage and readiness' \
+	  '  make quality                      Audit IOC quality across the catalog' \
 	  '  make build-prod                   Generate validated production artifacts' \
 	  '  make build-canary                 Generate reviewed+ canary artifacts' \
 	  '  make build-by-category-prod       Generate validated per-category artifacts' \
 	  '  make build-by-category-canary     Generate reviewed+ per-category artifacts' \
+	  '  make build-claw-macos-canary      Generate reviewed+ artifacts for macOS-installable CLAW apps' \
 	  '  make build-prod CATEGORY=GENAI_CODING' \
 	  '' \
 	  'Research:' \
@@ -34,6 +36,9 @@ validate:
 
 status:
 	$(CLI) status
+
+quality:
+	$(CLI) quality
 
 build-prod: build-network-prod build-host-prod
 
@@ -62,6 +67,10 @@ build-by-category-prod:
 build-by-category-canary:
 	@mkdir -p $(OUTPUT_DIR)
 	$(CLI) generate-category-alerts --min-status reviewed $(CATEGORY_ARG) --output-dir $(OUTPUT_DIR)
+
+build-claw-macos-canary:
+	@mkdir -p $(OUTPUT_DIR)
+	$(CLI) generate-claw-macos-installable --min-status reviewed --output-dir $(OUTPUT_DIR)
 
 clean-output:
 	rm -f $(OUTPUT_DIR)/*.esql $(OUTPUT_DIR)/*.sh $(OUTPUT_DIR)/*.md $(OUTPUT_DIR)/*.json

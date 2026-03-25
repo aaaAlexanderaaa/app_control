@@ -10,8 +10,12 @@ product_type:
 - messaging_gateway
 severity: critical
 priority_score: 96
-notes: Tencent PC Manager markets QClaw as a WeChat or QQ controlled local AI agent that can deploy OpenClaw-style automation
-  on macOS and Windows.
+notes: >-
+  Tencent PC Manager markets QClaw as a WeChat- or QQ-controlled local AI
+  agent that can deploy OpenClaw-style automation on macOS and Windows.
+  Excluded broader `qq.com`, `weixin.qq.com`, and generic Tencent account or
+  PC-manager surfaces because they are shared parent infrastructure; retained
+  only QClaw-specific web, download, and local app artifacts.
 references:
 - url: https://qclaw.qq.com/
   kind: official_site

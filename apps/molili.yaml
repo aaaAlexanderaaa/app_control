@@ -11,18 +11,19 @@ severity: critical
 priority_score: 93
 notes: >-
   Molili is a Chinese local-first desktop AI agent with macOS installers,
-  remote computer control, scheduling, and app automation. Reviewed host IOC
-  is not yet retained because current evidence only re-validates the transient
-  macOS download artifact names, not stable install or runtime indicators.
+  remote computer control, scheduling, and app automation. DMG re-review now
+  confirms the stable `Molili.app` bundle and `com.molili.ai` bundle ID, so
+  host IOC keeps only direct package metadata. Excluded transient DMG
+  filenames once bundle metadata was confirmed.
 references:
 - url: https://www.molili.com.cn/
   kind: official_site
   summary: Official Molili site establishes molili.com.cn as the first-party host and links the current macOS download artifacts.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
 - url: https://molili.dangcdn.com/molili/updates/MoliliAI_aarch64.dmg
   kind: official_download_asset
-  summary: Direct official download asset confirms the exact MoliliAI_aarch64.dmg macOS filename.
-  checked_at: '2026-03-22'
+  summary: Official Molili DMG expands to `Molili.app` and its Info.plist sets bundle ID `com.molili.ai`.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
@@ -32,7 +33,7 @@ iocs:
         Official Molili site and direct macOS DMG links establish
         `molili.com.cn` and `molili.dangcdn.com` as first-party distribution
         hosts.
-      checked_at: '2026-03-22'
+      checked_at: '2026-03-24'
     hostname_patterns:
     - pattern: molili.com.cn
       match: suffix
@@ -44,13 +45,19 @@ iocs:
     - pattern: molili
       match: substring
   host:
-    status: draft
+    status: reviewed
     provenance:
-      url: https://www.molili.com.cn/
+      url: https://molili.dangcdn.com/molili/updates/MoliliAI_aarch64.dmg
       evidence: >-
-        Official Molili download links still only expose the transient
-        `MoliliAI_aarch64.dmg` and `MoliliAI_x64.dmg` artifact names. Because
-        no stable app-install path, bundle identifier, process name, or local
-        state location was confirmed, the reviewed host IOC was withdrawn
-        pending stronger validation.
-      checked_at: '2026-03-23'
+        The official Molili Apple Silicon DMG expands to `Molili.app`, and its
+        Info.plist sets `CFBundleIdentifier=com.molili.ai` and
+        `CFBundleExecutable=Molili`, so the reviewed host IOC keeps only those
+        stable bundle artifacts.
+      checked_at: '2026-03-24'
+    paths:
+    - /Applications/Molili.app
+    - ~/Applications/Molili.app
+    bundle_ids:
+    - com.molili.ai
+    process_names:
+    - Molili

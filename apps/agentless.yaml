@@ -8,19 +8,29 @@ product_type:
 - agentic_coding
 severity: high
 priority_score: 85
-notes: Open-source coding agent with no dedicated first-party service host exposed by upstream docs; reviewed IOC therefore stays on exact Agentless project keywords and repo-local artifacts.
+notes: >-
+  Manual review of the upstream README and SWE-bench walkthrough confirms
+  Agentless does not expose a dedicated first-party service host or installer
+  domain. Excluded GitHub releases, Hugging Face datasets, and model-provider
+  endpoints as shared or operator-selected infrastructure; retained exact
+  Agentless project keywords plus the repo-local classification and generated
+  results artifacts that upstream documents.
 references:
 - url: https://raw.githubusercontent.com/OpenAutoCoder/Agentless/main/README.md
   kind: upstream_readme
   summary: Upstream README documents cloning Agentless, entering Agentless/, and using classification/ and README_swebench.md artifacts.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/OpenAutoCoder/Agentless/main/README_swebench.md
+  kind: upstream_docs
+  summary: SWE-bench walkthrough documents creating results/ and writing localization, retrieval, repair, and regression outputs beneath results/swe-bench-lite/.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
       url: https://raw.githubusercontent.com/OpenAutoCoder/Agentless/main/README.md
-      evidence: The upstream README names the project Agentless and the release line OpenAutoCoder-Agentless but does not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to those exact project keywords.
-      checked_at: '2026-03-22'
+      evidence: The upstream README names the project Agentless and the release line OpenAutoCoder-Agentless but does not expose a dedicated first-party service host, so the reviewed network IOC remains limited to those exact project keywords and excludes shared hosting, model-provider, and benchmark infrastructure.
+      checked_at: '2026-03-24'
     keyword_patterns:
     - pattern: agentless
       match: substring
@@ -29,8 +39,10 @@ iocs:
   host:
     status: reviewed
     provenance:
-      url: https://raw.githubusercontent.com/OpenAutoCoder/Agentless/main/README.md
-      evidence: The upstream README instructs users to clone Agentless, work from the Agentless repository root, and use the classification/ folder plus README_swebench.md, so the retained host IOC is limited to those exact repo-local artifacts.
-      checked_at: '2026-03-22'
+      url: https://raw.githubusercontent.com/OpenAutoCoder/Agentless/main/README_swebench.md
+      evidence: The upstream setup docs tell users to work from the Agentless repository root, keep the classification/ artifact set, and create a results/ tree with localization, retrieval, repair, and regression outputs beneath results/swe-bench-lite/.
+      checked_at: '2026-03-24'
     paths:
     - '*/Agentless/'
+    - '*/Agentless/classification/'
+    - '*/Agentless/results/'

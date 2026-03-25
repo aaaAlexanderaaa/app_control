@@ -8,11 +8,56 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (A-Claw核心/安全优先); detailed IOC review pending.
+notes: >-
+  Crystal-based autonomous assistant optimized for low-resource local
+  execution. Keep IOC on the official `crystal-autobot.github.io` docs host
+  plus the explicit `autobot` binary and process artifacts from upstream
+  install guides. Excluded Telegram, Slack, WhatsApp, Zulip, GitHub, weather,
+  and model-provider endpoints because they are shared service integrations
+  rather than Autobot-owned surfaces.
+references:
+- url: https://crystal-autobot.github.io/autobot/
+  kind: official_docs
+  summary: Official Autobot docs publish the product and quickstart guides on crystal-autobot.github.io/autobot/.
+  checked_at: '2026-03-24'
+- url: https://github.com/crystal-autobot/autobot
+  kind: official_repo
+  summary: Official Autobot repository documents Homebrew and direct binary installs plus the `autobot` CLI runtime.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/crystal-autobot/autobot/main/docs/quickstart.md
+  kind: official_docs
+  summary: Quickstart guide shows direct `/usr/local/bin/autobot` installs and the `autobot` command workflow.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: https://github.com/autobot-ai/autobot
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://crystal-autobot.github.io/autobot/
+      evidence: >-
+        Official Autobot docs and repository publish
+        `crystal-autobot.github.io/autobot/` as the canonical documentation and
+        distribution surface, so the reviewed network IOC keeps only that exact
+        branded host and the Autobot keyword.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: crystal-autobot.github.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: autobot
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/crystal-autobot/autobot/main/docs/quickstart.md
+      evidence: >-
+        Upstream README and quickstart document `brew install autobot`, direct
+        `/usr/local/bin/autobot` installs, and the `autobot` CLI process name,
+        so the reviewed host IOC keeps only those explicit machine-wide
+        artifacts and omits arbitrary per-project workspaces.
+      checked_at: '2026-03-24'
+    paths:
+    - /opt/homebrew/bin/autobot
+    - /usr/local/bin/autobot
+    process_names:
+    - autobot

@@ -9,7 +9,13 @@ product_type:
 - cli
 severity: critical
 priority_score: 93
-notes: OpenClaw-inspired Rust agent focused on privacy and security; supports Homebrew and shell-based onboarding on macOS.
+notes: >-
+  OpenClaw-inspired Rust agent focused on privacy and security; manual
+  re-review confirmed the branded `ironclaw.com` root plus the exact
+  `www.ironclaw.com` redirect and the Homebrew formula token. Excluded
+  `github.com`, `formulae.brew.sh` as network IOCs, and model-provider
+  endpoints because they are shared code, package, or downstream
+  infrastructure rather than IronClaw-owned service domains.
 references:
 - url: https://www.ironclaw.com
   kind: official_site
@@ -24,11 +30,18 @@ iocs:
     status: reviewed
     provenance:
       url: https://www.ironclaw.com
-      evidence: The official IronClaw site is served from ironclaw.com, so the reviewed network IOC keeps only the IronClaw-owned domain.
+      evidence: >-
+        The official IronClaw site is reachable on the branded
+        `ironclaw.com` root and the exact `www.ironclaw.com` host, so the
+        reviewed network IOC keeps only those first-party IronClaw web
+        surfaces.
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: ironclaw.com
-      match: suffix
+      match: exact
+      role: app_brand
+    - pattern: www.ironclaw.com
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: ironclaw

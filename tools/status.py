@@ -6,6 +6,7 @@ from __future__ import annotations
 from collections import Counter
 
 from app_control.catalog import load_apps
+from app_control.quality import OVERALL_GRADES, coverage_percent, summarize_catalog_quality
 
 
 def main() -> int:
@@ -79,6 +80,29 @@ def main() -> int:
     print("\nCategory breakdown:")
     for category, count in sorted(category_counts.items(), key=lambda item: -item[1]):
         print(f"  {category:30s}  {count:4d}")
+
+    quality = summarize_catalog_quality(apps)
+    print("\nIOC quality:")
+    for grade in OVERALL_GRADES:
+        count = quality["overall_grades"].get(grade, 0)
+        print(f"  {grade:12s}  {count:4d}  ({coverage_percent(count, total):3d}%)")
+
+    metrics = quality["metrics"]
+    print("\nQuality signals:")
+    for label, key in (
+        ("defense in depth", "defense_in_depth"),
+        ("notes with omission rationale", "omission_rationale"),
+        ("exact app-brand network", "exact_app_brand_network"),
+        ("strong host artifacts", "strong_host_artifact"),
+        ("placeholder entries", "placeholder"),
+        ("legacy network provenance", "legacy_network_provenance"),
+        ("inferred host provenance", "inferred_host_provenance"),
+        ("keyword-only network", "keyword_only_network"),
+        ("shared-only network", "shared_only_network"),
+        ("missing host group", "missing_host_group"),
+    ):
+        count = metrics.get(key, 0)
+        print(f"  {label:30s}  {count:4d}  ({coverage_percent(count, total):3d}%)")
 
     return 0
 

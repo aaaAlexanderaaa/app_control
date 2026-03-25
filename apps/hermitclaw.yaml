@@ -8,32 +8,64 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Open-source autonomous research pet; upstream lacks a dedicated service domain, so reviewed IOC stays on exact HermitClaw keywords plus repo-local config and generated *_box world artifacts documented by the upstream README.
+notes: >-
+  Open-source autonomous research pet; upstream still lacks a dedicated
+  service domain or installer package, so reviewed IOC stays on the exact
+  HermitClaw keyword plus the generated `*_box` runtime artifacts documented
+  by the upstream README, entrypoint, brain loop, and memory code. Deep source
+  review found only the local `localhost:8000` UI and third-party provider
+  endpoints rather than a HermitClaw-owned service domain. Excluded
+  `github.com`, `raw.githubusercontent.com`, and `localhost:8000` as network
+  IOCs because they are shared code-hosting or local-development surfaces
+  rather than HermitClaw-owned service domains.
 references:
 - url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/README.md
   kind: upstream_readme
   summary: Upstream README documents running hermitclaw/main.py, the repo-root config.yaml, and the generated {name}_box world directory with memory_stream.jsonl.
-  checked_at: '2026-03-22'
-- url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/hermitclaw/config.py
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/pyproject.toml
   kind: upstream_source
-  summary: Config loader resolves the repo-root config.yaml and the default environment path used for runtime state.
-  checked_at: '2026-03-22'
+  summary: Project metadata defines the package name hermitclaw for the local autonomous research pet.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/hermitclaw/main.py
+  kind: upstream_source
+  summary: Entrypoint discovers `*_box` directories, migrates legacy `environment/`, and starts the local HermitClaw web UI on localhost:8000.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/hermitclaw/brain.py
+  kind: upstream_source
+  summary: Brain loop writes the repo-local `hermitclaw.log.jsonl` activity log and updates `projects.md` inside each crab box.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/hermitclaw/memory.py
+  kind: upstream_source
+  summary: Memory implementation persists the append-only stream and related recall data inside the generated crab box.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
       url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/README.md
-      evidence: Upstream materials consistently name the project HermitClaw but do not expose a dedicated first-party service host, so the reviewed network IOC is intentionally limited to the exact HermitClaw keyword.
-      checked_at: '2026-03-22'
+      evidence: >-
+        Upstream materials consistently name the project HermitClaw but only
+        expose the local localhost UI plus third-party provider endpoints,
+        not a dedicated first-party service host or installer domain, so the
+        reviewed network IOC remains intentionally limited to the exact
+        HermitClaw keyword.
+      checked_at: '2026-03-24'
     keyword_patterns:
     - pattern: hermitclaw
       match: substring
   host:
     status: reviewed
     provenance:
-      url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/README.md
-      evidence: The upstream README tells users to run hermitclaw/main.py with a repo-root config.yaml, and states that first run creates a {name}_box directory whose memory lives in memory_stream.jsonl, so the retained host IOC is limited to those exact repo-local and generated artifacts.
-      checked_at: '2026-03-22'
+      url: https://raw.githubusercontent.com/brendanhogan/hermitclaw/main/hermitclaw/main.py
+      evidence: >-
+        The upstream README, package metadata, entrypoint, brain loop, and
+        memory code show that HermitClaw uses a repo-root config.yaml,
+        discovers generated `*_box` directories at startup, persists identity
+        plus `memory_stream.jsonl` inside each box, and writes a repo-local
+        `hermitclaw.log.jsonl` activity log.
+      checked_at: '2026-03-24'
     paths:
-    - '*/hermitclaw/'
+    - config.yaml
     - '*_box/'
+    - hermitclaw.log.jsonl

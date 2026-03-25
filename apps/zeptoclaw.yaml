@@ -8,7 +8,13 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Security-focused Rust assistant; reviewed IOC keeps the exact zeptoclaw.com host and the explicit ~/.zeptoclaw config, cache, skills, and plugin artifacts documented by upstream install and CLI references.
+notes: >-
+  Security-focused Rust assistant; reviewed IOC keeps the exact
+  `zeptoclaw.com` host and the explicit `~/.zeptoclaw` config, cache, skills,
+  and plugin artifacts documented by upstream install and CLI references.
+  Excluded `github.com`, `raw.githubusercontent.com`, and Homebrew or package
+  mirrors because they are shared code or distribution infrastructure rather
+  than ZeptoClaw-owned service domains.
 references:
 - url: https://raw.githubusercontent.com/qhkm/zeptoclaw/main/README.md
   kind: upstream_readme

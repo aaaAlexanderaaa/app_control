@@ -1,18 +1,53 @@
 id: octoclaw
 name: OctoClaw
-category: AI_DESKTOP_ASSISTANT
+category: CLAW_FAMILY_APP
 product_shape:
-- macos
+- web
 product_type:
-- desktop_agent
 - assistant
-severity: medium
-priority_score: 74
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (E-macOS应用/AI专家); detailed IOC review pending.
+- automation
+- cloud_deployment
+severity: critical
+priority_score: 93
+notes: >-
+  OctoClaw is a hosted OpenClaw-derived service on `octoclaw.ai` that sells
+  always-on marketing, sales, and support specialists as a web application.
+  Manual re-review of the official site confirms the exact branded domain and
+  `WebApplication` metadata. Excluded LinkedIn, Zendesk, HubSpot, and other
+  downstream integrations because they are customer tools rather than
+  OctoClaw-owned infrastructure, and omitted host IOC because current public
+  material exposes only a browser product without a desktop bundle or stable
+  local runtime artifact.
+references:
+- url: https://octoclaw.ai/
+  kind: official_site
+  summary: Official OctoClaw site describes a web application on octoclaw.ai for hosted marketing, sales, and support specialists built on OpenClaw.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: urn:internal:archive:claw_ecosystem_full_report:2026-03-20
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://octoclaw.ai/
+      evidence: >-
+        The official OctoClaw site is served from the exact `octoclaw.ai`
+        host and describes the product as a `WebApplication`, so the reviewed
+        network IOC keeps only that exact branded host and the exact OctoClaw
+        keyword.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: octoclaw.ai
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: octoclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://octoclaw.ai/
+      evidence: >-
+        Official OctoClaw material presents the product as a hosted web
+        application and does not publish a desktop app, extension ID, mobile
+        bundle, or stable local runtime path, so the reviewed host IOC remains
+        intentionally omitted.
+      checked_at: '2026-03-24'

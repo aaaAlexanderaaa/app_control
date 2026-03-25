@@ -13,7 +13,10 @@ priority_score: 94
 notes: >-
   NanoClaw is marketed as a secure lightweight OpenClaw alternative that runs
   Claude-driven agents inside Apple Container or Docker with modular messaging
-  skills.
+  skills. Manual re-review confirmed the exact `nanoclaw.dev` product host and
+  the source-backed launch-agent artifact. Excluded Apple Container, Docker,
+  npm, and provider endpoints as network IOCs because they are shared or
+  downstream infrastructure rather than NanoClaw-owned service domains.
 references:
 - url: https://nanoclaw.dev/
   kind: official_site
@@ -34,7 +37,7 @@ iocs:
       checked_at: '2026-03-22'
     hostname_patterns:
     - pattern: nanoclaw.dev
-      match: suffix
+      match: exact
       role: app_brand
     keyword_patterns:
     - pattern: nanoclaw

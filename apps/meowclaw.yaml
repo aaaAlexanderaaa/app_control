@@ -2,17 +2,47 @@ id: meowclaw
 name: MeowClaw
 category: CLAW_FAMILY_APP
 product_shape:
-- macos
+- web
 product_type:
 - personal_agent
 - automation
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (D-中国变体/一键使用); detailed IOC review pending.
+notes: >-
+  MeowClaw exposes its browser console on `claw.meowster.io`. Keep IOC on the
+  exact console host only. Excluded the broader `meowster.io` parent and any
+  inferred local install artifacts because the public service currently
+  presents as a hosted web console without published desktop or mobile package
+  metadata.
+references:
+- url: https://claw.meowster.io/
+  kind: official_site
+  summary: Official MeowClaw console is served from claw.meowster.io.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: urn:internal:archive:claw_ecosystem_full_report:2026-03-20
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://claw.meowster.io/
+      evidence: >-
+        The official MeowClaw console is served from the exact
+        `claw.meowster.io` host, so the reviewed network IOC keeps only that
+        branded console endpoint and the MeowClaw keyword.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: claw.meowster.io
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: meowclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://claw.meowster.io/
+      evidence: >-
+        Public MeowClaw material currently exposes only a hosted browser
+        console and does not publish a desktop app, mobile bundle, extension
+        ID, or stable local runtime path, so the reviewed host IOC remains
+        intentionally omitted.
+      checked_at: '2026-03-24'

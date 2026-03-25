@@ -2,17 +2,60 @@ id: supaclaw
 name: SupaClaw
 category: CLAW_FAMILY_APP
 product_shape:
-- macos
+- web
 product_type:
 - personal_agent
 - automation
+- cloud_deployment
 severity: critical
 priority_score: 93
-notes: Placeholder imported from archive/claw_ecosystem_full_report.csv (A-Claw核心/Supabase); detailed IOC review pending.
+notes: >-
+  SupaClaw exposes a dedicated `supaclaw.app` deployment surface and upstream
+  repo for quick OpenClaw rollout. Keep IOC on the exact branded web host
+  only. Excluded `supabase.com`, `api.telegram.org`, and model-provider
+  endpoints because they are shared infrastructure, and current upstream
+  material documents only repo-local deployment files rather than stable
+  machine-wide host artifacts.
+references:
+- url: https://www.supaclaw.app/en
+  kind: official_site
+  summary: Official SupaClaw site markets a web deployment surface on www.supaclaw.app.
+  checked_at: '2026-03-24'
+- url: https://github.com/vincenzodomina/supaclaw
+  kind: official_repo
+  summary: Official SupaClaw repository documents the Supabase-native deployment flow and install script.
+  checked_at: '2026-03-24'
+- url: https://raw.githubusercontent.com/vincenzodomina/supaclaw/main/scripts/install.sh
+  kind: official_source
+  summary: Install script shows only repo-local `supabase/.env.local` and `workspace/.agents` deployment artifacts.
+  checked_at: '2026-03-24'
 iocs:
   network:
-    status: draft
+    status: reviewed
     provenance:
-      url: https://github.com/supaclaw/supaclaw
-      evidence: Placeholder imported from archive/claw_ecosystem_full_report.csv; detailed IOC review pending.
-      checked_at: '2026-03-20'
+      url: https://www.supaclaw.app/en
+      evidence: >-
+        Official SupaClaw product pages are served from `www.supaclaw.app`
+        with a canonical `supaclaw.app` root, so the reviewed network IOC
+        keeps only those exact branded hosts and drops shared infrastructure.
+      checked_at: '2026-03-24'
+    hostname_patterns:
+    - pattern: www.supaclaw.app
+      match: exact
+      role: app_brand
+    - pattern: supaclaw.app
+      match: exact
+      role: app_brand
+    keyword_patterns:
+    - pattern: supaclaw
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://raw.githubusercontent.com/vincenzodomina/supaclaw/main/scripts/install.sh
+      evidence: >-
+        Upstream install material creates repo-local `supabase/.env.local` and
+        `workspace/.agents` files inside the deployment checkout, but no stable
+        bundle ID, machine-wide install path, or unique process name was
+        documented, so the reviewed host IOC remains intentionally omitted.
+      checked_at: '2026-03-24'

@@ -2,37 +2,64 @@ id: safeclaw
 name: safeclaw
 category: CLAW_FAMILY_APP
 product_shape:
-- macos
+- web
 product_type:
 - personal_agent
 - automation
 severity: critical
 priority_score: 93
-notes: Safeclaw's official landing page exposes a dedicated first-party host and the exact safeclaw CLI invocation; until a source-backed config path is published, keep host IOC limited to the exact CLI process name.
+notes: >-
+  SafeClaw's official landing, setup, and onboarding pages expose a dedicated
+  first-party brand host plus a hosted control plane, but deep re-review did
+  not find a published SafeClaw desktop bundle, CLI download, package token,
+  or stable local runtime path. The `safeclaw deploy` terminal snippet appears
+  inside hosted marketing and onboarding UI, so it is no longer treated as a
+  source-backed local host IOC. Excluded Stripe checkout, Telegram, and the
+  wider Railway platform because they are payment, messaging, or shared hosting
+  infrastructure rather than SafeClaw-owned app-brand surfaces.
 references:
 - url: https://safeclaw.dev/
   kind: official_site
   summary: Official safeclaw landing page presents the product on safeclaw.dev and shows the safeclaw deploy CLI command.
-  checked_at: '2026-03-21'
+  checked_at: '2026-03-24'
+- url: https://safeclaw.dev/onboard/
+  kind: official_onboarding
+  summary: Official onboarding page calls the hosted SafeClaw control plane on a dedicated Railway subdomain and guides users through web-based provisioning.
+  checked_at: '2026-03-24'
+- url: https://safeclaw.dev/setup.html
+  kind: official_tool
+  summary: Official setup page is a browser-based OpenClaw config audit tool and does not publish a SafeClaw binary, package token, or local install path.
+  checked_at: '2026-03-24'
 iocs:
   network:
     status: reviewed
     provenance:
-      url: https://safeclaw.dev/
-      evidence: Safeclaw's official product surface is served from https://safeclaw.dev/, so the reviewed network IOC set keeps only that exact first-party host.
-      checked_at: '2026-03-21'
+      url: https://safeclaw.dev/onboard/
+      evidence: >-
+        Official SafeClaw product and onboarding pages are served from the
+        exact `safeclaw.dev` host and call the dedicated
+        `safeclaw-control-plane-production.up.railway.app` control-plane
+        backend during hosted provisioning, so the reviewed network IOC keeps
+        those exact surfaces only.
+      checked_at: '2026-03-24'
     hostname_patterns:
     - pattern: safeclaw.dev
       match: exact
       role: app_brand
+    - pattern: safeclaw-control-plane-production.up.railway.app
+      match: exact
+      role: platform_service
     keyword_patterns:
     - pattern: safeclaw
       match: substring
   host:
     status: reviewed
     provenance:
-      url: https://safeclaw.dev/
-      evidence: The official Safeclaw site shows the exact command safeclaw deploy --plan pro, so the reviewed host IOC is limited to the product-specific safeclaw process name.
-      checked_at: '2026-03-21'
-    process_names:
-    - safeclaw
+      url: https://safeclaw.dev/setup.html
+      evidence: >-
+        The official SafeClaw landing, setup, and onboarding pages expose only
+        hosted web flows and a browser-side config audit utility; they do not
+        publish a downloadable SafeClaw app, package token, extension ID, or
+        stable local runtime path, so the reviewed host IOC remains
+        intentionally omitted.
+      checked_at: '2026-03-24'

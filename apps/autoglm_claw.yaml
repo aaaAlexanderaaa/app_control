@@ -8,7 +8,12 @@ product_type:
 - automation
 severity: critical
 priority_score: 93
-notes: Official AutoGLM app; keep IOC on the exact AutoGLM product host and exact App Store bundle instead of broader Zhipu parent domains.
+notes: >-
+  Official AutoGLM app; keep IOC on the exact AutoGLM product host and exact
+  App Store bundle instead of broader Zhipu parent domains. Excluded
+  `www.zhipuai.cn`, generic Zhipu product pages, and App Store search or
+  profile surfaces because they are shared with other Zhipu offerings rather
+  than AutoGLM specifically.
 references:
 - url: https://autoglm.zhipuai.cn/
   kind: official_site
