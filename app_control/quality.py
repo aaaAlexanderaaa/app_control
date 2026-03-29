@@ -17,7 +17,13 @@ OVERALL_GRADE_POINTS = {
     "excellent": 4,
 }
 SEVERITY_RANK = {"critical": 0, "high": 1, "medium": 2, "low": 3}
-REVIEW_GRADE_RANK = {"needs_work": 0, "acceptable": 1, "good": 2, "excellent": 3, "missing": 4}
+REVIEW_GRADE_RANK = {
+    "needs_work": 0,
+    "acceptable": 1,
+    "good": 2,
+    "excellent": 3,
+    "missing": 4,
+}
 RATIONALE_TERMS = (
     "avoid",
     "drop",
@@ -97,20 +103,46 @@ def _dedupe(values: list[str]) -> list[str]:
     return ordered
 
 
+_PKG_MGR_BIN_PREFIXES = (
+    "~/.local/bin/",
+    "~/.cargo/bin/",
+    "~/go/bin/",
+    "~/.go/bin/",
+    "/opt/homebrew/bin/",
+    "/usr/local/bin/",
+)
+_CLI_PRODUCT_TYPES = {"cli", "cli_agent", "terminal"}
+
+
 def _path_family_flags(paths: list[str]) -> dict[str, bool]:
     app_bundle = False
     user_scope = False
+    machine_scope = False
     repo_local = False
+    pkg_mgr_bin = False
     for path in paths:
         if not path:
             continue
+        if any(path.startswith(prefix) for prefix in _PKG_MGR_BIN_PREFIXES):
+            pkg_mgr_bin = True
         if "/Applications/" in path and ".app" in path:
             app_bundle = True
             continue
-        if path.startswith("~/") or path.startswith("/Library/") or path.startswith("~/Library/"):
+        if (
+            path.startswith("~/")
+            or path.startswith("/Library/")
+            or path.startswith("~/Library/")
+        ):
             user_scope = True
             continue
-        if path.startswith("./") or path.startswith("*/") or not path.startswith(("/", "~")):
+        if path.startswith(("/opt/", "/usr/local/", "/usr/bin/", "/bin/", "/etc/")):
+            machine_scope = True
+            continue
+        if (
+            path.startswith("./")
+            or path.startswith("*/")
+            or not path.startswith(("/", "~"))
+        ):
             repo_local = True
             continue
         if "/Library/" in path:
@@ -118,7 +150,9 @@ def _path_family_flags(paths: list[str]) -> dict[str, bool]:
     return {
         "app_bundle_path": app_bundle,
         "user_scope_path": user_scope,
+        "machine_scope_path": machine_scope,
         "repo_local_path": repo_local,
+        "pkg_mgr_bin_path": pkg_mgr_bin,
     }
 
 
@@ -149,18 +183,36 @@ def assess_network_quality(app: dict[str, Any]) -> dict[str, Any]:
     evidence = str(provenance.get("evidence", ""))
     hosts = network.get("hostname_patterns") or []
     keywords = network.get("keyword_patterns") or []
-    placeholder = _contains_placeholder_text(notes) or _contains_placeholder_text(evidence)
+    placeholder = _contains_placeholder_text(notes) or _contains_placeholder_text(
+        evidence
+    )
     legacy = _is_legacy_provenance(url)
     inferred = _is_inferred_evidence(evidence)
 
-    branded_exact = [item for item in hosts if item.get("role") == "app_brand" and item.get("match") == "exact"]
-    branded_suffix = [item for item in hosts if item.get("role") == "app_brand" and item.get("match") == "suffix"]
-    exact_secondary = [item for item in hosts if item.get("match") == "exact" and item.get("role") != "app_brand"]
+    branded_exact = [
+        item
+        for item in hosts
+        if item.get("role") == "app_brand" and item.get("match") == "exact"
+    ]
+    branded_suffix = [
+        item
+        for item in hosts
+        if item.get("role") == "app_brand" and item.get("match") == "suffix"
+    ]
+    exact_secondary = [
+        item
+        for item in hosts
+        if item.get("match") == "exact" and item.get("role") != "app_brand"
+    ]
     keyword_only = not hosts and bool(keywords)
-    shared_only = bool(hosts) and not (branded_exact or branded_suffix) and {
-        item.get("role") for item in hosts
-    } <= SHARED_NETWORK_ROLES
-    single_suffix_brand = len(branded_suffix) == 1 and not branded_exact and not exact_secondary
+    shared_only = (
+        bool(hosts)
+        and not (branded_exact or branded_suffix)
+        and {item.get("role") for item in hosts} <= SHARED_NETWORK_ROLES
+    )
+    single_suffix_brand = (
+        len(branded_suffix) == 1 and not branded_exact and not exact_secondary
+    )
 
     score = 0
     strengths: list[str] = []
@@ -171,7 +223,9 @@ def assess_network_quality(app: dict[str, Any]) -> dict[str, Any]:
         strengths.append("network provenance points to a direct source")
     elif url and not legacy:
         score += 1
-        issues.append("network provenance is weaker than a direct product or source reference")
+        issues.append(
+            "network provenance is weaker than a direct product or source reference"
+        )
     else:
         issues.append("network provenance still relies on legacy migration metadata")
 
@@ -261,30 +315,42 @@ def assess_host_quality(app: dict[str, Any]) -> dict[str, Any]:
     provenance = host.get("provenance") or {}
     url = str(provenance.get("url", ""))
     evidence = str(provenance.get("evidence", ""))
-    placeholder = _contains_placeholder_text(notes) or _contains_placeholder_text(evidence)
+    placeholder = _contains_placeholder_text(notes) or _contains_placeholder_text(
+        evidence
+    )
     legacy = _is_legacy_provenance(url)
     inferred = _is_inferred_evidence(evidence)
 
     paths = host.get("paths") or []
     process_names = host.get("process_names") or []
+    bundle_ids = host.get("bundle_ids") or []
+    product_types = set(app.get("product_type") or [])
+    is_cli_tool = bool(product_types & _CLI_PRODUCT_TYPES)
     strong_identity = any(host.get(field) for field in STRONG_HOST_FIELDS)
     path_flags = _path_family_flags(paths)
     app_bundle_path = path_flags["app_bundle_path"]
     user_scope_path = path_flags["user_scope_path"]
+    machine_scope_path = path_flags["machine_scope_path"]
     repo_local_path = path_flags["repo_local_path"]
+    pkg_mgr_bin_path = path_flags["pkg_mgr_bin_path"]
+    missing_bundle_id = app_bundle_path and not bundle_ids
+    cli_missing_pkg_path = is_cli_tool and not pkg_mgr_bin_path and not app_bundle_path
 
     family_count = sum(
         1
         for present in (
             app_bundle_path,
             user_scope_path,
+            machine_scope_path,
             repo_local_path,
             strong_identity,
             bool(process_names),
         )
         if present
     )
-    strong_artifact = strong_identity or app_bundle_path or user_scope_path
+    strong_artifact = (
+        strong_identity or app_bundle_path or user_scope_path or machine_scope_path
+    )
     repo_local_only = repo_local_path and not strong_artifact
     single_family = family_count <= 1
 
@@ -304,9 +370,9 @@ def assess_host_quality(app: dict[str, Any]) -> dict[str, Any]:
     if strong_identity:
         score += 3
         strengths.append("host IOC includes a strong identity artifact")
-    elif app_bundle_path or user_scope_path:
+    elif app_bundle_path or user_scope_path or machine_scope_path:
         score += 2
-        strengths.append("host IOC includes a concrete install or user-scope path")
+        strengths.append("host IOC includes a concrete install or local-scope path")
     elif repo_local_path or process_names:
         score += 1
         issues.append("host IOC is limited to repo-local paths or process names")
@@ -341,6 +407,14 @@ def assess_host_quality(app: dict[str, Any]) -> dict[str, Any]:
         issues.append("host IOC depends on inferred installer or product naming")
     if not strong_artifact:
         issues.append("host IOC lacks a strong installation or identity artifact")
+    if missing_bundle_id:
+        issues.append(
+            "host has .app bundle path but no bundle_id (retrievable via system_profiler or mdls)"
+        )
+    if cli_missing_pkg_path:
+        issues.append(
+            "CLI tool lacks package manager install paths (e.g. ~/.local/bin/, /opt/homebrew/bin/, ~/.cargo/bin/)"
+        )
 
     return {
         "grade": grade,
@@ -356,6 +430,8 @@ def assess_host_quality(app: dict[str, Any]) -> dict[str, Any]:
             "strong_artifact": strong_artifact,
             "single_family": single_family,
             "repo_local_only": repo_local_only,
+            "missing_bundle_id": missing_bundle_id,
+            "cli_missing_pkg_path": cli_missing_pkg_path,
         },
     }
 
@@ -371,10 +447,18 @@ def assess_app_quality(app: dict[str, Any]) -> dict[str, Any]:
     strengths: list[str] = []
     issues: list[str] = []
 
-    if network["grade"] in {"acceptable", "good", "excellent"} and host["grade"] in {"acceptable", "good", "excellent"}:
+    if network["grade"] in {"acceptable", "good", "excellent"} and host["grade"] in {
+        "acceptable",
+        "good",
+        "excellent",
+    }:
         score += 2
         strengths.append("app has both network and host coverage")
-    elif network["grade"] in {"acceptable", "good", "excellent"} or host["grade"] in {"acceptable", "good", "excellent"}:
+    elif network["grade"] in {"acceptable", "good", "excellent"} or host["grade"] in {
+        "acceptable",
+        "good",
+        "excellent",
+    }:
         score += 1
         issues.append("app relies on a single IOC channel")
     else:
@@ -456,10 +540,15 @@ def summarize_catalog_quality(apps: list[dict[str, Any]]) -> dict[str, Any]:
             metrics["strong_host_artifact"] += 1
         if item["host"]["flags"]["repo_local_only"]:
             metrics["repo_local_only_host"] += 1
+        if item["host"]["flags"].get("missing_bundle_id"):
+            metrics["missing_bundle_id_host"] += 1
+        if item["host"]["flags"].get("cli_missing_pkg_path"):
+            metrics["cli_missing_pkg_path"] += 1
 
     review_candidates = sorted(
         (
-            item for item in assessments
+            item
+            for item in assessments
             if item["overall"]["grade"] in {"needs_work", "acceptable"}
         ),
         key=lambda item: (

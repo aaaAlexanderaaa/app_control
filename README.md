@@ -4,8 +4,8 @@
 
 Enterprise environments face growing data leakage risk from AI-powered applications that can autonomously access, upload, or exfiltrate sensitive data. This project catalogs such applications and their fingerprints (network domains, host artifacts) to enable automated detection via:
 
-- **Network IOCs** -- ES|QL alert rules matching DNS/TLS/HTTP traffic to known app domains
-- **Host IOCs** -- MDM-deployed scripts (Jamf) scanning for app installations, config files, and binaries
+- **Network IOCs** -- ES|QL alert rules matching DNS/TLS traffic to known app domains
+- **Host IOCs** -- MDM-deployed scripts (Jamf) scanning for app installations, config files, binaries, Chrome extensions, and uncataloged application inventory via `system_profiler`, `mdfind`, and package manager filesystem scans
 
 Priority is given to high-risk AI apps ranked by autonomy and exfiltration surface:
 
@@ -16,6 +16,8 @@ Priority score bands follow this order:
 - `74-81` interaction-required execution
 - `60-73` active file or prompt uploads leading to leakage
 - `35-59` local-first or lower-priority point tools
+
+Named mandatory examples in `docs/QUALITY_STANDARDS.md` override generic heuristics. In particular, `openclaw` / `zeroclaw` stay `critical`, `opencode` / `claude_code` stay `high`, and `lovable` / `bolt` / `replit` stay `medium` unless that document is explicitly updated after an independent review pass.
 
 1. **Fully automated hosting** -- 24/7 daemons with skills/plugins and messaging integration (e.g., OpenClaw)
 2. **Automated command execution** -- terminal-level AI with autonomous command generation (e.g., Warp.app)
@@ -53,7 +55,7 @@ schemas/app.schema.yaml      # frozen schema definition
 
 generators/
   esql_rules.py              # network IOCs -> ES|QL detection rules
-  jamf_scan.py               # host IOCs -> Jamf/MDM scan scripts
+  jamf_scan.py               # host IOCs -> Jamf/MDM scan scripts + inventory discovery
 
 tools/
   validate.py                # validate all app files against schema
@@ -105,6 +107,7 @@ scripts/catalog/recompute-priority --write
 scripts/generate/network-rules --min-status reviewed
 scripts/generate/host-scan --min-status validated
 scripts/generate/category-alerts --min-status reviewed --output-dir output
+scripts/generate/targeted-alerts --min-status reviewed --from-pattern '*ftd*' --output-dir output
 ```
 
 ### Research Commands
@@ -128,6 +131,20 @@ scripts/research --list-known
 # JSON output for downstream processing
 scripts/research --app cursor --format json
 ```
+
+## Targeted Cohorts
+
+Need the two requested cohorts (macOS-runnable CLAW family, plus high-risk-and-above excluding that CLAW set)? Use `scripts/generate/targeted-alerts`. The workflow and example outputs are documented in `docs/TARGETED_ALERT_WORKFLOWS.md`.
+
+## One-Page Overview
+
+Need a one-page overall view of the full catalog? Generate the static HTML overview:
+
+```bash
+scripts/catalog/overview --output output/apps_overview.html
+```
+
+Open `output/apps_overview.html` in a browser to get summary cards, category/severity breakdowns, priority hotspots, and a searchable full-app table.
 
 ## IOC Status Lifecycle
 
@@ -193,6 +210,7 @@ make build-canary
 
 **Jamf scan (host detection):**
 ```bash
+# Targeted detection: per-app checks for known IOCs
 OPENCLAW_CANDIDATES=(
     "/Applications/OpenClaw.app"
     "/opt/homebrew/bin/openclaw"
@@ -204,6 +222,18 @@ for h in "${USER_HOMES[@]}"; do
         "$h/Applications/OpenClaw.app"
     )
 done
+
+# Chrome extension detection
+check_chrome_extension "automa" "infppggnoaenmfagbfknfkancpbljcca"
+
+# Inventory discovery: finds uncataloged apps via system_profiler,
+# mdfind, and package manager filesystem scans
+discover_via_system_profiler  # _name, path, version, obtained_from, signed_by
+discover_via_mdfind           # .app bundles on any Spotlight-indexed volume
+discover_via_cargo            # reads ~/.cargo/.crates2.json
+discover_via_go               # scans ~/go/bin/
+discover_via_npm              # scans /opt/homebrew/lib/node_modules/
+discover_via_pip              # scans ~/.local/pipx/venvs/, ~/.local/bin/
 ```
 
 ## Operational Gap

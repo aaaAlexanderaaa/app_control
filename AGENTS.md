@@ -3,7 +3,7 @@
 Follow the `docs/QUALITY_STANDARDS.md` and `docs/PROJECT_STANDARD.md`
 
 ## Project Structure & Module Organization
-`apps/` is the source of truth: one YAML file per application. Keep active catalog work there, using snake_case filenames such as `apps/chatgpt.yaml`. Shared Python code lives in `app_control/`, operator-facing implementations live in `tools/` and `generators/`, and stable shell wrappers live in `scripts/`. Schema contracts are frozen in `schemas/`; governance and quality rules are in `docs/`. Treat `output/` as generated-only, `scratch/` as temporary workspace, and `archive/` as historical reference.
+`apps/` is the source of truth: one YAML file per application. Keep active catalog work there, using snake_case filenames such as `apps/chatgpt.yaml`. Shared Python code lives in `app_control/`, operator-facing implementations live in `tools/` and `generators/`, and stable shell wrappers live in `scripts/`. Schema contracts are frozen in `schemas/`; governance and quality rules are in `docs/`. Treat `output/` as generated-only, `scratch/` as temporary workspace, and `archive/` as historical reference. The Jamf scan generator (`generators/jamf_scan.py`) produces both targeted detection for cataloged apps and inventory discovery of uncataloged apps via `system_profiler`, `mdfind`, and package manager filesystem scans.
 
 ## Build, Test, and Development Commands
 Use the supported entrypoints instead of ad hoc scripts:

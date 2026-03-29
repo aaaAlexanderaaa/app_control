@@ -59,6 +59,7 @@ SHARED_HOSTING_EXACT = frozenset({
     "rubygems.org", "api.rubygems.org",
     "dl.google.com", "storage.googleapis.com",
     "download.docker.com", "registry.hub.docker.com",
+    "apps.apple.com", "itunes.apple.com",
 })
 
 
@@ -93,6 +94,125 @@ def _fetch_text(url: str) -> str | None:
     except Exception as exc:
         print(f"  WARN: fetch failed {url}: {exc}", file=sys.stderr)
         return None
+
+
+# ════════════════════════════════════════════════════════════════════════
+#  Hostname helpers
+# ════════════════════════════════════════════════════════════════════════
+
+PUBLIC_SUFFIX_LIST_URL = "https://publicsuffix.org/list/public_suffix_list.dat"
+
+DEFAULT_MULTI_LABEL_PUBLIC_SUFFIXES = frozenset({
+    "ac.in", "ac.jp", "ac.kr", "ac.nz", "ac.uk",
+    "asn.au", "co.in", "co.jp", "co.kr", "co.nz", "co.uk",
+    "com.au", "com.br", "com.cn", "com.hk", "com.sg",
+    "edu.au", "edu.cn", "edu.hk", "edu.in", "edu.sg",
+    "firm.in", "gen.in", "geek.nz", "gov.au", "gov.br", "gov.cn",
+    "gov.hk", "gov.in", "gov.uk", "govt.nz", "health.nz",
+    "id.au", "idv.hk", "iwi.nz", "kiwi.nz", "ltd.uk",
+    "maori.nz", "me.uk", "mil.cn", "mil.in", "mil.kr", "mil.nz",
+    "ne.jp", "ne.kr", "net.au", "net.br", "net.cn", "net.hk",
+    "net.in", "net.nz", "net.sg", "net.uk", "or.jp", "or.kr",
+    "org.au", "org.br", "org.cn", "org.hk", "org.in", "org.nz",
+    "org.sg", "org.uk", "pe.kr", "per.sg", "plc.uk", "re.kr",
+    "res.in", "sch.uk", "school.nz",
+})
+
+_PUBLIC_SUFFIX_RULES: set[str] | None = None
+_PUBLIC_SUFFIX_WILDCARDS: set[str] | None = None
+_PUBLIC_SUFFIX_EXCEPTIONS: set[str] | None = None
+
+
+def _normalize_hostname(value: str | None) -> str | None:
+    if not value:
+        return None
+    host = value.strip().lower()
+    if "://" in host:
+        host = urlparse(host).hostname or ""
+    if host.startswith("*."):
+        host = host[2:]
+    host = host.strip(".")
+    if not host or "/" in host or " " in host:
+        return None
+    labels = host.split(".")
+    if any(not label for label in labels):
+        return None
+    return host
+
+
+def _append_domain_from_url(domains: dict[str, str], url: str, role: str) -> None:
+    host = _normalize_hostname(urlparse(url).hostname)
+    if host and not _is_shared_infra(host) and host not in domains:
+        domains[host] = role
+
+
+def _load_public_suffix_data() -> tuple[set[str], set[str], set[str]]:
+    global _PUBLIC_SUFFIX_RULES, _PUBLIC_SUFFIX_WILDCARDS, _PUBLIC_SUFFIX_EXCEPTIONS
+
+    if (
+        _PUBLIC_SUFFIX_RULES is not None
+        and _PUBLIC_SUFFIX_WILDCARDS is not None
+        and _PUBLIC_SUFFIX_EXCEPTIONS is not None
+    ):
+        return _PUBLIC_SUFFIX_RULES, _PUBLIC_SUFFIX_WILDCARDS, _PUBLIC_SUFFIX_EXCEPTIONS
+
+    rules = set(DEFAULT_MULTI_LABEL_PUBLIC_SUFFIXES)
+    wildcards: set[str] = set()
+    exceptions: set[str] = set()
+
+    text = _fetch_text(PUBLIC_SUFFIX_LIST_URL)
+    if text:
+        rules.clear()
+        for raw_line in text.splitlines():
+            line = raw_line.strip().lower()
+            if not line or line.startswith("//"):
+                continue
+            if line.startswith("!"):
+                exceptions.add(line[1:])
+            elif line.startswith("*."):
+                wildcards.add(line[2:])
+            else:
+                rules.add(line)
+
+    _PUBLIC_SUFFIX_RULES = rules
+    _PUBLIC_SUFFIX_WILDCARDS = wildcards
+    _PUBLIC_SUFFIX_EXCEPTIONS = exceptions
+    return rules, wildcards, exceptions
+
+
+def _public_suffix_length(labels: list[str]) -> int:
+    rules, wildcards, exceptions = _load_public_suffix_data()
+
+    for index in range(len(labels)):
+        candidate = ".".join(labels[index:])
+        if candidate in exceptions:
+            return len(labels) - index - 1
+
+    match_len = 1
+    for index in range(len(labels)):
+        candidate = ".".join(labels[index:])
+        if candidate in rules:
+            match_len = max(match_len, len(labels) - index)
+        if index + 1 < len(labels):
+            wildcard_candidate = ".".join(labels[index + 1 :])
+            if wildcard_candidate in wildcards:
+                match_len = max(match_len, len(labels) - index)
+    return match_len
+
+
+def registrable_domain(hostname: str | None) -> str | None:
+    host = _normalize_hostname(hostname)
+    if not host:
+        return None
+
+    labels = host.split(".")
+    if len(labels) <= 2:
+        return host
+
+    suffix_len = _public_suffix_length(labels)
+    if len(labels) <= suffix_len:
+        return host
+    return ".".join(labels[-(suffix_len + 1):])
 
 
 # ════════════════════════════════════════════════════════════════════════
@@ -357,6 +477,199 @@ def run_homebrew(app_id: str | None, brew_type: str | None, token: str | None) -
     ruby_url = BREW_FORMULA_RAW.format(prefix=token[0], token=token)
     ruby_source = _fetch_text(ruby_url)
     return _extract_formula_host_iocs(ruby_source, token), _extract_formula_network_iocs(data, ruby_source, token)
+
+
+# ════════════════════════════════════════════════════════════════════════
+#  App Store research
+# ════════════════════════════════════════════════════════════════════════
+
+APPLE_LOOKUP_KIND = "apple_lookup_api"
+APP_STORE_LISTING_KIND = "app_store_listing"
+APP_STORE_ID_RE = re.compile(r"/id(?P<track_id>\d+)(?:[/?]|$)")
+
+
+def _load_existing_app_data(app_id: str) -> dict[str, Any] | None:
+    path = APPS_DIR / f"{app_id}.yaml"
+    if not path.exists():
+        return None
+    return load_app(path)
+
+
+def _lookup_url_from_app_store_listing(url: str) -> str | None:
+    parsed = urlparse(url)
+    match = APP_STORE_ID_RE.search(parsed.path)
+    if not match:
+        return None
+
+    country: str | None = None
+    segments = [segment for segment in parsed.path.split("/") if segment]
+    if segments and re.fullmatch(r"[a-z]{2}(?:-[a-z]{2})?", segments[0]):
+        country = segments[0]
+
+    lookup_url = f"https://itunes.apple.com/lookup?id={match.group('track_id')}"
+    if country:
+        lookup_url += f"&country={country}"
+    return lookup_url
+
+
+def _find_app_store_lookup_url(app_data: dict[str, Any] | None) -> str | None:
+    if not app_data:
+        return None
+
+    listing_url: str | None = None
+    for ref in app_data.get("references", []):
+        if not isinstance(ref, dict):
+            continue
+        url = str(ref.get("url", "")).strip()
+        if not url:
+            continue
+        kind = ref.get("kind")
+        if kind == APPLE_LOOKUP_KIND and "itunes.apple.com/lookup" in url:
+            return url
+        if kind == APP_STORE_LISTING_KIND and "apps.apple.com" in url and listing_url is None:
+            listing_url = url
+
+    if listing_url:
+        return _lookup_url_from_app_store_listing(listing_url)
+    return None
+
+
+def _extract_app_store_result(data: dict[str, Any]) -> dict[str, Any] | None:
+    results = data.get("results")
+    if not isinstance(results, list):
+        return None
+    for entry in results:
+        if isinstance(entry, dict):
+            return entry
+    return None
+
+
+def _extract_app_store_host_iocs(data: dict[str, Any], lookup_url: str) -> dict[str, Any] | None:
+    result = _extract_app_store_result(data)
+    if not result:
+        return None
+
+    bundle_id = result.get("bundleId")
+    if not isinstance(bundle_id, str) or not bundle_id.strip():
+        return None
+
+    track_name = result.get("trackName") or result.get("trackCensoredName") or "App Store listing"
+    seller_name = result.get("sellerName") or result.get("artistName") or "unknown seller"
+    return {
+        "paths": [],
+        "bundle_ids": [bundle_id.strip()],
+        "provenance_url": lookup_url,
+        "evidence": f"Apple Lookup metadata for {track_name} from {seller_name}",
+    }
+
+
+def _extract_app_store_network_iocs(data: dict[str, Any], lookup_url: str) -> dict[str, Any] | None:
+    result = _extract_app_store_result(data)
+    if not result:
+        return None
+
+    domains: dict[str, str] = {}
+    for field_name in ("sellerUrl", "supportUrl", "websiteUrl"):
+        value = result.get(field_name, "")
+        if isinstance(value, str) and value:
+            _append_domain_from_url(domains, value, "app_brand")
+
+    if not domains:
+        return None
+
+    track_name = result.get("trackName") or result.get("trackCensoredName") or "App Store listing"
+    return {
+        "hostname_patterns": [
+            {"pattern": domain, "match": "exact", "role": role}
+            for domain, role in sorted(domains.items())
+        ],
+        "provenance_url": lookup_url,
+        "evidence": f"Apple Lookup seller/support URLs for {track_name}",
+    }
+
+
+def run_app_store(app_id: str, app_data: dict[str, Any] | None = None) -> tuple[dict | None, dict | None]:
+    """Run App Store lookup research, returning (host_iocs, network_iocs)."""
+    app_data = app_data or _load_existing_app_data(app_id)
+    lookup_url = _find_app_store_lookup_url(app_data)
+    if not lookup_url:
+        return None, None
+
+    data = _fetch_json(lookup_url)
+    if not data:
+        return None, None
+    return _extract_app_store_host_iocs(data, lookup_url), _extract_app_store_network_iocs(data, lookup_url)
+
+
+def _join_unique(values: list[str]) -> str:
+    return " | ".join(dict.fromkeys(value for value in values if value))
+
+
+def merge_host_iocs(base: dict[str, Any] | None, extra: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not base:
+        return extra
+    if not extra:
+        return base
+
+    paths = sorted(
+        dict.fromkeys([*base.get("paths", []), *extra.get("paths", [])]),
+        key=_path_sort_key,
+    )
+    bundle_ids = sorted(set([*base.get("bundle_ids", []), *extra.get("bundle_ids", [])]))
+    return {
+        "paths": paths,
+        "bundle_ids": bundle_ids,
+        "provenance_url": _join_unique([
+            str(base.get("provenance_url", "")),
+            str(extra.get("provenance_url", "")),
+        ]),
+        "evidence": _join_unique([
+            str(base.get("evidence", "")),
+            str(extra.get("evidence", "")),
+        ]),
+    }
+
+
+def merge_network_iocs(base: dict[str, Any] | None, extra: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not base:
+        return extra
+    if not extra:
+        return base
+
+    seen: set[tuple[str, str, str]] = set()
+    patterns: list[dict[str, str]] = []
+    for source in (base, extra):
+        for hp in source.get("hostname_patterns", []):
+            pattern = str(hp.get("pattern", ""))
+            match = str(hp.get("match", ""))
+            role = str(hp.get("role", ""))
+            key = (pattern, match, role)
+            if not pattern or key in seen:
+                continue
+            seen.add(key)
+            patterns.append({"pattern": pattern, "match": match, "role": role})
+
+    patterns.sort(key=lambda hp: (hp["pattern"], hp["match"], hp["role"]))
+    return {
+        "hostname_patterns": patterns,
+        "provenance_url": _join_unique([
+            str(base.get("provenance_url", "")),
+            str(extra.get("provenance_url", "")),
+        ]),
+        "evidence": _join_unique([
+            str(base.get("evidence", "")),
+            str(extra.get("evidence", "")),
+        ]),
+    }
+
+
+def collect_registrable_domains(patterns: list[dict[str, Any]]) -> set[str]:
+    domains: set[str] = set()
+    for hp in patterns:
+        domain = registrable_domain(str(hp.get("pattern", "")))
+        if domain:
+            domains.add(domain)
+    return domains
 
 
 # ════════════════════════════════════════════════════════════════════════
@@ -645,7 +958,7 @@ def format_full_report(
         lines.append("")
 
     if network_iocs and network_iocs.get("hostname_patterns"):
-        lines.append("── Network IoC Candidates (Homebrew) ──")
+        lines.append("── Network IoC Candidates ──")
         for hp in network_iocs["hostname_patterns"]:
             lines.append(f"    {hp['pattern']:40s}  {hp['match']:6s}  {hp['role']}")
         lines.append("")
@@ -667,11 +980,17 @@ def format_full_report(
     return "\n".join(lines)
 
 
-def format_homebrew_report(app_id: str, host_iocs: dict, network_iocs: dict, fmt: str = "text") -> str:
+def format_source_report(source_label: str, app_id: str, host_iocs: dict, network_iocs: dict, fmt: str = "text") -> str:
     if fmt == "json":
-        return json.dumps({"app_id": app_id, "researched_at": TODAY, "host": host_iocs, "network": network_iocs}, indent=2)
+        return json.dumps({
+            "app_id": app_id,
+            "researched_at": TODAY,
+            "source": source_label,
+            "host": host_iocs,
+            "network": network_iocs,
+        }, indent=2)
 
-    lines = [f"═══ Homebrew Research: {app_id} ═══", f"Date: {TODAY}", "", "── Host IoC Candidates ──"]
+    lines = [f"═══ {source_label} Research: {app_id} ═══", f"Date: {TODAY}", "", "── Host IoC Candidates ──"]
     if host_iocs.get("paths"):
         lines.append("  Paths:")
         for p in host_iocs["paths"]:
@@ -734,13 +1053,14 @@ def main() -> int:
         epilog="Examples:\n"
                "  app-control research --app cursor\n"
                "  app-control research --app cursor --source homebrew\n"
+               "  app-control research --app gemini --source appstore\n"
                "  app-control research --domain cursor.sh --source crtsh\n"
                "  app-control research --list-known\n",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--app", type=str, help="App ID to research")
     parser.add_argument("--domain", type=str, help="Base domain for crt.sh query")
-    parser.add_argument("--source", type=str, choices=("homebrew", "crtsh", "all"), default="all",
+    parser.add_argument("--source", type=str, choices=("homebrew", "appstore", "crtsh", "all"), default="all",
                         help="Research source (default: all)")
     parser.add_argument("--token", type=str, help="Homebrew cask/formula token (overrides app lookup)")
     parser.add_argument("--type", type=str, choices=("cask", "formula"), help="Homebrew package type")
@@ -765,7 +1085,19 @@ def main() -> int:
             print(f"No Homebrew data found for {args.app or args.token}", file=sys.stderr)
             return 1
         app_id = args.app or (args.token or "").replace("-", "_")
-        print(format_homebrew_report(app_id, host or {}, net or {}, args.format))
+        print(format_source_report("Homebrew", app_id, host or {}, net or {}, args.format))
+        return 0
+
+    # ── Source: App Store lookup only ──
+    if args.source == "appstore":
+        if not args.app:
+            parser.error("--source appstore requires --app")
+        app_data = _load_existing_app_data(args.app)
+        host, net = run_app_store(args.app, app_data)
+        if not host and not net:
+            print(f"No App Store lookup metadata found for {args.app}", file=sys.stderr)
+            return 1
+        print(format_source_report("App Store Lookup", args.app, host or {}, net or {}, args.format))
         return 0
 
     # ── Source: crtsh only ──
@@ -783,6 +1115,7 @@ def main() -> int:
         parser.error("--app is required for full research (or use --source homebrew/crtsh)")
 
     app_id = args.app
+    app_data = _load_existing_app_data(app_id)
     host_iocs: dict | None = None
     network_iocs: dict | None = None
     crtsh_analysis: dict | None = None
@@ -791,26 +1124,35 @@ def main() -> int:
     if app_id in KNOWN_HOMEBREW_MAP:
         brew_type, token = KNOWN_HOMEBREW_MAP[app_id]
         print(f"[homebrew] Researching {app_id} ({brew_type}:{token})...", file=sys.stderr)
-        host_iocs, network_iocs = run_homebrew(app_id, None, None)
+        brew_host, brew_network = run_homebrew(app_id, None, None)
+        host_iocs = merge_host_iocs(host_iocs, brew_host)
+        network_iocs = merge_network_iocs(network_iocs, brew_network)
     else:
         print(f"[homebrew] {app_id} not in known map, skipping", file=sys.stderr)
+
+    app_store_lookup_url = _find_app_store_lookup_url(app_data)
+    if app_store_lookup_url:
+        print(f"[appstore] Researching {app_id} via {app_store_lookup_url}...", file=sys.stderr)
+        app_store_host, app_store_network = run_app_store(app_id, app_data)
+        host_iocs = merge_host_iocs(host_iocs, app_store_host)
+        network_iocs = merge_network_iocs(network_iocs, app_store_network)
+    else:
+        print(f"[appstore] {app_id} has no App Store lookup reference, skipping", file=sys.stderr)
 
     # Collect base domains for crt.sh
     domains: set[str] = set()
     if args.domain:
-        domains.add(args.domain.lower().strip())
+        normalized = _normalize_hostname(args.domain)
+        if normalized:
+            domains.add(normalized)
     if network_iocs:
-        for hp in network_iocs.get("hostname_patterns", []):
-            parts = hp["pattern"].split(".")
-            if len(parts) >= 2:
-                domains.add(".".join(parts[-2:]))
-    existing = APPS_DIR / f"{app_id}.yaml"
-    if existing.exists():
-        app_data = load_app(existing)
-        for hp in app_data.get("iocs", {}).get("network", {}).get("hostname_patterns", []):
-            parts = hp.get("pattern", "").split(".")
-            if len(parts) >= 2:
-                domains.add(".".join(parts[-2:]))
+        domains.update(collect_registrable_domains(network_iocs.get("hostname_patterns", [])))
+    if app_data:
+        domains.update(
+            collect_registrable_domains(
+                app_data.get("iocs", {}).get("network", {}).get("hostname_patterns", [])
+            )
+        )
 
     for domain in sorted(domains):
         print(f"[crt.sh] Querying *.{domain}...", file=sys.stderr)

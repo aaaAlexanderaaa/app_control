@@ -1,0 +1,87 @@
+id: litellm
+name: LiteLLM
+category: AI_AGENT_FRAMEWORK
+product_shape:
+- web
+product_type:
+- llm_gateway
+- llm_proxy
+- llm_router
+severity: medium
+priority_score: 82
+notes: >-
+  Independent review retains LiteLLM as a standalone `medium` LLM gateway
+  rather than folding it into any upstream model-provider record. Official
+  materials describe LiteLLM as a central AI gateway / proxy with routing,
+  auth, virtual keys, spend tracking, and an admin UI, exposed on LiteLLM-
+  owned web properties plus a product-specific `litellm` CLI. From the
+  enterprise-management viewpoint it can broker prompts and provider
+  credentials, but current public evidence does not show the local command-
+  execution or autonomous computer-operator boundary reserved for `high` or
+  `critical`. Reviewed IOC keeps only LiteLLM-owned web surfaces and the
+  exact LiteLLM-named local artifact `litellm_config.yaml` plus the `litellm`
+  process name. Excluded GitHub, Discord, the Railway-hosted Swagger demo,
+  provider API endpoints, and generic deployment artifacts such as
+  `config.yaml`, `.env`, `prometheus.yml`, and `/app/config.yaml` because
+  those are third-party/shared infrastructure or too generic to attribute to
+  LiteLLM on their own.
+references:
+- url: https://www.litellm.ai/
+  kind: official_site
+  summary: Official LiteLLM site is served from www.litellm.ai and links the product documentation and support surfaces.
+  checked_at: '2026-03-26'
+- url: https://docs.litellm.ai/
+  kind: official_docs
+  summary: Getting started docs describe LiteLLM's Python SDK and AI Gateway, show the `litellm --model ...` proxy CLI flow, and run the proxy on http://0.0.0.0:4000.
+  checked_at: '2026-03-26'
+- url: https://docs.litellm.ai/docs/proxy/docker_quick_start
+  kind: official_docs
+  summary: Docker quick-start shows `litellm --setup` saving `./litellm_config.yaml`, requires `.env` plus `config.yaml` and `prometheus.yml` for compose, and mounts `./config.yaml:/app/config.yaml`.
+  checked_at: '2026-03-26'
+- url: https://docs.litellm.ai/docs/proxy/configs
+  kind: official_docs
+  summary: Config docs show `litellm --config /path/to/config.yaml`, `CONFIG_FILE_PATH`, and bucket-backed config examples for LiteLLM proxy deployments.
+  checked_at: '2026-03-26'
+iocs:
+  network:
+    status: reviewed
+    provenance:
+      url: https://docs.litellm.ai/
+      evidence: >-
+        LiteLLM's official site is served from `www.litellm.ai`, its product
+        documentation is served from `docs.litellm.ai`, and the official proxy
+        quick-start pulls LiteLLM images from `docker.litellm.ai`, so the
+        reviewed network IOC keeps only those LiteLLM-owned hosts and excludes
+        third-party demo, code-hosting, community, and model-provider
+        infrastructure.
+      checked_at: '2026-03-26'
+    hostname_patterns:
+    - pattern: www.litellm.ai
+      match: exact
+      role: app_brand
+    - pattern: docs.litellm.ai
+      match: exact
+      role: app_brand
+    - pattern: docker.litellm.ai
+      match: exact
+      role: file_download
+    keyword_patterns:
+    - pattern: litellm
+      match: substring
+  host:
+    status: reviewed
+    provenance:
+      url: https://docs.litellm.ai/docs/proxy/docker_quick_start
+      evidence: >-
+        The official quick-start shows `litellm --setup` saving
+        `./litellm_config.yaml`, while the config docs run the proxy with the
+        exact `litellm` command and `--config /path/to/config.yaml`; the
+        retained host IOC therefore keeps only the product-specific
+        `litellm_config.yaml` filename and `litellm` process name, excluding
+        generic deployment filenames that are not independently attributable to
+        LiteLLM.
+      checked_at: '2026-03-26'
+    paths:
+    - '*/litellm_config.yaml'
+    process_names:
+    - litellm

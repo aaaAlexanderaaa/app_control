@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """Normalize priority_score across app YAML files using governance risk bands.
 
+This helper is not authoritative for app ownership or severity. Before relying on
+its output, perform an independent review pass using the highest-priority bad-case
+checks in `docs/QUALITY_STANDARDS.md`.
+
 Priority is defined for enterprise data security and app control, with emphasis on
-high-profile and high-risk AI apps:
+high-profile and high-risk AI apps. Explicit named cases in `docs/QUALITY_STANDARDS.md`
+override these generic bands:
 
 1. fully automated hosting / always-on autonomous agents
 2. automated command execution
@@ -59,8 +64,23 @@ D_CATEGORIES = {
 }
 E_CATEGORIES = {"TRANSLATION", "GENAI_MEDIA"}
 
+EXPLICIT_BAND_OVERRIDES = {
+    # Mandatory examples from docs/QUALITY_STANDARDS.md
+    "openclaw": "A",
+    "zeroclaw": "A",
+    "opencode": "B",
+    "claude_code": "B",
+    "lovable": "D",
+    "bolt": "D",
+    "replit": "D",
+}
+
 
 def band_for(app: dict) -> str:
+    app_id = app["id"]
+    if app_id in EXPLICIT_BAND_OVERRIDES:
+        return EXPLICIT_BAND_OVERRIDES[app_id]
+
     category = app["category"]
     types = set(app.get("product_type", []))
 
@@ -141,6 +161,7 @@ def main() -> int:
             if args.write:
                 update_priority_line(path, new_score)
 
+    print("WARNING: priority/severity decisions require independent review; see docs/QUALITY_STANDARDS.md")
     print("Priority bands:")
     for band in ("A", "B", "C", "D", "E"):
         print(f"  {band}: {band_counts.get(band, 0)} apps")

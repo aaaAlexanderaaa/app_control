@@ -15,7 +15,7 @@ This repository is the internal source of truth for high-risk or unmanaged appli
 - `schemas/` — frozen schema contracts for current catalog data.
 - `app_control/` — shared library and unified CLI entrypoint for supported operations.
 - `tools/` — catalog maintenance, validation, enrichment, and research implementations.
-- `generators/` — detection artifact generators.
+- `generators/` — detection artifact generators (targeted app detection and uncataloged app inventory discovery).
 - `scripts/` — shell wrappers for supported operator entrypoints.
 - `pyproject.toml` — packaging and console-entry metadata for internal installation.
 - `docs/` — governance, workflow, quality standards, and analysis playbooks.

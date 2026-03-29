@@ -1,5 +1,98 @@
 # Quality Standards
 
+## STOP: Highest-Priority Bad Cases And Mandatory Re-Review Triggers
+
+These bad cases already happened in this repository. Treat them as mandatory
+stop-signs, not optional style guidance.
+
+### Bad Case 1: Network IOC contains an obvious non-domain keyword
+
+If a network IOC includes a keyword that is obviously not a domain-safe token
+(for example it contains a space, like `kimi claw`), you must assume the
+problem is bigger than that one IOC.
+
+Required action:
+
+- do **not** only delete the broken IOC and move on
+- trigger a fresh, independent review of the entire YAML
+- re-check whether the app should exist as an independent record at all
+- re-check whether the app is sharing the parent app's domain, bundle ID, or
+  other detection surface
+
+Concrete repository example:
+
+- `apps/kimi_claw.yaml` used the keyword `kimi claw`
+- the same record also depended on the shared `www.kimi.com` host and the
+  shared `com.moonshot.kimichat` bundle
+- the right fix is not just "remove the bad keyword"; the right fix is to
+  independently review whether `kimi_claw` should be merged into `kimi`
+
+### Kimi-Claw Standard: When a record must be merged or removed
+
+A record must be treated like `kimi_claw` and cannot remain a standalone active
+app if the independent review finds all or nearly all of the following:
+
+- it is only a feature, mode, activity page, beta rollout, or hosted surface
+  inside a broader parent product or platform
+- it has no independent host artifact such as an install path, bundle ID,
+  process name, extension ID, or stable local state path
+- its network evidence depends on a shared parent/product/platform host plus a
+  keyword, instead of an independently governable app boundary
+- from an enterprise application-management viewpoint, it is not a separately
+  manageable installed app on the endpoint
+
+Disposition rule:
+
+- if a real parent app record exists in the catalog, merge the evidence into the
+  parent app's notes/review context
+- if no appropriate parent app record exists, remove the child record from the
+  active catalog instead of keeping a misleading standalone app entry
+
+### Bad Case 2: App priority/severity was decided without an independent review pass
+
+App priority and severity must be reviewed by an **independent subagent** or an
+explicitly separate review pass. Do not let the same drafting pass decide app
+ownership, app independence, and enterprise severity in one shot.
+
+That priority review must answer all of these questions explicitly:
+
+- **a.** Is this app actually a standalone app, or is it only a feature / mode /
+  product surface inside another app?
+- **b.** Does it satisfy the quality standards in this document, especially
+  ownership boundaries, alert independence, and actionable detections?
+- **c.** Was it evaluated from the enterprise application-management viewpoint,
+  instead of from product-marketing language?
+
+The following examples are mandatory and must stay visible. Do not abstract
+these away, do not remove the cases, and do not replace them with vague rules:
+
+- `openclaw` / `zeroclaw`: `critical`
+  - installed on the host
+  - high-autonomy local operation
+  - can directly and continuously operate the computer
+  - from enterprise app management view this predictably leads to information leakage
+
+- `opencode` / `claude code`: `high`
+  - installed on the host
+  - require the user to issue instructions
+  - can automatically execute commands and read files after user intent is given
+  - from enterprise app management view this very easily leads to information leakage
+
+- `lovable` / `bolt` / `replit`: `medium`
+  - treat these named repository examples as active-upload surfaces for enterprise priority review
+  - the employee must still actively and intentionally upload or paste information
+  - they should not be escalated to `high` or `critical` merely because they are AI coding products
+  - do not overrule this named example merely because a product also offers desktop packaging or coding-related branding
+
+Mandatory interpretation order for enterprise app management:
+
+1. installed and locally operating on the host
+2. installed and able to read files / run commands after user instruction
+3. web-only usage that still requires the employee to actively upload data
+
+If a record fails this review discipline, stop and re-review the YAML before it
+is allowed to influence catalog severity, priority, or production-facing outputs.
+
 This document defines the quality bar for every artifact in the catalog and the standardized process for producing them. "Acceptable" means the artifact passes validation; "excellent" means it actively makes the catalog more reliable and actionable.
 
 ## What Makes a Good IoC
@@ -72,6 +165,12 @@ against the standards above and reports:
 - defense-in-depth coverage across network plus host
 - placeholder, legacy-migration, inferred, keyword-only, and shared-infra-only
   weak spots that should be prioritized for review
+- `missing_bundle_id`: apps with `.app` bundle paths but no `bundle_ids` field —
+  these are retrievable via `system_profiler`, `defaults read`, or `mdls` and should
+  be backfilled
+- `cli_missing_pkg_path`: CLI-typed apps (`cli`, `cli_agent`, `terminal` in
+  `product_type`) that lack any package manager install path (e.g.,
+  `~/.local/bin/`, `/opt/homebrew/bin/`, `~/.cargo/bin/`, `~/go/bin/`)
 
 `make status` includes the condensed quality summary so coverage, workflow state,
 and IOC quality can be reviewed together.
@@ -89,6 +188,10 @@ The `app-control research` command automates the mechanical parts of app analysi
 | Homebrew cask/formula | `research --source homebrew` | `research --source homebrew` + `--source crtsh` |
 | GitHub / `curl \| sh` | Manual: parse install script for paths | Manual: extract URLs from source |
 | DMG / PKG (closed-source) | Manual: BOM extraction (`lsbom`) | `research --source crtsh` on vendor domain |
+| pip / pipx | Check `console_scripts` in `setup.py`/`pyproject.toml`; paths: `~/.local/bin/<tool>` | `research --source crtsh` on vendor domain |
+| Cargo (Rust) | Check `[[bin]]` in `Cargo.toml`; paths: `~/.cargo/bin/<tool>` | `research --source crtsh` on vendor domain |
+| npm (global) | Check `bin` in `package.json`; paths: `/opt/homebrew/lib/node_modules/<pkg>` | `research --source crtsh` on vendor domain |
+| Go install | Check main packages; paths: `~/go/bin/<tool>` | `research --source crtsh` on vendor domain |
 | Web-only | N/A | `research --source crtsh` on vendor domain |
 
 ### Host IoC Decision Tree
@@ -98,10 +201,19 @@ Homebrew cask/formula available?
 ├─ YES → app-control research --app <id> --source homebrew
 │        Extracts: /Applications/*.app, /opt/homebrew/bin/*, bundle IDs,
 │        uninstall paths, zap paths — all from explicit cask declarations.
-├─ Open source (GitHub/cargo/go/pip)?
+├─ Open source (GitHub/cargo/go/pip/npm)?
 │  └─ Search repo for: ~/.appname, LaunchAgents, launchctl, XDG paths
 │     Check: install.sh, Makefile, setup.py post-install hooks
 │     Check: Cargo.toml [[bin]], Go main packages, console_scripts
+│     Check: package.json "bin" field for npm packages
+│     Record install paths: ~/.local/bin/, ~/.cargo/bin/, ~/go/bin/
+├─ Has a .app bundle but missing bundle_id?
+│  └─ Retrieve via: defaults read /Applications/X.app/Contents/Info.plist CFBundleIdentifier
+│     or: mdls -name kMDItemCFBundleIdentifier /Applications/X.app
+│     The quality audit flags these as missing_bundle_id automatically.
+├─ Has a .app bundle but missing team_id?
+│  └─ Retrieve via: codesign -dvv /Applications/X.app 2>&1 | grep TeamIdentifier
+│     or: parse signed_by array from system_profiler SPApplicationsDataType -json
 └─ Closed-source DMG/PKG?
    ├─ Query Hybrid Analysis / OTX by hash (existing reports only)
    └─ For PKGs: static unpack BOM → lsbom for file manifest

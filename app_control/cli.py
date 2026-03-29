@@ -23,10 +23,17 @@ COMMANDS: dict[str, tuple[str, str, str]] = {
         "main",
         "Generate per-category ES|QL and host alert artifacts.",
     ),
+    "generate-targeted-alerts": (
+        "tools.generate_targeted_alerts",
+        "main",
+        "Generate the requested claw/high-risk ES|QL, Jamf, and inventory artifacts.",
+    ),
     "enrich-homebrew": ("tools.enrich_from_homebrew", "main", "Enrich host IOCs from Homebrew metadata."),
     "enrich-network": ("tools.enrich_network_iocs", "main", "Apply researched network IOC updates."),
     "export-iocs": ("tools.export_ioc_list", "main", "Export IOC data in markdown or JSON."),
     "export-metadata": ("tools.export_app_metadata", "main", "Export app category and priority metadata."),
+    "generate-overview": ("tools.generate_overview", "main", "Generate a one-page catalog overview HTML page."),
+    "export-highrisk-tasks": ("tools.export_highrisk_tasks", "main", "Export high-risk review tasks with quality-standard evaluation."),
     "recompute-priority": ("tools.recompute_priority_scores", "main", "Recompute priority_score from governance risk bands."),
     "research": ("tools.research", "main", "Research IoC candidates (Homebrew, crt.sh, or full pipeline)."),
 }
