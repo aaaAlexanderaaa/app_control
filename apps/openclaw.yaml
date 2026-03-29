@@ -20,12 +20,14 @@ notes: >-
   certs on all three brand domains; removed redundant `docs.openclaw.ai`
   entry (covered by suffix on `openclaw.ai`). Added LaunchAgent plist paths
   (ai.openclaw.gateway, ai.openclaw.node) confirmed in src/daemon/constants.ts,
-  and ~/Library/Application Support/OpenClaw from Homebrew cask zap. Added
-  legacy bundle ID `bot.molt.mac` found in Homebrew cask zap section. Removed
-  `~/.cargo/bin/openclaw` because OpenClaw is Node.js/TypeScript, not Rust.
-  Excluded `github.com`, `raw.githubusercontent.com`, and model-provider
-  endpoints because they are shared code-hosting or downstream AI
-  infrastructure rather than OpenClaw-owned service domains.
+  and ~/Library/Application Support/OpenClaw from Homebrew cask zap. Kept
+  bundle ID coverage to the actual app bundle identifier `ai.openclaw.mac`
+  and excluded zap-only artifacts such as `bot.molt.mac` that are not
+  CFBundleIdentifier values. Removed `~/.cargo/bin/openclaw` because
+  OpenClaw is Node.js/TypeScript, not Rust. Excluded `github.com`,
+  `raw.githubusercontent.com`, and model-provider endpoints because they are
+  shared code-hosting or downstream AI infrastructure rather than
+  OpenClaw-owned service domains.
 references:
 - url: https://docs.openclaw.ai/tools/clawhub
   kind: official_docs
@@ -37,7 +39,7 @@ references:
   checked_at: '2026-03-29'
 - url: https://formulae.brew.sh/cask/openclaw
   kind: homebrew_cask
-  summary: Homebrew cask openclaw (formerly clawdbot) confirms /Applications/OpenClaw.app, bundle ID ai.openclaw.mac, legacy bundle bot.molt.mac, and Application Support paths.
+  summary: Homebrew cask openclaw (formerly clawdbot) confirms /Applications/OpenClaw.app and Application Support paths; zap entries include legacy bot.molt.mac storage/preferences artifacts, not an app bundle ID.
   checked_at: '2026-03-29'
 iocs:
   network:
@@ -73,7 +75,8 @@ iocs:
         Homebrew cask and official repo confirm /Applications/OpenClaw.app,
         CLI paths, ~/.openclaw state, LaunchAgent plists for gateway and
         node daemons, and ~/Library/Application Support/OpenClaw data.
-        Legacy bundle bot.molt.mac found in Homebrew cask zap section.
+        Homebrew cask zap also references bot.molt.mac storage/preferences
+        artifacts, but those are not CFBundleIdentifier values.
       checked_at: '2026-03-29'
     paths:
     - /Applications/OpenClaw.app
@@ -88,6 +91,5 @@ iocs:
     - ~/Library/Logs/OpenClaw/diagnostics.jsonl
     bundle_ids:
     - ai.openclaw.mac
-    - bot.molt.mac
     process_names:
     - openclaw

@@ -19,15 +19,16 @@ notes: >-
   subdomains). Changed hostname match from exact to suffix and removed
   redundant `www.zeroclawlabs.ai` entry (covered by suffix). Added
   LaunchAgent plist `com.zeroclaw.daemon` confirmed in src/service/mod.rs,
-  Homebrew binary paths, /Applications/ZeroClaw.app from Tauri desktop
-  companion, and Homebrew var workspace. Excluded `zeroclawlabs.cn` (no
-  longer presents ZeroClaw branding), `github.com`, `zeroclaw.org`,
-  `zeroclaw.net` (impersonation), and package/distribution infrastructure
-  because they are shared or adversarial surfaces.
+  Homebrew binary paths for both Apple Silicon and Intel prefixes, Tauri
+  desktop app bundle paths, bundle ID `ai.zeroclawlabs.desktop`, and
+  Homebrew var workspace. Excluded `zeroclawlabs.cn` (no longer presents
+  ZeroClaw branding), `github.com`, `zeroclaw.org`, `zeroclaw.net`
+  (impersonation), and package/distribution infrastructure because they are
+  shared or adversarial surfaces.
 references:
 - url: https://github.com/zeroclaw-labs/zeroclaw
   kind: official_repo
-  summary: Official ZeroClaw repository (29.1k stars, Rust) documents CLI binary, ~/.zeroclaw state, LaunchAgent com.zeroclaw.daemon, and Tauri desktop app.
+  summary: Official ZeroClaw repository (29.1k stars, Rust) documents CLI binary, ~/.zeroclaw state, LaunchAgent com.zeroclaw.daemon, Tauri desktop app, and bundle ID ai.zeroclawlabs.desktop.
   checked_at: '2026-03-29'
 - url: https://zeroclawlabs.ai/
   kind: official_site
@@ -35,7 +36,7 @@ references:
   checked_at: '2026-03-29'
 - url: https://formulae.brew.sh/formula/zeroclaw
   kind: homebrew_formula
-  summary: Homebrew formula zeroclaw (3730+ installs/30d) places binary at $HOMEBREW_PREFIX/bin/zeroclaw with service workspace at $HOMEBREW_PREFIX/var/zeroclaw.
+  summary: Homebrew formula zeroclaw (3730+ installs/30d) places binary at $HOMEBREW_PREFIX/bin/zeroclaw with service workspace at $HOMEBREW_PREFIX/var/zeroclaw, covering /opt/homebrew and /usr/local installs.
   checked_at: '2026-03-29'
 iocs:
   network:
@@ -65,15 +66,20 @@ iocs:
         Official repo Cargo.toml confirms zeroclaw binary, install.sh
         confirms ~/.cargo/bin/zeroclaw and ~/.zeroclaw/ paths,
         src/service/mod.rs confirms com.zeroclaw.daemon LaunchAgent,
-        apps/tauri/ confirms desktop companion app.
+        apps/tauri/tauri.conf.json confirms desktop companion app bundle ID
+        ai.zeroclawlabs.desktop, and Homebrew formula uses
+        $HOMEBREW_PREFIX/bin/zeroclaw.
       checked_at: '2026-03-29'
     paths:
     - /Applications/ZeroClaw.app
     - /opt/homebrew/bin/zeroclaw
+    - /usr/local/bin/zeroclaw
     - ~/.cargo/bin/zeroclaw
     - ~/.zeroclaw/
     - ~/.zfunc/_zeroclaw
     - ~/Applications/ZeroClaw.app
     - ~/Library/LaunchAgents/com.zeroclaw.daemon.plist
+    bundle_ids:
+    - ai.zeroclawlabs.desktop
     process_names:
     - zeroclaw
