@@ -12,40 +12,45 @@ priority_score: 95
 notes: >-
   ZeroClaw positions itself as a local private AI assistant and its official
   repo explicitly warns against `zeroclaw.org` and `zeroclaw.net`
-  impersonation; manual re-review of the upstream README and current web
-  property confirms the trusted web surface is `zeroclawlabs.ai` and the exact
-  `www.zeroclawlabs.ai` host, while `zeroclawlabs.cn` no longer presents
-  ZeroClaw branding. Reviewed IOC keeps only those first-party runtime
-  indicators. Excluded `zeroclawlabs.cn`, `github.com`, and package or
-  distribution infrastructure because they no longer present consistent
-  ZeroClaw ownership or are shared surfaces.
+  impersonation domains (both verified live and pointing to openagen fork).
+  Independent manual review (2026-03-29) verified `zeroclawlabs.ai` via web
+  fetch (live, official site) and crt.sh (wildcard cert *.zeroclawlabs.ai
+  issued by Google Trust Services and Sectigo, confirms intent for
+  subdomains). Changed hostname match from exact to suffix and removed
+  redundant `www.zeroclawlabs.ai` entry (covered by suffix). Added
+  LaunchAgent plist `com.zeroclaw.daemon` confirmed in src/service/mod.rs,
+  Homebrew binary paths, /Applications/ZeroClaw.app from Tauri desktop
+  companion, and Homebrew var workspace. Excluded `zeroclawlabs.cn` (no
+  longer presents ZeroClaw branding), `github.com`, `zeroclaw.org`,
+  `zeroclaw.net` (impersonation), and package/distribution infrastructure
+  because they are shared or adversarial surfaces.
 references:
 - url: https://github.com/zeroclaw-labs/zeroclaw
   kind: official_repo
-  summary: Official ZeroClaw repository documents the local assistant runtime and macOS host artifacts.
-  checked_at: '2026-03-22'
+  summary: Official ZeroClaw repository (29.1k stars, Rust) documents CLI binary, ~/.zeroclaw state, LaunchAgent com.zeroclaw.daemon, and Tauri desktop app.
+  checked_at: '2026-03-29'
 - url: https://zeroclawlabs.ai/
   kind: official_site
-  summary: Official ZeroClaw site establishes zeroclawlabs.ai as a first-party brand domain.
-  checked_at: '2026-03-22'
+  summary: Official ZeroClaw site confirms zeroclawlabs.ai as the first-party brand domain with wildcard cert.
+  checked_at: '2026-03-29'
+- url: https://formulae.brew.sh/formula/zeroclaw
+  kind: homebrew_formula
+  summary: Homebrew formula zeroclaw (3730+ installs/30d) places binary at $HOMEBREW_PREFIX/bin/zeroclaw with service workspace at $HOMEBREW_PREFIX/var/zeroclaw.
+  checked_at: '2026-03-29'
 iocs:
   network:
     status: reviewed
     provenance:
       url: https://zeroclawlabs.ai/
       evidence: >-
-        The official ZeroClaw repository and current website identify
-        `zeroclawlabs.ai` as the trusted web property, and current web
-        resolution lands on the exact `www.zeroclawlabs.ai` host; the reviewed
-        network IOC therefore keeps only those consistent first-party ZeroClaw
-        surfaces.
-      checked_at: '2026-03-22'
+        crt.sh CT log lookup confirms wildcard cert *.zeroclawlabs.ai
+        (Google Trust Services + Sectigo) indicating active subdomain
+        infrastructure. Suffix matching on zeroclawlabs.ai captures current
+        www subdomain and future api/docs/cdn subdomains.
+      checked_at: '2026-03-29'
     hostname_patterns:
     - pattern: zeroclawlabs.ai
-      match: exact
-      role: app_brand
-    - pattern: www.zeroclawlabs.ai
-      match: exact
+      match: suffix
       role: app_brand
     keyword_patterns:
     - pattern: zeroclaw
@@ -57,12 +62,18 @@ iocs:
     provenance:
       url: https://github.com/zeroclaw-labs/zeroclaw
       evidence: >-
-        The official ZeroClaw repository documents the `zeroclaw` runtime and
-        local `~/.zeroclaw` state plus shell-completion artifacts.
-      checked_at: '2026-03-22'
+        Official repo Cargo.toml confirms zeroclaw binary, install.sh
+        confirms ~/.cargo/bin/zeroclaw and ~/.zeroclaw/ paths,
+        src/service/mod.rs confirms com.zeroclaw.daemon LaunchAgent,
+        apps/tauri/ confirms desktop companion app.
+      checked_at: '2026-03-29'
     paths:
+    - /Applications/ZeroClaw.app
+    - /opt/homebrew/bin/zeroclaw
     - ~/.cargo/bin/zeroclaw
     - ~/.zeroclaw/
     - ~/.zfunc/_zeroclaw
+    - ~/Applications/ZeroClaw.app
+    - ~/Library/LaunchAgents/com.zeroclaw.daemon.plist
     process_names:
     - zeroclaw

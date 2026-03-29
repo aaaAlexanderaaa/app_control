@@ -11,45 +11,54 @@ severity: critical
 priority_score: 96
 notes: >-
   OpenClaw is the reference claw-family personal agent with ClawHub skills,
-  remote messaging control, and local automation. Manual re-review confirmed
-  exact `openclaw.ai`, `docs.openclaw.ai`, `clawhub.ai`, and redirecting
-  `clawhub.com` first-party surfaces plus explicit local app, CLI, state, and
-  log artifacts from the upstream repository. Excluded `github.com`,
-  `raw.githubusercontent.com`, and model-provider endpoints because they are
-  shared code-hosting or downstream AI infrastructure rather than OpenClaw-
-  owned service domains.
+  remote messaging control, and local automation. Independent manual review
+  (2026-03-29) verified all four first-party domains via web fetch and crt.sh:
+  `openclaw.ai` (live, subdomains: docs, trust, www), `clawhub.ai` (live,
+  wildcard cert, subdomains: auth, manatee, www), `clawhub.com` (live,
+  wildcard cert, redirects to clawhub.ai). Changed hostname matches from
+  exact to suffix because crt.sh confirms active subdomains and wildcard
+  certs on all three brand domains; removed redundant `docs.openclaw.ai`
+  entry (covered by suffix on `openclaw.ai`). Added LaunchAgent plist paths
+  (ai.openclaw.gateway, ai.openclaw.node) confirmed in src/daemon/constants.ts,
+  and ~/Library/Application Support/OpenClaw from Homebrew cask zap. Added
+  legacy bundle ID `bot.molt.mac` found in Homebrew cask zap section. Removed
+  `~/.cargo/bin/openclaw` because OpenClaw is Node.js/TypeScript, not Rust.
+  Excluded `github.com`, `raw.githubusercontent.com`, and model-provider
+  endpoints because they are shared code-hosting or downstream AI
+  infrastructure rather than OpenClaw-owned service domains.
 references:
 - url: https://docs.openclaw.ai/tools/clawhub
   kind: official_docs
   summary: Official OpenClaw docs publish the ClawHub tools surface on docs.openclaw.ai.
-  checked_at: '2026-03-22'
+  checked_at: '2026-03-29'
 - url: https://github.com/openclaw/openclaw
   kind: official_repo
-  summary: Official OpenClaw repository documents the macOS app, CLI install paths, and local ~/.openclaw state.
-  checked_at: '2026-03-22'
+  summary: Official OpenClaw repository (340k stars) documents macOS app, CLI install paths, LaunchAgent daemon labels, and local ~/.openclaw state.
+  checked_at: '2026-03-29'
+- url: https://formulae.brew.sh/cask/openclaw
+  kind: homebrew_cask
+  summary: Homebrew cask openclaw (formerly clawdbot) confirms /Applications/OpenClaw.app, bundle ID ai.openclaw.mac, legacy bundle bot.molt.mac, and Application Support paths.
+  checked_at: '2026-03-29'
 iocs:
   network:
     status: reviewed
     provenance:
       url: https://docs.openclaw.ai/tools/clawhub
       evidence: >-
-        Official OpenClaw docs and repository establish `openclaw.ai`,
-        `docs.openclaw.ai`, `clawhub.ai`, and `clawhub.com` as first-party
-        OpenClaw surfaces, so the reviewed network IOC removes broader
-        third-party provider and platform domains.
-      checked_at: '2026-03-22'
+        crt.sh CT log lookup confirms active subdomains and wildcard certs on
+        openclaw.ai (docs, trust, www), clawhub.ai (auth, manatee, www +
+        wildcard), and clawhub.com (www + wildcard). Suffix matching is
+        appropriate for all three brand-owned apex domains.
+      checked_at: '2026-03-29'
     hostname_patterns:
+    - pattern: openclaw.ai
+      match: suffix
+      role: app_brand
     - pattern: clawhub.ai
-      match: exact
+      match: suffix
       role: app_brand
     - pattern: clawhub.com
-      match: exact
-      role: app_brand
-    - pattern: docs.openclaw.ai
-      match: exact
-      role: app_brand
-    - pattern: openclaw.ai
-      match: exact
+      match: suffix
       role: app_brand
     keyword_patterns:
     - pattern: clawhub
@@ -61,21 +70,24 @@ iocs:
     provenance:
       url: https://github.com/openclaw/openclaw
       evidence: >-
-        The official OpenClaw repository documents the macOS app,
-        `/opt/homebrew/bin/openclaw`, `/usr/local/bin/openclaw`, the
-        `~/.openclaw` state directory, and `~/Library/Logs/OpenClaw`, so the
-        reviewed host IOC keeps only those explicit OpenClaw artifacts.
-      checked_at: '2026-03-22'
+        Homebrew cask and official repo confirm /Applications/OpenClaw.app,
+        CLI paths, ~/.openclaw state, LaunchAgent plists for gateway and
+        node daemons, and ~/Library/Application Support/OpenClaw data.
+        Legacy bundle bot.molt.mac found in Homebrew cask zap section.
+      checked_at: '2026-03-29'
     paths:
     - /Applications/OpenClaw.app
     - /opt/homebrew/bin/openclaw
     - /usr/local/bin/openclaw
-    - ~/.cargo/bin/openclaw
     - ~/.local/bin/openclaw
     - ~/.openclaw
     - ~/Applications/OpenClaw.app
+    - ~/Library/Application Support/OpenClaw
+    - ~/Library/LaunchAgents/ai.openclaw.gateway.plist
+    - ~/Library/LaunchAgents/ai.openclaw.node.plist
     - ~/Library/Logs/OpenClaw/diagnostics.jsonl
     bundle_ids:
     - ai.openclaw.mac
+    - bot.molt.mac
     process_names:
     - openclaw
