@@ -41,7 +41,6 @@ iocs:
     - ~/.kode
     - ~/.kode.json
     - ./.kode/
-    - ./.mcp.json
     - ./.mcprc
     process_names:
     - kode

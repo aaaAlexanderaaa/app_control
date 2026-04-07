@@ -43,7 +43,6 @@ iocs:
       evidence: The upstream readme tells users to run main.py from the developer repository root, use prompt.md for the spec, and start smol_dev/api.py, while the documented workflow writes and reuses shared_dependencies.md for cross-file planning.
       checked_at: '2026-03-24'
     paths:
-    - '*/developer/main.py'
-    - '*/developer/prompt.md'
-    - '*/developer/shared_dependencies.md'
     - '*/developer/smol_dev/api.py'
+    process_names:
+    - smol_dev

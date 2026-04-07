@@ -22,6 +22,48 @@ from generators.jamf_scan import generate_scan_script
 CLAW_COHORT = "claw_macos_installable"
 HIGH_RISK_COHORT = "high_risk_plus_excluding_claw_macos_installable"
 
+HIGH_RISK_WATCHLIST_KEYWORDS = [
+    "Cursor",
+    "Qoder",
+    "Windsurf",
+    "Zed",
+    "Bolt",
+    "Replit",
+    "Claudius",
+    "Augment",
+    "TRAE",
+    "CodeBuddy",
+    "Kiro",
+    "Void",
+    "Dyad",
+    "Warp",
+    "ChatGPT",
+    "Claude",
+    "Cherry Studio",
+    "Doubao",
+    "Comet",
+    "Raycast",
+    "Notion",
+    "Antigravity",
+    "Pieces",
+    "Blackbox",
+    "Codeium",
+    "Macaify",
+    "Grammarly",
+    "Perplexity",
+    "TypingMind",
+    "Kimi",
+    "AIHub",
+    "MacGPT",
+    "Elephas",
+    "Rewind",
+    "Otter",
+]
+
+HIGH_RISK_EXCLUDE_IDS = {
+    "onedrive",
+}
+
 
 def status_suffix(min_status: str) -> str:
     if min_status == "validated":
@@ -282,6 +324,7 @@ def generate_one_cohort(
     description: str,
     from_pattern: str,
     aggregate_minutes: int,
+    watchlist_keywords: list[str] | None = None,
 ) -> dict[str, Any]:
     suffix = status_suffix(min_status)
     network_apps = sort_apps(filter_apps_with_ready_group(apps, "network", min_status))
@@ -309,6 +352,8 @@ def generate_one_cohort(
             min_status,
             cohort_name.upper(),
             output_mode="jamf_ea",
+            include_inventory=False,
+            watchlist_keywords=watchlist_keywords,
         ),
         executable=True,
     )
@@ -384,7 +429,7 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     claw_apps, _ = load_claw_macos_installable_apps(args.min_status)
     claw_ids = {app["id"] for app in claw_apps}
-    high_risk_apps = load_high_risk_apps_excluding(claw_ids)
+    high_risk_apps = load_high_risk_apps_excluding(claw_ids | HIGH_RISK_EXCLUDE_IDS)
 
     results = [
         generate_one_cohort(
@@ -404,6 +449,7 @@ def main() -> None:
             "所有 high risk 及以上应用，排除集合 1；若缺少 reviewed 级网络或主机 IOC，则在清单中声明原因。",
             args.from_pattern,
             args.aggregate_minutes,
+            watchlist_keywords=HIGH_RISK_WATCHLIST_KEYWORDS,
         ),
     ]
 

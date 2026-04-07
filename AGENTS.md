@@ -5,6 +5,13 @@ Follow the `docs/QUALITY_STANDARDS.md` and `docs/PROJECT_STANDARD.md`
 ## Project Structure & Module Organization
 `apps/` is the source of truth: one YAML file per application. Keep active catalog work there, using snake_case filenames such as `apps/chatgpt.yaml`. Shared Python code lives in `app_control/`, operator-facing implementations live in `tools/` and `generators/`, and stable shell wrappers live in `scripts/`. Schema contracts are frozen in `schemas/`; governance and quality rules are in `docs/`. Treat `output/` as generated-only, `scratch/` as temporary workspace, and `archive/` as historical reference. The Jamf scan generator (`generators/jamf_scan.py`) produces both targeted detection for cataloged apps and inventory discovery of uncataloged apps via `system_profiler`, `mdfind`, and package manager filesystem scans.
 
+## Generation Architecture Constraint
+All `.sh` and `.esql` artifact generation **must** go through the two generator entry points in `generators/`:
+- `generators/jamf_scan.py` — host scan script generation (`generate_scan_script`)
+- `generators/esql_rules.py` — ES|QL rule generation (`generate_esql`, `generate_optimized_esql`)
+
+Orchestration tools in `tools/` (e.g. `generate_targeted_alerts.py`, `generate_claw_macos_installable_alerts.py`, `generate_category_alerts.py`) **must** import and call these generator functions — never duplicate or re-implement generation logic. If a generator cannot support a required feature, fix the generator; do not create new generation entry points in `scripts/` or elsewhere. The `scripts/generate/` wrappers are thin shell shims that delegate to the CLI, which in turn routes to `tools/` orchestrators backed by `generators/`.
+
 ## Build, Test, and Development Commands
 Use the supported entrypoints instead of ad hoc scripts:
 

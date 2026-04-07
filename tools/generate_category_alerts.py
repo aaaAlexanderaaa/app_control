@@ -72,7 +72,7 @@ def generate_category_artifacts(
         if host_apps:
             write_text(
                 host_path,
-                generate_scan_script(host_apps, min_status, current_category),
+                generate_scan_script(host_apps, min_status, current_category, include_inventory=False),
                 executable=True,
             )
 

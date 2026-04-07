@@ -55,7 +55,6 @@ iocs:
     paths:
     - '*/Devon/'
     - '*/Devon/.devon.config'
-    - checkpoint_*.jsonl
     - devon_environment.db
     process_names:
     - devon_agent

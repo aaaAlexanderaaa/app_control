@@ -138,7 +138,17 @@ def generate_artifacts(min_status: str, output_dir: Path) -> dict[str, Any]:
     manifest_path = output_dir / f"{OUTPUT_PREFIX}_manifest.txt"
 
     write_text(network_path, generate_esql(network_apps, min_status, FILTER_LABEL))
-    write_text(host_path, generate_scan_script(host_apps, min_status, FILTER_LABEL), executable=True)
+    write_text(
+        host_path,
+        generate_scan_script(
+            host_apps,
+            min_status,
+            FILTER_LABEL,
+            output_mode="jamf_ea",
+            include_inventory=False,
+        ),
+        executable=True,
+    )
     write_text(manifest_path, render_manifest(included, skipped, min_status))
 
     return {
