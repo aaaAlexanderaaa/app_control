@@ -35,7 +35,7 @@ iocs:
       match: exact
       role: file_download
     keyword_patterns:
-    - pattern: claude
+    - pattern: claude.ai
       match: substring
   host:
     status: reviewed

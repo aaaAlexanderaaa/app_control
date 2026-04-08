@@ -24,7 +24,7 @@ iocs:
       match: exact
       role: file_download
     keyword_patterns:
-    - pattern: signal
+    - pattern: signal.org
       match: substring
   host:
     status: reviewed

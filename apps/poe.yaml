@@ -25,7 +25,7 @@ iocs:
       match: exact
       role: file_download
     keyword_patterns:
-    - pattern: poe
+    - pattern: poe.com
       match: substring
   host:
     status: reviewed

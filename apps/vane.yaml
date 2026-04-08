@@ -40,7 +40,7 @@ iocs:
       match: exact
       role: app_brand
     keyword_patterns:
-    - pattern: vane
+    - pattern: vane.ai
       match: substring
   host:
     status: reviewed

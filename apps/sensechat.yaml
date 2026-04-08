@@ -39,8 +39,6 @@ iocs:
     keyword_patterns:
     - pattern: sensechat
       match: substring
-    - pattern: 商量
-      match: substring
   host:
     status: reviewed
     provenance:

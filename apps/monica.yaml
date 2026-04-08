@@ -34,7 +34,7 @@ iocs:
       match: exact
       role: platform_service
     keyword_patterns:
-    - pattern: monica
+    - pattern: monica.im
       match: substring
   host:
     status: reviewed

@@ -46,8 +46,6 @@ iocs:
       match: substring
     - pattern: wenxin
       match: substring
-    - pattern: 文心
-      match: substring
   host:
     status: reviewed
     provenance:

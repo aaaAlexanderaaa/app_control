@@ -31,7 +31,7 @@ iocs:
       match: exact
       role: app_brand
     keyword_patterns:
-    - pattern: gemini
+    - pattern: gemini.google
       match: substring
   host:
     status: reviewed

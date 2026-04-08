@@ -15,3 +15,7 @@ output/*
 
 scratch/*
 !scratch/.gitkeep
+
+# Review / analysis docs (generated, not source)
+*_review.md
+*_analysis.md

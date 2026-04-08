@@ -30,5 +30,5 @@ iocs:
       match: suffix
       role: platform_service
     keyword_patterns:
-    - pattern: gist
+    - pattern: gist.github
       match: substring

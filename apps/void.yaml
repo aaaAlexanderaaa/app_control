@@ -27,8 +27,6 @@ iocs:
     keyword_patterns:
     - pattern: voideditor
       match: substring
-    - pattern: void
-      match: substring
   host:
     status: reviewed
     provenance:

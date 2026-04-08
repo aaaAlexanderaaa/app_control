@@ -36,8 +36,6 @@ iocs:
     keyword_patterns:
     - pattern: tiangong
       match: substring
-    - pattern: 天工
-      match: substring
   host:
     status: reviewed
     provenance:

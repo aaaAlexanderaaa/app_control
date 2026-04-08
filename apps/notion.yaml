@@ -41,7 +41,7 @@ iocs:
       match: exact
       role: platform_service
     keyword_patterns:
-    - pattern: notion
+    - pattern: notion.so
       match: substring
   host:
     status: reviewed

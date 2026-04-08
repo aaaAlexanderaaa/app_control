@@ -198,6 +198,11 @@ def generate_scan_script(
     lines.append("esac")
     lines.append('NOW_EPOCH=$(/bin/date "+%s" 2>/dev/null || echo 0)')
     lines.append("")
+    lines.append('PROFILER_TIMEOUT="${PROFILER_TIMEOUT:-30}"')
+    lines.append('FIND_TIMEOUT="${FIND_TIMEOUT:-30}"')
+    lines.append('WITH_NICE="${WITH_NICE:-0}"')
+    lines.append('if [ "$WITH_NICE" = "1" ]; then /usr/bin/renice 10 $$ >/dev/null 2>&1 || true; fi')
+    lines.append("")
     lines.append("RESULTS=()")
     lines.append('FOUND_IDS="|"')
     lines.append("")
@@ -232,11 +237,11 @@ def generate_scan_script(
             '    add_search_dir "$h"',
             "done",
             "",
-            "# Pre-collect system_profiler JSON (one call, ~3s)",
-            '_CACHED_SP_JSON=$(/usr/sbin/system_profiler SPApplicationsDataType -json 2>/dev/null || true)',
+            "# Pre-collect system_profiler JSON (one call, ~3-15s on Intel)",
+            '_CACHED_SP_JSON=$(/usr/bin/timeout "$PROFILER_TIMEOUT" /usr/sbin/system_profiler SPApplicationsDataType -json 2>/dev/null || true)',
             "",
             "# Pre-collect mdfind .app bundles (one call, ~1s)",
-            "_CACHED_MDFIND_APPS=$(mdfind \"kMDItemContentTypeTree == 'com.apple.application-bundle'\" 2>/dev/null || true)",
+            '_CACHED_MDFIND_APPS=$(/usr/bin/timeout "$PROFILER_TIMEOUT" mdfind "kMDItemContentTypeTree == \'com.apple.application-bundle\'" 2>/dev/null || true)',
             "",
             "# Pre-build bundle_id <-> path map from mdfind results (bash 3.2 compatible)",
             "# Stored as newline-separated 'bundle_id<TAB>path' pairs",
@@ -271,7 +276,7 @@ def generate_scan_script(
             "# Pre-build filesystem index for search_name (one find pass per SEARCH_DIR)",
             '_CACHED_FS_INDEX=""',
             'for _fs_d in "${SEARCH_DIRS[@]}"; do',
-            '    _CACHED_FS_INDEX="${_CACHED_FS_INDEX}$(find "$_fs_d" -maxdepth 3 -print 2>/dev/null || true)"',
+            '    _CACHED_FS_INDEX="${_CACHED_FS_INDEX}$(/usr/bin/timeout "$FIND_TIMEOUT" /usr/bin/find "$_fs_d" -maxdepth 3 -print 2>/dev/null || true)"',
             '    _CACHED_FS_INDEX="${_CACHED_FS_INDEX}"$\'\\n\'',
             "done",
             "",
@@ -309,13 +314,24 @@ def generate_scan_script(
             "",
             "get_times() {",
             '    local path="$1"',
-            "    local times",
-            '    times=$(/usr/bin/stat -f "%SB|%Sa" -t "%Y-%m-%d %H:%M:%S" "$path" 2>/dev/null || true)',
-            '    if [ -n "$times" ]; then',
-            '        echo "$times"',
-            "    else",
-            '        echo "UNKNOWN|UNKNOWN"',
-            "    fi",
+            "    local birth_time last_used",
+            "    # Birth time (install approximation) via stat",
+            '    birth_time=$(/usr/bin/stat -f "%SB" -t "%Y-%m-%d %H:%M:%S" "$path" 2>/dev/null || true)',
+            '    [ -n "$birth_time" ] || birth_time="UNKNOWN"',
+            "    # Last-used via kMDItemLastUsedDate (reliable on APFS; atime is not)",
+            '    last_used=$(/usr/bin/mdls -name kMDItemLastUsedDate -raw "$path" 2>/dev/null || true)',
+            '    case "$last_used" in',
+            '        "(null)"|""|*"could not find"*)',
+            "            # Fallback to mtime when mdls has no data",
+            '            last_used=$(/usr/bin/stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S" "$path" 2>/dev/null || true)',
+            '            [ -n "$last_used" ] || last_used="UNKNOWN"',
+            "            ;;",
+            "        *)",
+            '            # mdls returns "2024-01-15 10:30:00 +0000"; strip timezone suffix',
+            '            last_used="${last_used% +0000}"',
+            "            ;;",
+            "    esac",
+            '    echo "${birth_time}|${last_used}"',
             "}",
             "",
             "record_path_match() {",
@@ -669,6 +685,7 @@ def generate_scan_script(
         all_bundle_ids: set[str] = set()
         all_app_names: set[str] = set()
         all_cli_names: set[str] = set()
+        all_extension_ids: set[str] = set()
         _bin_prefixes = (
             "~/.local/bin/",
             "~/.cargo/bin/",
@@ -681,6 +698,8 @@ def generate_scan_script(
             host = app.get("iocs", {}).get("host") or {}
             for bid in host.get("bundle_ids", []):
                 all_bundle_ids.add(bid)
+            for ext_id in host.get("chrome_extension_ids", []):
+                all_extension_ids.add(ext_id)
             # Extract CLI binary names from known bin directories
             for path in host.get("paths", []):
                 for prefix in _bin_prefixes:
@@ -729,6 +748,12 @@ def generate_scan_script(
         known_cli_str = "|".join(sorted(all_cli_names))
         lines.append("# Known catalog CLI tool names for package manager cross-reference")
         lines.append(f'KNOWN_CLI_NAMES="|{shell_escape(known_cli_str)}|"')
+        lines.append("")
+
+        # Emit known Chrome extension IDs as a lookup string
+        known_ext_str = "|".join(sorted(all_extension_ids))
+        lines.append("# Known catalog Chrome extension IDs for cross-reference")
+        lines.append(f'KNOWN_EXTENSION_IDS="|{shell_escape(known_ext_str)}|"')
         lines.append("")
 
         lines.extend(
@@ -936,6 +961,77 @@ def generate_scan_script(
                 "    done",
                 "}",
                 "",
+                "# Discover Chrome/Chromium-based browser extensions (enumerates all profiles)",
+                "discover_via_chrome_extensions() {",
+                "    local h",
+                '    for h in "${USER_HOMES[@]}"; do',
+                "        local _ce_entry browser_name browser_dir",
+                '        while IFS=$\'\\t\' read -r browser_name browser_dir; do',
+                '            [ -d "$browser_dir" ] || continue',
+                "            local profile_dir",
+                '            for profile_dir in "$browser_dir"/*/; do',
+                '                [ -d "$profile_dir/Extensions" ] || continue',
+                "                local ext_dir",
+                '                for ext_dir in "$profile_dir/Extensions"/*/; do',
+                '                    [ -d "$ext_dir" ] || continue',
+                "                    local ext_id",
+                '                    ext_id="${ext_dir%/}" && ext_id="${ext_id##*/}"',
+                '                    [ -n "$ext_id" ] || continue',
+                "                    # Skip extensions already in the catalog",
+                '                    case "$KNOWN_EXTENSION_IDS" in *"|$ext_id|"*) continue ;; esac',
+                "                    # Find the latest version directory containing manifest.json",
+                '                    local manifest_file=""',
+                "                    local ver_dir",
+                '                    for ver_dir in "$ext_dir"/*/; do',
+                '                        [ -f "$ver_dir/manifest.json" ] && manifest_file="$ver_dir/manifest.json"',
+                "                    done",
+                '                    [ -n "$manifest_file" ] || continue',
+                "                    local ext_version",
+                '                    ext_version="${manifest_file%/manifest.json}" && ext_version="${ext_version##*/}"',
+                "                    # Extract extension name from manifest.json using python3",
+                "                    local ext_name",
+                "                    ext_name=$(/usr/bin/python3 -c \"",
+                "import json, sys, os",
+                "try:",
+                "    manifest_path = sys.argv[1]",
+                "    with open(manifest_path) as f:",
+                "        manifest = json.load(f)",
+                "    name = manifest.get('name', '')",
+                "    if name.startswith('__MSG_') and name.endswith('__'):",
+                "        msg_key = name[6:-2]",
+                "        locale_dir = os.path.join(os.path.dirname(manifest_path), '_locales')",
+                "        for lang in ['en', 'en_US', 'en_GB']:",
+                "            msg_file = os.path.join(locale_dir, lang, 'messages.json')",
+                "            if os.path.isfile(msg_file):",
+                "                with open(msg_file) as mf:",
+                "                    msgs = json.load(mf)",
+                "                for k, v in msgs.items():",
+                "                    if k.lower() == msg_key.lower():",
+                "                        name = v.get('message', name)",
+                "                        break",
+                "                break",
+                "    print(name)",
+                "except Exception:",
+                "    pass",
+                '\" "$manifest_file" 2>/dev/null || true)',
+                '                    [ -n "$ext_name" ] || ext_name="UNKNOWN"',
+                "                    local profile_name",
+                '                    profile_name="${profile_dir%/}" && profile_name="${profile_name##*/}"',
+                '                    UNKNOWN_APPS+=("UNKNOWN_EXT|NAME=$ext_name|EXT_ID=$ext_id|VERSION=$ext_version|BROWSER=$browser_name|PROFILE=$profile_name|PATH=$ext_dir|USER=$h")',
+                "                done",
+                "            done",
+                "        done <<EOF",
+                "Chrome\t$h/Library/Application Support/Google/Chrome",
+                "Edge\t$h/Library/Application Support/Microsoft Edge",
+                "Brave\t$h/Library/Application Support/BraveSoftware/Brave-Browser",
+                "Chromium\t$h/Library/Application Support/Chromium",
+                "Vivaldi\t$h/Library/Application Support/Vivaldi",
+                "Arc\t$h/Library/Application Support/Arc/User Data",
+                "Opera\t$h/Library/Application Support/com.operasoftware.Opera",
+                "EOF",
+                "    done",
+                "}",
+                "",
                 "# Run discovery using cached data (no duplicate external calls)",
                 "discover_via_system_profiler",
                 "discover_via_mdfind",
@@ -943,6 +1039,7 @@ def generate_scan_script(
                 "discover_via_go",
                 "discover_via_npm",
                 "discover_via_pip",
+                "discover_via_chrome_extensions",
                 "",
             ]
         )

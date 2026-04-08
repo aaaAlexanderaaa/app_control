@@ -109,7 +109,17 @@ This document defines the quality bar for every artifact in the catalog and the 
 
 - **Signal-to-noise ratio.** If this pattern fired on 1,000 enterprise DNS logs, how many would be true positives? A pattern with >95% expected TP rate is excellent. A bare keyword like `poe` in HTTP traffic would drown in false hits.
 
+- **Keyword collision rule.** Never use a bare common English word, person name, or CJK common phrase as a keyword pattern. Always use domain fragments instead: `claude.ai` not `claude`, `notion.so` not `notion`, `signal.org` not `signal`. If the app name is a common word, the keyword MUST include a disambiguating domain or product-specific qualifier. See `AGENTS.md` leverage hierarchy point 3.
+
 - **Provenance depth.** Not just "URL checked" but multi-source corroboration — e.g., domain confirmed in app binary, DNS observed in sandbox traffic, AND listed in vendor docs. Each additional source increases confidence.
+
+- **Provenance authority hierarchy.** Who backs this IOC matters more than the review status label:
+  1. Homebrew cask artifacts — community peer-reviewed, explicitly declares paths and bundle IDs
+  2. Vendor firewall/security documentation — official statement
+  3. Apple App Store bundleId — Apple-authoritative
+  4. Source code / install scripts — first-party evidence
+  5. GitHub README / docs — reasonable but may be outdated
+  6. Inference from product name — unacceptable without corroboration
 
 ## What Makes a Good App YAML
 

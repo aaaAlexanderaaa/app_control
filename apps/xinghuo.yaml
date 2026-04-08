@@ -41,9 +41,7 @@ iocs:
     keyword_patterns:
     - pattern: xinghuo
       match: substring
-    - pattern: spark
-      match: substring
-    - pattern: 星火
+    - pattern: spark.xfyun
       match: substring
   host:
     status: reviewed

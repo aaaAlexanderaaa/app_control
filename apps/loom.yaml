@@ -25,7 +25,7 @@ iocs:
       match: exact
       role: file_download
     keyword_patterns:
-    - pattern: loom
+    - pattern: loom.com
       match: substring
   host:
     status: reviewed

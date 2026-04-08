@@ -31,8 +31,6 @@ iocs:
     keyword_patterns:
     - pattern: elizaos
       match: substring
-    - pattern: eliza
-      match: substring
   host:
     status: reviewed
     provenance:

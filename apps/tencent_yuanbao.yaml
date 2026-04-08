@@ -40,8 +40,6 @@ iocs:
     keyword_patterns:
     - pattern: yuanbao
       match: substring
-    - pattern: 元宝
-      match: substring
   host:
     status: reviewed
     provenance:

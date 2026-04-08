@@ -31,8 +31,6 @@ iocs:
     keyword_patterns:
     - pattern: jan ai
       match: substring
-    - pattern: jan
-      match: substring
   host:
     status: reviewed
     provenance:

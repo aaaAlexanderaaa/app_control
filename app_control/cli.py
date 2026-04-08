@@ -36,6 +36,7 @@ COMMANDS: dict[str, tuple[str, str, str]] = {
     "export-highrisk-tasks": ("tools.export_highrisk_tasks", "main", "Export high-risk review tasks with quality-standard evaluation."),
     "recompute-priority": ("tools.recompute_priority_scores", "main", "Recompute priority_score from governance risk bands."),
     "research": ("tools.research", "main", "Research IoC candidates (Homebrew, crt.sh, or full pipeline)."),
+
 }
 
 

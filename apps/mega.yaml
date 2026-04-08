@@ -27,8 +27,6 @@ iocs:
     keyword_patterns:
     - pattern: megasync
       match: substring
-    - pattern: mega
-      match: substring
   host:
     status: reviewed
     provenance:

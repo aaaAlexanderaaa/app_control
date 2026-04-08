@@ -40,7 +40,7 @@ iocs:
       match: exact
       role: ai_service_provider
     keyword_patterns:
-    - pattern: crush
+    - pattern: charm.land
       match: substring
   host:
     status: reviewed

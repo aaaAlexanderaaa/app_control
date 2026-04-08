@@ -2,6 +2,25 @@
 
 Follow the `docs/QUALITY_STANDARDS.md` and `docs/PROJECT_STANDARD.md`
 
+## Priority Principles — Read This First
+
+This project exists to **detect risk apps on enterprise endpoints with high F1 score**. Every change must serve this goal. Before starting work, ask: "Does this directly improve alert precision, recall, or IOC coverage?"
+
+### Leverage hierarchy (20% effort → 80% value)
+
+1. **IOC discovery mechanisms** — Automate via high-quality sources (Homebrew cask, App Store API, vendor docs). A good source eliminates manual analysis for dozens of apps at once. Never hand-research what can be batch-fetched.
+2. **Host discovery methods** — Better discovery methods (`mdfind`, `system_profiler`, `bundleId`) reduce dependence on per-app IOC precision. One good method > 100 precise paths.
+3. **Keyword collision audit** — Every keyword pattern must be reviewed for false-positive collision. A bare common word (`signal`, `notion`, `claude`) in a keyword match will fire on unrelated traffic and destroy alert credibility. Use domain fragments (`signal.org`, `notion.so`) instead.
+4. **IOC provenance chain** — Who backs this IOC? Homebrew cask artifacts = peer-reviewed. Vendor security docs = authoritative. GitHub README = reasonable. Guesswork = unacceptable. The provenance source matters more than the review status label.
+
+### What NOT to prioritize
+
+- Code aesthetics, line count, deduplication — AI can maintain messy code; it cannot fix bad IOCs
+- HTML viewers, dashboards, export formatters — nice-to-have, zero F1 impact
+- Quality scoring engines — meaningless until IOC data itself is trustworthy
+- Process documentation beyond what's needed for the next agent to continue work
+- Shell script wrappers, directory reorganization, CI polish
+
 ## Project Structure & Module Organization
 `apps/` is the source of truth: one YAML file per application. Keep active catalog work there, using snake_case filenames such as `apps/chatgpt.yaml`. Shared Python code lives in `app_control/`, operator-facing implementations live in `tools/` and `generators/`, and stable shell wrappers live in `scripts/`. Schema contracts are frozen in `schemas/`; governance and quality rules are in `docs/`. Treat `output/` as generated-only, `scratch/` as temporary workspace, and `archive/` as historical reference. The Jamf scan generator (`generators/jamf_scan.py`) produces both targeted detection for cataloged apps and inventory discovery of uncataloged apps via `system_profiler`, `mdfind`, and package manager filesystem scans.
 

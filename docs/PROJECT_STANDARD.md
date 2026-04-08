@@ -2,12 +2,24 @@
 
 ## Positioning
 
-This repository is the internal source of truth for high-risk or unmanaged application governance. It is not a generic research dump. Every file should support one of four enterprise workflows:
+This repository is the internal source of truth for high-risk or unmanaged application governance. Its ultimate deliverable is **detection rules (ES|QL + Jamf scan scripts) that achieve high F1 score** — every alert must be defensible evidence that a risk app is truly present.
+
+Every file should support one of four enterprise workflows:
 
 1. cataloging risky apps in a durable schema,
 2. reviewing and validating IOC evidence,
 3. generating deterministic detection artifacts,
 4. retaining legacy research without mixing it into current operations.
+
+## Work Prioritization
+
+Before adding new code, tools, or documentation, evaluate against the **leverage hierarchy** in `AGENTS.md`. The default priority order is:
+
+1. **Expand IOC coverage via automated high-quality sources** (Homebrew, App Store, vendor docs).
+2. **Improve host/network detection precision** (fix keyword collisions, improve discovery methods).
+3. **Validate existing IOCs** against real evidence (not just URL checks).
+4. **Maintain and fix generators** — they are the production output pipeline.
+5. Everything else (dashboards, exporters, code cleanup) is secondary.
 
 ## Canonical Repository Areas
 
