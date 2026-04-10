@@ -430,9 +430,9 @@ EOF
         }
 
         emit_base64_result() {
-          printf '<result>'
-          generate_csv | /usr/bin/base64 | /usr/bin/tr -d '\n'
-          printf '</result>\n'
+          local payload=""
+          payload="$(generate_csv | /usr/bin/base64 | /usr/bin/tr -d '\n')"
+          printf '<result>%s</result>\n' "$payload"
         }
 
         main() {
