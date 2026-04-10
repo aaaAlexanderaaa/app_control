@@ -7,6 +7,11 @@
         # READ-ONLY: no file writes, no temp files, no cleanup.
         # All output to stdout. Deploy via MDM; framework captures output.
 
+        # ── Jamf / MDM environment hardening ─────────────────────────────────
+        # Jamf runs scripts as root with a minimal environment.  set -u will
+        # abort on any unset variable, so we must provide safe defaults.
+        PATH="${PATH:-/usr/bin:/bin:/usr/sbin:/sbin}"
+
         INCLUDE_SYSTEM_APPS="${INCLUDE_SYSTEM_APPS:-0}"
         INCLUDE_EXTERNAL_VOLUMES="${INCLUDE_EXTERNAL_VOLUMES:-0}"
         WITH_SIGNATURE="${WITH_SIGNATURE:-0}"
@@ -261,32 +266,54 @@
         # ── Chrome/Chromium extension inventory ───────────────────────────────
 
         collect_chrome_extensions() {
-          local browser_name browser_dir
-          while IFS=$'\t' read -r browser_name browser_dir; do
-            [ -d "$browser_dir" ] || continue
-            local profile_dir
-            for profile_dir in "$browser_dir"/*/; do
-              local _pd="${profile_dir%/}"
-              [ -d "$_pd/Extensions" ] || continue
-              local ext_dir
-              for ext_dir in "$_pd/Extensions"/*/; do
-                [ -d "$ext_dir" ] || continue
-                local ext_id
-                ext_id="${ext_dir%/}" && ext_id="${ext_id##*/}"
-                [ -n "$ext_id" ] || continue
+          # Browser relative paths under ~/Library/Application Support
+          local browser_specs=(
+            "Chrome|Google/Chrome"
+            "Edge|Microsoft Edge"
+            "Brave|BraveSoftware/Brave-Browser"
+            "Chromium|Chromium"
+            "Vivaldi|Vivaldi"
+            "Arc|Arc/User Data"
+            "Opera|com.operasoftware.Opera"
+          )
 
-                # Find latest version's manifest.json
-                local manifest_file="" ver_dir
-                for ver_dir in "$ext_dir"/*/; do
-                  [ -f "$ver_dir/manifest.json" ] && manifest_file="$ver_dir/manifest.json"
-                done
-                [ -n "$manifest_file" ] || continue
+          # Iterate every real user home so we discover extensions
+          # for all users, not just the invoking account (root under Jamf).
+          local user_home
+          for user_home in /Users/*/; do
+            [ -d "$user_home" ] || continue
+            case "$user_home" in /Users/Shared/|/Users/Guest/) continue ;; esac
 
-                local ext_version ext_name
-                ext_version="${manifest_file%/manifest.json}" && ext_version="${ext_version##*/}"
+            local spec browser_name browser_rel browser_dir
+            for spec in "${browser_specs[@]}"; do
+              browser_name="${spec%%|*}"
+              browser_rel="${spec#*|}"
+              browser_dir="${user_home}Library/Application Support/${browser_rel}"
+              [ -d "$browser_dir" ] || continue
 
-                # Extract name via python3 (handles __MSG_ i18n placeholders)
-                ext_name=$(/usr/bin/python3 -c "
+              local profile_dir
+              for profile_dir in "$browser_dir"/*/; do
+                local _pd="${profile_dir%/}"
+                [ -d "$_pd/Extensions" ] || continue
+                local ext_dir
+                for ext_dir in "$_pd/Extensions"/*/; do
+                  [ -d "$ext_dir" ] || continue
+                  local ext_id
+                  ext_id="${ext_dir%/}" && ext_id="${ext_id##*/}"
+                  [ -n "$ext_id" ] || continue
+
+                  # Find latest version's manifest.json
+                  local manifest_file="" ver_dir
+                  for ver_dir in "$ext_dir"/*/; do
+                    [ -f "$ver_dir/manifest.json" ] && manifest_file="$ver_dir/manifest.json"
+                  done
+                  [ -n "$manifest_file" ] || continue
+
+                  local ext_version ext_name
+                  ext_version="${manifest_file%/manifest.json}" && ext_version="${ext_version##*/}"
+
+                  # Extract name via python3 (handles __MSG_ i18n placeholders)
+                  ext_name=$(/usr/bin/python3 -c "
 import json, sys, os
 try:
     mf = sys.argv[1]
@@ -306,27 +333,20 @@ try:
     print(name)
 except Exception: pass
 " "$manifest_file" 2>/dev/null || true)
-                [ -n "$ext_name" ] || ext_name="$ext_id"
+                  [ -n "$ext_name" ] || ext_name="$ext_id"
 
-                local profile_name
-                profile_name="${profile_dir%/}" && profile_name="${profile_name##*/}"
+                  local profile_name
+                  profile_name="${profile_dir%/}" && profile_name="${profile_name##*/}"
 
-                csv_row \
-                  "$ext_dir" "$ext_name" "$ext_id" "$ext_version" "" \
-                  "" "" "" \
-                  "" "" \
-                  "" "" "chrome_ext/$browser_name/$profile_name"
+                  csv_row \
+                    "$ext_dir" "$ext_name" "$ext_id" "$ext_version" "" \
+                    "" "" "" \
+                    "" "" \
+                    "" "" "chrome_ext/$browser_name/$profile_name"
+                done
               done
             done
-          done <<EOF
-Chrome	$HOME/Library/Application Support/Google/Chrome
-Edge	$HOME/Library/Application Support/Microsoft Edge
-Brave	$HOME/Library/Application Support/BraveSoftware/Brave-Browser
-Chromium	$HOME/Library/Application Support/Chromium
-Vivaldi	$HOME/Library/Application Support/Vivaldi
-Arc	$HOME/Library/Application Support/Arc/User Data
-Opera	$HOME/Library/Application Support/com.operasoftware.Opera
-EOF
+          done
         }
 
         # ── Main: collect → dedup → validate → emit ─────────────────────────
@@ -388,7 +408,7 @@ EOF
 
             source_hint="off_standard_path"
             case "$canonical" in
-              /Applications/*|/Users/*/Applications/*|"$HOME"/Applications/*)
+              /Applications/*|/Users/*/Applications/*)
                 source_hint="standard_app_dir" ;;
               /Volumes/*) source_hint="external_volume" ;;
             esac
