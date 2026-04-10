@@ -19,6 +19,23 @@
         PROFILER_TIMEOUT="${PROFILER_TIMEOUT:-30}"
         WITH_NICE="${WITH_NICE:-0}"
 
+        # ── Command helpers ───────────────────────────────────────────────────
+
+        timeout_run() {
+          local seconds="$1"
+          shift
+
+          if [ -x /opt/homebrew/bin/gtimeout ]; then
+            /opt/homebrew/bin/gtimeout "$seconds" "$@"
+          elif [ -x /usr/local/bin/gtimeout ]; then
+            /usr/local/bin/gtimeout "$seconds" "$@"
+          elif command -v timeout >/dev/null 2>&1; then
+            timeout "$seconds" "$@"
+          else
+            "$@"
+          fi
+        }
+
         # ── CSV helpers ──────────────────────────────────────────────────────
 
         csv_escape() {
@@ -117,13 +134,13 @@
         collect_candidates() {
           # Source 1: Spotlight index (no TCC required, covers entire indexed FS)
           if /usr/bin/command -v /usr/bin/mdfind >/dev/null 2>&1; then
-            /usr/bin/timeout "$PROFILER_TIMEOUT" /usr/bin/mdfind \
+            timeout_run "$PROFILER_TIMEOUT" /usr/bin/mdfind \
               'kMDItemContentTypeTree == "com.apple.application-bundle"' 2>/dev/null || true
           fi
 
           # Source 2: LaunchServices DB via system_profiler (no TCC required).
           # Catches apps that Spotlight missed (e.g. Spotlight disabled).
-          /usr/bin/timeout "$PROFILER_TIMEOUT" /usr/sbin/system_profiler SPApplicationsDataType \
+          timeout_run "$PROFILER_TIMEOUT" /usr/sbin/system_profiler SPApplicationsDataType \
             -detailLevel mini 2>/dev/null \
             | /usr/bin/awk -F': ' '/^ *Location: /{print $2}' || true
 
@@ -147,7 +164,7 @@
 
           for root in "${roots[@]}"; do
             [ -d "$root" ] || continue
-            /usr/bin/timeout "$FIND_TIMEOUT" /usr/bin/find "$root" -xdev -maxdepth 5 -type d -name '*.app' -prune 2>/dev/null || true
+            timeout_run "$FIND_TIMEOUT" /usr/bin/find "$root" -xdev -maxdepth 5 -type d -name '*.app' -prune 2>/dev/null || true
           done
 
           # Per-user home scan: sweep everything EXCEPT TCC-protected dirs
@@ -156,7 +173,7 @@
           for user_home in /Users/*/; do
             [ -d "$user_home" ] || continue
             case "$user_home" in /Users/Shared/|/Users/Guest/) continue ;; esac
-            /usr/bin/timeout "$FIND_TIMEOUT" /usr/bin/find "$user_home" -xdev -maxdepth 6 -type d \
+            timeout_run "$FIND_TIMEOUT" /usr/bin/find "$user_home" -xdev -maxdepth 6 -type d \
               \( -name Desktop -o -name Downloads -o -name Documents \
                  -o -name Photos -o -name Movies -o -name Music \
                  -o -name .Trash -o -name DerivedData \
