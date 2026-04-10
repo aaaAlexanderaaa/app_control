@@ -314,7 +314,7 @@ EOF
 
         # ── Main: collect → dedup → validate → emit ─────────────────────────
 
-        main() {
+        generate_csv() {
           if [ "$WITH_NICE" = "1" ]; then
             /usr/bin/renice 10 $$ >/dev/null 2>&1 || true
           fi
@@ -410,6 +410,16 @@ EOF
           if [ "$WITH_CHROME_EXTENSIONS" = "1" ]; then
             collect_chrome_extensions
           fi
+        }
+
+        emit_base64_result() {
+          printf '<result>'
+          generate_csv | /usr/bin/base64 | /usr/bin/tr -d '\n'
+          printf '</result>\n'
+        }
+
+        main() {
+          emit_base64_result
         }
 
         main "$@"

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from app_control.catalog import HOST_VALUE_FIELDS, get_ioc_group, load_apps, meets_min_status
-from generators.esql_rules import generate_esql
+from generators.esql_rules import NetworkIOCConflictError, generate_esql
 from generators.jamf_scan import generate_scan_script
 
 OUTPUT_PREFIX = "claw_macos_installable"
@@ -179,7 +179,10 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    result = generate_artifacts(args.min_status, Path(args.output_dir))
+    try:
+        result = generate_artifacts(args.min_status, Path(args.output_dir))
+    except NetworkIOCConflictError as exc:
+        raise SystemExit(f"ERROR: {exc}")
     print(
         " | ".join(
             [

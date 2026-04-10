@@ -9,7 +9,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from app_control.catalog import VALID_CATEGORIES, category_slug, filter_apps_with_ioc_group
-from generators.esql_rules import generate_esql
+from generators.esql_rules import NetworkIOCConflictError, generate_esql
 from generators.jamf_scan import generate_scan_script
 
 
@@ -110,7 +110,10 @@ def main() -> None:
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir)
-    generated = generate_category_artifacts(args.min_status, output_dir, args.category)
+    try:
+        generated = generate_category_artifacts(args.min_status, output_dir, args.category)
+    except NetworkIOCConflictError as exc:
+        raise SystemExit(f"ERROR: {exc}")
     if not generated:
         scope = f" in category '{args.category}'" if args.category else ""
         print(f"No category artifacts generated for min-status '{args.min_status}'{scope}.")

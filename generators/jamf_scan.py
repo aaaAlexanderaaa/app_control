@@ -47,6 +47,76 @@ _SYSTEM_BIN_DIRS = ("/opt/homebrew/bin", "/usr/local/bin")
 _NPM_GLOBAL_DIRS = ("/opt/homebrew/lib/node_modules", "/usr/local/lib/node_modules")
 DEFAULT_SEARCH_IOC_MODE = "first_hit"
 DEFAULT_SEARCH_IOC_STALE_DAYS = 30
+_USER_APP_ROOTS = ("Applications/",)
+_SYSTEM_APP_ROOTS = ("/Applications/",)
+_WEAK_LIBRARY_PREFIXES = (
+    "Library/Application Scripts/",
+    "Library/Application Support/",
+    "Library/Caches/",
+    "Library/Containers/",
+    "Library/Cookies/",
+    "Library/Group Containers/",
+    "Library/HTTPStorages/",
+    "Library/Logs/",
+    "Library/Preferences/",
+    "Library/Saved Application State/",
+    "Library/WebKit/",
+)
+
+# Paths matching these patterns are considered "strong" IOC indicators
+# (executables / app bundles) and checked before bundle_id / process_name.
+# Everything else (caches, preferences, HTTPStorages, saved state dirs, …)
+# is "weak" and only checked as a fallback after bundle_id / process_name.
+
+
+def _is_strong_path(path: str) -> bool:
+    """Return True if *path* points to an app bundle or executable location.
+
+    Strong paths: installed .app bundles, .app/Contents internals, and binaries
+    under known bin directories. Weak paths: caches, preferences,
+    HTTPStorages, saved-state dirs, and similar companion locations.
+    """
+    # Normalize away home-dir prefixes for comparison
+    normalized = (
+        path.replace("~/", "")
+        .replace("$HOME/", "")
+        .replace("${HOME}/", "")
+        .replace("\\", "/")
+    )
+    absolute = normalized.startswith("/")
+
+    # Known binary directories
+    for prefix in _USER_BIN_PREFIXES:
+        if normalized.startswith(prefix):
+            return True
+
+    for sys_dir in _SYSTEM_BIN_DIRS:
+        if normalized.startswith(sys_dir + "/"):
+            return True
+
+    # Paths inside a real app bundle are strong regardless of bundle name.
+    if ".app/Contents/" in normalized or normalized.endswith(".app/Contents"):
+        return True
+
+    # Companion Library paths often use bundle-id-shaped directory names such
+    # as com.cn.trae.app, but they are not application bundles.
+    for prefix in _WEAK_LIBRARY_PREFIXES:
+        if normalized.startswith(prefix):
+            return False
+
+    # Installed app bundles under standard Applications roots are strong even
+    # when the bundle name itself contains dots, e.g. Yandex.Disk.2.app.
+    if normalized.endswith(".app") or ".app/" in normalized:
+        if absolute:
+            for root in _SYSTEM_APP_ROOTS:
+                if normalized.startswith(root):
+                    return True
+        else:
+            for root in _USER_APP_ROOTS:
+                if normalized.startswith(root):
+                    return True
+
+    return False
 
 
 def _normalize_ioc_path(path: str) -> str:
@@ -77,30 +147,90 @@ def _path_owner_score(path: str, app_id: str) -> int:
     return 0
 
 
-def resolve_shared_ioc_ownership(apps: list[dict]) -> dict[str, set[str]]:
-    """When multiple apps claim the same IOC path, assign ownership to the
-    app whose id best matches the path.  Non-owners get the path excluded.
+def _ioc_owner_score(value: str, app_id: str) -> int:
+    """Score how well an app_id matches a generic IOC value for ownership.
+
+    Works for bundle_ids (e.g. com.bytedance.lark vs lark_personal_tenant)
+    and process_names (e.g. Feishu vs feishu_personal_tenant).
+    Returns 0 if no match, higher for better matches.
     """
+    app_token = app_id.lower().replace("-", "_").replace(".", "_")
+    value_token = value.lower().replace("-", "_").replace(".", "_")
+
+    if app_token == value_token:
+        return 3
+    if app_token in value_token or value_token in app_token:
+        return 2
+    # Try each dot/underscore segment of the value
+    for segment in value.replace(".", "_").replace("-", "_").lower().split("_"):
+        if not segment:
+            continue
+        if segment == app_token or app_token in segment or segment in app_token:
+            return 1
+    return 0
+
+
+def resolve_shared_ioc_ownership(apps: list[dict]) -> dict[str, dict[str, set[str]]]:
+    """When multiple apps claim the same IOC (path, bundle_id, or process_name),
+    assign ownership to the app whose id best matches the value.
+    Non-owners get the IOC excluded.
+
+    Returns {app_id: {"paths": set, "bundle_ids": set, "process_names": set}}.
+    """
+    # Collect claims for paths, bundle_ids, and process_names
     path_claims: dict[str, list[tuple[str, str]]] = {}
+    bid_claims: dict[str, list[str]] = {}
+    proc_claims: dict[str, list[str]] = {}
+
     for app in apps:
         host = app.get("iocs", {}).get("host", {})
         for path in host.get("paths", []):
             normalized = _normalize_ioc_path(path)
             path_claims.setdefault(normalized, []).append((app["id"], path))
+        for bid in host.get("bundle_ids", []):
+            bid_claims.setdefault(bid, []).append(app["id"])
+        for proc in host.get("process_names", []):
+            proc_claims.setdefault(proc, []).append(app["id"])
 
-    excluded: dict[str, set[str]] = {}
+    excluded: dict[str, dict[str, set[str]]] = {}
+
+    def ensure_app(app_id: str) -> dict[str, set[str]]:
+        if app_id not in excluded:
+            excluded[app_id] = {"paths": set(), "bundle_ids": set(), "process_names": set()}
+        return excluded[app_id]
+
+    # Resolve shared paths
     for normalized, claims in path_claims.items():
         if len(claims) <= 1:
             continue
-
         scored = [(app_id, _path_owner_score(normalized, app_id)) for app_id, _ in claims]
         scored.sort(key=lambda x: -x[1])
-
         owner = scored[0][0] if scored[0][1] > 0 else claims[0][0]
-
         for app_id, original in claims:
             if app_id != owner:
-                excluded.setdefault(app_id, set()).add(_normalize_ioc_path(original))
+                ensure_app(app_id)["paths"].add(_normalize_ioc_path(original))
+
+    # Resolve shared bundle_ids
+    for bid, claimants in bid_claims.items():
+        if len(claimants) <= 1:
+            continue
+        scored = [(app_id, _ioc_owner_score(bid, app_id)) for app_id in claimants]
+        scored.sort(key=lambda x: -x[1])
+        owner = scored[0][0] if scored[0][1] > 0 else claimants[0]
+        for app_id in claimants:
+            if app_id != owner:
+                ensure_app(app_id)["bundle_ids"].add(bid)
+
+    # Resolve shared process_names
+    for proc, claimants in proc_claims.items():
+        if len(claimants) <= 1:
+            continue
+        scored = [(app_id, _ioc_owner_score(proc, app_id)) for app_id in claimants]
+        scored.sort(key=lambda x: -x[1])
+        owner = scored[0][0] if scored[0][1] > 0 else claimants[0]
+        for app_id in claimants:
+            if app_id != owner:
+                ensure_app(app_id)["process_names"].add(proc)
 
     return excluded
 
@@ -205,6 +335,7 @@ def generate_scan_script(
     lines.append("")
     lines.append("RESULTS=()")
     lines.append('FOUND_IDS="|"')
+    lines.append("DATA_WARNINGS=()")
     lines.append("")
 
     lines.extend(
@@ -238,10 +369,46 @@ def generate_scan_script(
             "done",
             "",
             "# Pre-collect system_profiler JSON (one call, ~3-15s on Intel)",
-            '_CACHED_SP_JSON=$(/usr/bin/timeout "$PROFILER_TIMEOUT" /usr/sbin/system_profiler SPApplicationsDataType -json 2>/dev/null || true)',
+            "_SP_RC=0",
+            '_CACHED_SP_JSON=$(/usr/bin/timeout "$PROFILER_TIMEOUT" /usr/sbin/system_profiler SPApplicationsDataType -json 2>/dev/null) || _SP_RC=$?',
+            'if [ "$_SP_RC" -ne 0 ] || [ -z "$_CACHED_SP_JSON" ]; then',
+            '    DATA_WARNINGS+=("DATA_SOURCE_TIMEOUT|SOURCE=system_profiler|DETAIL=exit_code_${_SP_RC}_timeout_${PROFILER_TIMEOUT}s")',
+            '    _CACHED_SP_JSON=""',
+            "fi",
+            "",
+            "# Pre-build lowercase app-name <-> path map from system_profiler JSON",
+            "# Stored as newline-separated 'name_lc<TAB>path' pairs",
+            '_SP_NAME_MAP_DATA=""',
+            '_build_sp_name_map() {',
+            '    [ -n "$_CACHED_SP_JSON" ] || return 0',
+            '    _SP_NAME_MAP_DATA=$(/usr/bin/python3 -c "',
+            "import json, sys",
+            "seen = set()",
+            "try:",
+            "    data = json.loads(sys.stdin.read())",
+            "    for item in data.get('SPApplicationsDataType', []):",
+            "        name = (item.get('_name') or '').strip()",
+            "        path = (item.get('path') or '').strip()",
+            "        if not name or not path:",
+            "            continue",
+            "        key = name.lower()",
+            "        if key in seen:",
+            "            continue",
+            "        seen.add(key)",
+            "        print(f'{key}\\t{path}')",
+            "except Exception:",
+            "    pass",
+            '" <<< "$_CACHED_SP_JSON" 2>/dev/null || true)',
+            "}",
+            "_build_sp_name_map",
             "",
             "# Pre-collect mdfind .app bundles (one call, ~1s)",
-            '_CACHED_MDFIND_APPS=$(/usr/bin/timeout "$PROFILER_TIMEOUT" mdfind "kMDItemContentTypeTree == \'com.apple.application-bundle\'" 2>/dev/null || true)',
+            "_MDF_RC=0",
+            '_CACHED_MDFIND_APPS=$(/usr/bin/timeout "$PROFILER_TIMEOUT" mdfind "kMDItemContentTypeTree == \'com.apple.application-bundle\'" 2>/dev/null) || _MDF_RC=$?',
+            'if [ "$_MDF_RC" -ne 0 ] || [ -z "$_CACHED_MDFIND_APPS" ]; then',
+            '    DATA_WARNINGS+=("DATA_SOURCE_TIMEOUT|SOURCE=mdfind|DETAIL=exit_code_${_MDF_RC}_timeout_${PROFILER_TIMEOUT}s")',
+            '    _CACHED_MDFIND_APPS=""',
+            "fi",
             "",
             "# Pre-build bundle_id <-> path map from mdfind results (bash 3.2 compatible)",
             "# Stored as newline-separated 'bundle_id<TAB>path' pairs",
@@ -269,6 +436,23 @@ def generate_scan_script(
             '    done <<< "$_CACHED_MDFIND_APPS"',
             "}",
             "_build_bundle_map",
+            "",
+            "# Shared helper: get bundle ID from an .app path (uses _BUNDLE_MAP_DATA cache when possible)",
+            "get_bundle_id_from_path() {",
+            '    local app_path="$1"',
+            "    local _gbid _gpath",
+            "    while IFS=$'\\t' read -r _gbid _gpath; do",
+            '        if [ "$_gpath" = "$app_path" ]; then echo "$_gbid"; return; fi',
+            '    done <<< "$_BUNDLE_MAP_DATA"',
+            '    local plist="$app_path/Contents/Info.plist"',
+            "    local bid",
+            '    if [ -f "$plist" ]; then',
+            '        bid=$(/usr/bin/defaults read "$plist" CFBundleIdentifier 2>/dev/null || true)',
+            '        if [ -n "$bid" ]; then echo "$bid"; return; fi',
+            "    fi",
+            '    bid=$(mdls -name kMDItemCFBundleIdentifier -raw "$app_path" 2>/dev/null || true)',
+            '    if [ -n "$bid" ] && [ "$bid" != "(null)" ]; then echo "$bid"; return; fi',
+            "}",
             "",
             "# Pre-collect running process names (one ps call, avoids per-app pgrep)",
             '_CACHED_PROCS=$(/bin/ps -axco comm= 2>/dev/null || true)',
@@ -312,26 +496,95 @@ def generate_scan_script(
             '    /bin/date -j -f "%Y-%m-%d %H:%M:%S" "$timestamp" "+%s" 2>/dev/null || return 1',
             "}",
             "",
+            "normalize_mdls_timestamp() {",
+            '    local timestamp="$1"',
+            '    case "$timestamp" in',
+            '        "(null)"|"") echo "" ;;',
+            '        *" "[-+][0-9][0-9][0-9][0-9]) echo "${timestamp% [+-][0-9][0-9][0-9][0-9]}" ;;',
+            '        *) echo "$timestamp" ;;',
+            "    esac",
+            "}",
+            "",
             "get_times() {",
             '    local path="$1"',
-            "    local birth_time last_used",
-            "    # Birth time (install approximation) via stat",
-            '    birth_time=$(/usr/bin/stat -f "%SB" -t "%Y-%m-%d %H:%M:%S" "$path" 2>/dev/null || true)',
-            '    [ -n "$birth_time" ] || birth_time="UNKNOWN"',
-            "    # Last-used via kMDItemLastUsedDate (reliable on APFS; atime is not)",
+            "    local birth_time last_used date_added",
+            "",
+            "    # Install time: prefer kMDItemDateAdded (tracks when file was",
+            "    # added to its parent directory — survives Spotlight reindex,",
+            "    # APFS clone, and Time Machine restore). Fall back to stat",
+            "    # birth time only if mdls has no data.",
+            '    date_added=$(/usr/bin/mdls -name kMDItemDateAdded -raw "$path" 2>/dev/null || true)',
+            '    case "$date_added" in',
+            '        "(null)"|""|*"could not find"*)',
+            '            birth_time=$(/usr/bin/stat -f "%SB" -t "%Y-%m-%d %H:%M:%S" "$path" 2>/dev/null || true)',
+            '            [ -n "$birth_time" ] || birth_time="UNKNOWN"',
+            "            ;;",
+            "        *)",
+            '            birth_time=$(normalize_mdls_timestamp "$date_added")',
+            '            [ -n "$birth_time" ] || birth_time="UNKNOWN"',
+            "            ;;",
+            "    esac",
+            "",
+            "    # Last-used: prefer kMDItemLastUsedDate (set by LaunchServices",
+            "    # on user-initiated launches only — NOT affected by Spotlight",
+            "    # reindex, background access, or metadata changes).",
+            "    # Fallback to mtime only when mdls has no data, but note that",
+            "    # mtime is less reliable (any metadata change bumps it).",
             '    last_used=$(/usr/bin/mdls -name kMDItemLastUsedDate -raw "$path" 2>/dev/null || true)',
             '    case "$last_used" in',
             '        "(null)"|""|*"could not find"*)',
-            "            # Fallback to mtime when mdls has no data",
             '            last_used=$(/usr/bin/stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S" "$path" 2>/dev/null || true)',
             '            [ -n "$last_used" ] || last_used="UNKNOWN"',
             "            ;;",
             "        *)",
-            '            # mdls returns "2024-01-15 10:30:00 +0000"; strip timezone suffix',
-            '            last_used="${last_used% +0000}"',
+            '            last_used=$(normalize_mdls_timestamp "$last_used")',
+            '            [ -n "$last_used" ] || last_used="UNKNOWN"',
             "            ;;",
             "    esac",
             '    echo "${birth_time}|${last_used}"',
+            "}",
+            "",
+            "# --- Evidence level constants ---",
+            "# Evidence levels from strongest to weakest:",
+            "#   app_inventory  — confirmed by system_profiler / mdfind app inventory",
+            "#   app_bundle     — .app bundle found on disk with Contents/",
+            "#   executable     — standalone binary found in a bin/ directory",
+            "#   bundle_id      — matched via system bundle_id registry",
+            "#   running_process — matched via ps (currently running)",
+            "#   chrome_extension — browser extension directory found",
+            "#   companion_path — support directory (caches, prefs, HTTPStorages)",
+            "#   search_ioc     — found via repo/project directory search",
+            "#   keyword        — watchlist keyword match only",
+            "",
+            "# Classify a matched path into an evidence level and confidence.",
+            "# Returns: sets _EVIDENCE_LEVEL and _CONFIDENCE variables (avoids subshell).",
+            "# Confidence mapping:",
+            "#   high   — app_inventory, app_bundle, executable (definitive install proof)",
+            "#   medium — bundle_id, running_process, chrome_extension",
+            "#   low    — companion_path, search_ioc, keyword (residual/indirect)",
+            "classify_path_evidence() {",
+            '    local path="$1"',
+            "    _EVIDENCE_LEVEL=companion_path",
+            "    _CONFIDENCE=low",
+            '    case "$path" in',
+            "        *.app)",
+            '            if [ -d "$path/Contents" ]; then',
+            "                _EVIDENCE_LEVEL=app_bundle",
+            "                _CONFIDENCE=high",
+            "            fi",
+            "            ;;",
+            "        *.app/*)",
+            '            local app_root="${path%.app/*}.app"',
+            '            if [ -d "$app_root/Contents" ]; then',
+            "                _EVIDENCE_LEVEL=app_bundle",
+            "                _CONFIDENCE=high",
+            "            fi",
+            "            ;;",
+            "    esac",
+            '    if [ "$_EVIDENCE_LEVEL" = "companion_path" ] && [ -f "$path" ] && [ -x "$path" ]; then',
+            "        _EVIDENCE_LEVEL=executable",
+            "        _CONFIDENCE=high",
+            "    fi",
             "}",
             "",
             "record_path_match() {",
@@ -345,7 +598,8 @@ def generate_scan_script(
             "    fi",
             "    install_time=${times%%|*}",
             "    last_access=${times#*|}",
-            '    RESULTS+=("$app_id|PATH=$path|INSTALL_APPROX=$install_time|LAST_ACCESS=$last_access")',
+            '    classify_path_evidence "$path"',
+            '    RESULTS+=("$app_id|PATH=$path|INSTALL_APPROX=$install_time|LAST_ACCESS=$last_access|EVIDENCE_LEVEL=$_EVIDENCE_LEVEL|CONFIDENCE=$_CONFIDENCE")',
             '    mark_found "$app_id"',
             "}",
             "",
@@ -361,14 +615,31 @@ def generate_scan_script(
             "    fi",
             "    install_time=${times%%|*}",
             "    last_access=${times#*|}",
-            '    RESULTS+=("$app_id|BUNDLE_ID=$bundle_id|PATH=$path|INSTALL_APPROX=$install_time|LAST_ACCESS=$last_access")',
+            '    RESULTS+=("$app_id|BUNDLE_ID=$bundle_id|PATH=$path|INSTALL_APPROX=$install_time|LAST_ACCESS=$last_access|EVIDENCE_LEVEL=bundle_id|CONFIDENCE=medium")',
+            '    mark_found "$app_id"',
+            "}",
+            "",
+            "record_inventory_match() {",
+            '    local app_id="$1"',
+            '    local inv_name="$2"',
+            '    local inv_bid="$3"',
+            '    local inv_path="$4"',
+            "    local times install_time last_access",
+            '    if [ -n "$inv_path" ] && [ "$inv_path" != "UNKNOWN" ] && [ -e "$inv_path" ]; then',
+            '        times=$(get_times "$inv_path")',
+            "    else",
+            '        times="UNKNOWN|UNKNOWN"',
+            "    fi",
+            "    install_time=${times%%|*}",
+            "    last_access=${times#*|}",
+            '    RESULTS+=("$app_id|INV_NAME=$inv_name|BUNDLE_ID=$inv_bid|PATH=$inv_path|INSTALL_APPROX=$install_time|LAST_ACCESS=$last_access|EVIDENCE_LEVEL=app_inventory|CONFIDENCE=high")',
             '    mark_found "$app_id"',
             "}",
             "",
             "record_process_match() {",
             '    local app_id="$1"',
             '    local process_name="$2"',
-            '    RESULTS+=("$app_id|PROCESS=$process_name")',
+            '    RESULTS+=("$app_id|PROCESS=$process_name|EVIDENCE_LEVEL=running_process|CONFIDENCE=medium")',
             '    mark_found "$app_id"',
             "}",
             "",
@@ -376,7 +647,7 @@ def generate_scan_script(
             '    local app_id="$1"',
             '    local ext_id="$2"',
             '    local ext_path="$3"',
-            '    RESULTS+=("$app_id|CHROME_EXT=$ext_id|PATH=$ext_path")',
+            '    RESULTS+=("$app_id|CHROME_EXT=$ext_id|PATH=$ext_path|EVIDENCE_LEVEL=chrome_extension|CONFIDENCE=medium")',
             '    mark_found "$app_id"',
             "}",
             "",
@@ -428,19 +699,29 @@ def generate_scan_script(
             "    fi",
             "    install_time=${times%%|*}",
             "    last_access=${times#*|}",
-            '    RESULTS+=("$app_id|SEARCH_IOC=$search_ioc|PATH=$path|INSTALL_APPROX=$install_time|LAST_ACCESS=$last_access")',
+            '    RESULTS+=("$app_id|SEARCH_IOC=$search_ioc|PATH=$path|INSTALL_APPROX=$install_time|LAST_ACCESS=$last_access|EVIDENCE_LEVEL=search_ioc|CONFIDENCE=low")',
             '    mark_found "$app_id"',
             "}",
             "",
             "check_chrome_extension() {",
             '    local app_id="$1"',
             '    local ext_id="$2"',
-            "    local h ext_path",
+            "    local h browser_dir",
             '    for h in "${USER_HOMES[@]}"; do',
-            '        for profile_dir in "$h/Library/Application Support/Google/Chrome"/*; do',
-            '            [ -d "$profile_dir/Extensions/$ext_id" ] || continue',
-            '            record_extension_match "$app_id" "$ext_id" "$profile_dir/Extensions/$ext_id"',
-            "            return 0",
+            "        for browser_dir in \\",
+            '            "$h/Library/Application Support/Google/Chrome" \\',
+            '            "$h/Library/Application Support/Microsoft Edge" \\',
+            '            "$h/Library/Application Support/BraveSoftware/Brave-Browser" \\',
+            '            "$h/Library/Application Support/Chromium" \\',
+            '            "$h/Library/Application Support/Vivaldi" \\',
+            '            "$h/Library/Application Support/Arc/User Data" \\',
+            '            "$h/Library/Application Support/com.operasoftware.Opera"; do',
+            '            [ -d "$browser_dir" ] || continue',
+            '            for profile_dir in "$browser_dir"/*; do',
+            '                [ -d "$profile_dir/Extensions/$ext_id" ] || continue',
+            '                record_extension_match "$app_id" "$ext_id" "$profile_dir/Extensions/$ext_id"',
+            "                return 0",
+            "            done",
             "        done",
             "    done",
             "    return 1",
@@ -471,6 +752,61 @@ def generate_scan_script(
             "    local candidate",
             '    for candidate in "$@"; do',
             '        check_candidate_pattern "$app_id" "$candidate" && return 0',
+            "    done",
+            "    return 1",
+            "}",
+            "",
+            "# P0: Inventory cross-reference — highest confidence detection.",
+            "# Two-pronged approach:",
+            "#   a) Check _BUNDLE_MAP_DATA (mdfind-derived) for bundle_id matches",
+            "#   b) Check _CACHED_SP_JSON (system_profiler) for app name matches",
+            "# This is the strongest evidence: the OS itself confirms the",
+            "# application is registered and installed.",
+            "check_inventory() {",
+            '    local app_id="$1"',
+            "    shift",
+            "    # Remaining args: alternating name/bundle_id pairs.",
+            "    # check_inventory APP_ID name1 bid1 [name2 bid2 ...]",
+            "    local name bid",
+            '    while [ $# -ge 2 ]; do',
+            '        name="$1"; bid="$2"; shift 2',
+            "",
+            "        # (a) Bundle ID lookup in mdfind-derived map (fast, no python)",
+            '        if [ -n "$bid" ] && [ -n "$_BUNDLE_MAP_DATA" ]; then',
+            "            local _ci_bid _ci_path",
+            "            while IFS=$'\\t' read -r _ci_bid _ci_path; do",
+            '                if [ "$_ci_bid" = "$bid" ]; then',
+            '                    record_inventory_match "$app_id" "$name" "$bid" "$_ci_path"',
+            "                    return 0",
+            "                fi",
+            '            done <<< "$_BUNDLE_MAP_DATA"',
+            "        fi",
+            "",
+            "        # (b) App name lookup in system_profiler JSON",
+            '        if [ -n "$name" ] && [ -n "$_SP_NAME_MAP_DATA" ]; then',
+            "            local sp_match name_lc _sp_name _sp_path",
+            '            name_lc=$(printf "%s" "$name" | /usr/bin/tr "[:upper:]" "[:lower:]")',
+            '            while IFS=$\'\\t\' read -r _sp_name _sp_path; do',
+            '                if [ "$_sp_name" = "$name_lc" ]; then',
+            '                    sp_match="$_sp_path"',
+            "                    break",
+            "                fi",
+            '            done <<< "$_SP_NAME_MAP_DATA"',
+            '            if [ -n "$sp_match" ] && [ -d "$sp_match" ]; then',
+            "                local sp_bid",
+            '                sp_bid=$(get_bundle_id_from_path "$sp_match" 2>/dev/null || true)',
+            '                [ -n "$sp_bid" ] || sp_bid="UNKNOWN"',
+            "                # If we have an expected bundle_id, verify it matches the actual one.",
+            "                # A name-only match with mismatched bundle_id is NOT a valid inventory match",
+            "                # (e.g. different products can share a display name).",
+            '                if [ -n "$bid" ] && [ "$sp_bid" != "UNKNOWN" ] && [ "$sp_bid" != "$bid" ]; then',
+            "                    : # bundle_id mismatch — skip this name match",
+            "                else",
+            '                    record_inventory_match "$app_id" "$name" "$sp_bid" "$sp_match"',
+            "                    return 0",
+            "                fi",
+            "            fi",
+            "        fi",
             "    done",
             "    return 1",
             "}",
@@ -550,7 +886,8 @@ def generate_scan_script(
         if var_name[0].isdigit():
             var_name = "APP_" + var_name
 
-        app_excluded_paths = ioc_excluded.get(app_id, set())
+        app_exclusions = ioc_excluded.get(app_id, {"paths": set(), "bundle_ids": set(), "process_names": set()})
+        app_excluded_paths = app_exclusions["paths"]
 
         system_paths: list[str] = []
         user_paths: list[str] = []
@@ -582,36 +919,116 @@ def generate_scan_script(
                             system_set.add(candidate)
                     break
 
+        # Split paths into strong (app bundles, executables) and weak
+        # (caches, preferences, HTTPStorages, etc.) so that strong
+        # indicators are checked first, then bundle_id / process_name,
+        # and weak paths only serve as a last-resort fallback.
+        strong_system: list[str] = []
+        weak_system: list[str] = []
+        for p in system_paths:
+            if _is_strong_path(p):
+                strong_system.append(p)
+            else:
+                weak_system.append(p)
+
+        strong_user: list[str] = []
+        weak_user: list[str] = []
+        for p in user_paths:
+            # classify_path strips ~/  so reconstruct for _is_strong_path
+            if _is_strong_path(f"~/{p}"):
+                strong_user.append(p)
+            else:
+                weak_user.append(p)
+
+        has_strong_paths = bool(strong_system or strong_user)
+        has_weak_paths = bool(weak_system or weak_user)
+
         lines.append(f"# {'─' * 30}")
         lines.append(f"# {app_name} ({app_id})")
         lines.append(f"# {'─' * 30}")
 
-        if system_paths or user_paths:
-            emit_shell_array(lines, f"{var_name}_CANDIDATES", system_paths)
-            if user_paths:
+        # Emit strong path candidates (app bundles, executables)
+        if has_strong_paths:
+            emit_shell_array(lines, f"{var_name}_STRONG", strong_system)
+            if strong_user:
                 lines.append('for h in "${USER_HOMES[@]}"; do')
-                lines.append(f"    {var_name}_CANDIDATES+=(")
-                for path in user_paths:
+                lines.append(f"    {var_name}_STRONG+=(")
+                for path in strong_user:
                     lines.append(f'        "$h/{shell_escape(path)}"')
                 lines.append("    )")
                 lines.append("done")
             lines.append("")
 
+        # Emit weak path candidates (caches, preferences, support dirs)
+        if has_weak_paths:
+            emit_shell_array(lines, f"{var_name}_WEAK", weak_system)
+            if weak_user:
+                lines.append('for h in "${USER_HOMES[@]}"; do')
+                lines.append(f"    {var_name}_WEAK+=(")
+                for path in weak_user:
+                    lines.append(f'        "$h/{shell_escape(path)}"')
+                lines.append("    )")
+                lines.append("done")
+            lines.append("")
+
+        # --- Build prioritised detection branches ---
+        # Priority order (evidence strength):
+        #   0. Inventory cross-reference (system_profiler confirms install)
+        #   1. Strong paths (app bundles, executables on disk)
+        #   2. Bundle IDs (mdfind bundle registry)
+        #   3. Process names (currently running — but no path evidence)
+        #   4. Chrome extensions
+        #   5. Weak paths (caches, prefs, HTTPStorages — possible orphans)
+        #   6. Search branches (repo / project traversals)
+
         strong_branches: list[str] = []
-        if system_paths or user_paths:
+
+        # P0: Inventory cross-reference — build name/bid pairs for check_inventory
+        all_bundle_ids_for_app = host.get("bundle_ids", [])
+        excluded_bids = app_exclusions["bundle_ids"]
+        excluded_procs = app_exclusions["process_names"]
+        bundle_ids = [bid for bid in all_bundle_ids_for_app if bid not in excluded_bids]
+        inv_pairs: list[str] = []
+        if bundle_ids:
+            # Use app name + first bundle_id as the primary pair
+            inv_pairs.append(f'"{shell_escape(app_name)}" "{shell_escape(bundle_ids[0])}"')
+            # Additional bundle_ids with empty name (name already covered)
+            for bid in bundle_ids[1:]:
+                inv_pairs.append(f'"" "{shell_escape(bid)}"')
+        else:
+            # No bundle_id — try matching by name only
+            inv_pairs.append(f'"{shell_escape(app_name)}" ""')
+        strong_branches.append(
+            f'check_inventory "{app_id}" {" ".join(inv_pairs)}'
+        )
+
+        # P1: Strong paths (app bundles, executables)
+        if has_strong_paths:
             strong_branches.append(
-                f'check_app_paths "{app_id}" "${{{var_name}_CANDIDATES[@]}}"'
+                f'check_app_paths "{app_id}" "${{{var_name}_STRONG[@]}}"'
             )
-        for bundle_id in host.get("bundle_ids", []):
+        # P2: Bundle IDs (via mdfind map — different from inventory cross-ref
+        # because mdfind covers apps not in system_profiler)
+        for bundle_id in bundle_ids:
             strong_branches.append(f'check_bundle_id "{app_id}" "{shell_escape(bundle_id)}"')
+        # P3: Process names (exclude shared process_names owned by another app)
         for process_name in host.get("process_names", []):
+            if process_name in excluded_procs:
+                continue
             strong_branches.append(
                 f'check_process_name "{app_id}" "{shell_escape(process_name)}"'
             )
+        # P4: Chrome extensions
         for ext_id in host.get("chrome_extension_ids", []):
             strong_branches.append(
                 f'check_chrome_extension "{app_id}" "{shell_escape(ext_id)}"'
             )
+        # P5: Weak paths — after all strong evidence types
+        if has_weak_paths:
+            strong_branches.append(
+                f'check_app_paths "{app_id}" "${{{var_name}_WEAK[@]}}"'
+            )
+
         search_branches: list[str] = []
         for repo_path in repo_paths:
             search_branches.append(f'search_dirs "{app_id}" "{shell_escape(repo_path)}"')
@@ -758,23 +1175,6 @@ def generate_scan_script(
 
         lines.extend(
             [
-                "# Helper: get bundle ID from an .app path (uses _BUNDLE_MAP_DATA cache when possible)",
-                "get_bundle_id_from_path() {",
-                '    local app_path="$1"',
-                "    local _gbid _gpath",
-                "    while IFS=$'\\t' read -r _gbid _gpath; do",
-                '        if [ "$_gpath" = "$app_path" ]; then echo "$_gbid"; return; fi',
-                '    done <<< "$_BUNDLE_MAP_DATA"',
-                '    local plist="$app_path/Contents/Info.plist"',
-                "    local bid",
-                '    if [ -f "$plist" ]; then',
-                '        bid=$(/usr/bin/defaults read "$plist" CFBundleIdentifier 2>/dev/null || true)',
-                '        if [ -n "$bid" ]; then echo "$bid"; return; fi',
-                "    fi",
-                '    bid=$(mdls -name kMDItemCFBundleIdentifier -raw "$app_path" 2>/dev/null || true)',
-                '    if [ -n "$bid" ] && [ "$bid" != "(null)" ]; then echo "$bid"; return; fi',
-                "}",
-                "",
                 "# Helper: extract team ID from codesign output",
                 "get_team_id_from_path() {",
                 '    local app_path="$1"',
@@ -821,7 +1221,11 @@ def generate_scan_script(
                 '        if [ "$sp_bundle" != "UNKNOWN" ]; then',
                 '            case "$KNOWN_BUNDLE_IDS" in *"|$sp_bundle|"*) known=1 ;; esac',
                 "        fi",
-                '        if [ "$known" -eq 0 ] && [ -n "$sp_name" ]; then',
+                "        # Only fall back to name matching when bundle_id is unknown.",
+                "        # When we have a real bundle_id that is NOT in the catalog,",
+                "        # a same-name app is likely a different product (e.g. spoofed",
+                "        # or rebranded) and must NOT be silently skipped.",
+                '        if [ "$known" -eq 0 ] && [ "$sp_bundle" = "UNKNOWN" ] && [ -n "$sp_name" ]; then',
                 '            case "$KNOWN_APP_NAMES" in *"|$sp_name|"*) known=1 ;; esac',
                 "        fi",
                 '        [ "$known" -eq 0 ] && UNKNOWN_APPS+=("UNKNOWN_APP|NAME=$sp_name|BUNDLE_ID=$sp_bundle|PATH=$sp_path|VERSION=$sp_version|TEAM_ID=$sp_team|SOURCE=$sp_obtained")',
@@ -843,12 +1247,17 @@ def generate_scan_script(
                 '            case "$entry" in *"$app_path"*) already_found=1; break ;; esac',
                 "        done",
                 '        [ "$already_found" -eq 1 ] && continue',
-                '        case "$KNOWN_APP_NAMES" in *"|$app_name|"*) continue ;; esac',
                 "        local bundle_id",
                 '        bundle_id=$(get_bundle_id_from_path "$app_path" 2>/dev/null || true)',
                 '        [ -n "$bundle_id" ] || bundle_id="UNKNOWN"',
                 '        if [ "$bundle_id" != "UNKNOWN" ]; then',
                 '            case "$KNOWN_BUNDLE_IDS" in *"|$bundle_id|"*) continue ;; esac',
+                "        fi",
+                "        # Only fall back to name matching when bundle_id is unknown.",
+                "        # When we have a real bundle_id not in the catalog, a same-name app",
+                "        # may be a different/spoofed product — do NOT silently skip it.",
+                '        if [ "$bundle_id" = "UNKNOWN" ]; then',
+                '            case "$KNOWN_APP_NAMES" in *"|$app_name|"*) continue ;; esac',
                 "        fi",
                 '        UNKNOWN_APPS+=("UNKNOWN_APP|NAME=$app_name|BUNDLE_ID=$bundle_id|PATH=$app_path|SOURCE=mdfind")',
                 '    done <<< "$_CACHED_MDFIND_APPS"',
@@ -1204,6 +1613,10 @@ def generate_scan_script(
         if use_combined:
             combined_lines = [
                 "COMBINED=()",
+                '# Include data source warnings first',
+                'for item in "${DATA_WARNINGS[@]}"; do',
+                '    COMBINED+=("$item")',
+                "done",
                 'for item in "${RESULTS[@]}"; do',
                 '    COMBINED+=("$item")',
                 "done",
@@ -1238,10 +1651,18 @@ def generate_scan_script(
         else:
             lines.extend(
                 [
-                    'if [ "${#RESULTS[@]}" -eq 0 ]; then',
+                    '# Merge data warnings with results',
+                    'ALL_OUT=()',
+                    'for item in "${DATA_WARNINGS[@]}"; do',
+                    '    ALL_OUT+=("$item")',
+                    "done",
+                    'for item in "${RESULTS[@]}"; do',
+                    '    ALL_OUT+=("$item")',
+                    "done",
+                    'if [ "${#ALL_OUT[@]}" -eq 0 ]; then',
                     '    echo "<result>NOT_FOUND</result>"',
                     "else",
-                    "    OUT=$(printf \"%s\\n\" \"${RESULTS[@]}\" | /usr/bin/awk 'NF' | /usr/bin/paste -sd ';' -)",
+                    "    OUT=$(printf \"%s\\n\" \"${ALL_OUT[@]}\" | /usr/bin/awk 'NF' | /usr/bin/paste -sd ';' -)",
                     '    echo "<result>$OUT</result>"',
                     "fi",
                 ]
@@ -1288,6 +1709,19 @@ def generate_scan_script(
                     "",
                 ]
             )
+        # Data source warnings (timeout / failure)
+        lines.extend(
+            [
+                'if [ "${#DATA_WARNINGS[@]}" -gt 0 ]; then',
+                '    echo ""',
+                '    echo "WARNING: ${#DATA_WARNINGS[@]} data source(s) degraded — results may be incomplete:"',
+                '    for item in "${DATA_WARNINGS[@]}"; do',
+                '        echo "  - $item"',
+                "    done",
+                "fi",
+                "",
+            ]
+        )
         clean_parts = ['[ "${#RESULTS[@]}" -eq 0 ]']
         if include_inventory:
             clean_parts.append('[ "${#UNKNOWN_APPS[@]}" -eq 0 ]')
@@ -1297,7 +1731,11 @@ def generate_scan_script(
         lines.extend(
             [
                 f"if {clean_check}; then",
-                '    echo "CLEAN: No monitored apps detected."',
+                '    if [ "${#DATA_WARNINGS[@]}" -gt 0 ]; then',
+                '        echo "CLEAN (DEGRADED): No monitored apps detected, but some data sources failed."',
+                "    else",
+                '        echo "CLEAN: No monitored apps detected."',
+                "    fi",
                 "fi",
                 "",
                 "exit $EXIT_CODE",

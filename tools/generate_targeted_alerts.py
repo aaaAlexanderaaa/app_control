@@ -16,7 +16,7 @@ from app_control.cohorts import (
     load_high_risk_apps_excluding,
     network_group_has_values,
 )
-from generators.esql_rules import generate_optimized_esql
+from generators.esql_rules import NetworkIOCConflictError, generate_optimized_esql
 from generators.jamf_scan import generate_scan_script
 
 CLAW_COHORT = "claw_macos_installable"
@@ -431,27 +431,30 @@ def main() -> None:
     claw_ids = {app["id"] for app in claw_apps}
     high_risk_apps = load_high_risk_apps_excluding(claw_ids | HIGH_RISK_EXCLUDE_IDS)
 
-    results = [
-        generate_one_cohort(
-            CLAW_COHORT,
-            claw_apps,
-            args.min_status,
-            output_dir,
-            "CLAW 系中具备明确 macOS 可运行/可安装证据的应用（含 CLI）。",
-            args.from_pattern,
-            args.aggregate_minutes,
-        ),
-        generate_one_cohort(
-            HIGH_RISK_COHORT,
-            high_risk_apps,
-            args.min_status,
-            output_dir,
-            "所有 high risk 及以上应用，排除集合 1；若缺少 reviewed 级网络或主机 IOC，则在清单中声明原因。",
-            args.from_pattern,
-            args.aggregate_minutes,
-            watchlist_keywords=HIGH_RISK_WATCHLIST_KEYWORDS,
-        ),
-    ]
+    try:
+        results = [
+            generate_one_cohort(
+                CLAW_COHORT,
+                claw_apps,
+                args.min_status,
+                output_dir,
+                "CLAW 系中具备明确 macOS 可运行/可安装证据的应用（含 CLI）。",
+                args.from_pattern,
+                args.aggregate_minutes,
+            ),
+            generate_one_cohort(
+                HIGH_RISK_COHORT,
+                high_risk_apps,
+                args.min_status,
+                output_dir,
+                "所有 high risk 及以上应用，排除集合 1；若缺少 reviewed 级网络或主机 IOC，则在清单中声明原因。",
+                args.from_pattern,
+                args.aggregate_minutes,
+                watchlist_keywords=HIGH_RISK_WATCHLIST_KEYWORDS,
+            ),
+        ]
+    except NetworkIOCConflictError as exc:
+        raise SystemExit(f"ERROR: {exc}")
 
     manifest_path = output_dir / f"targeted_alert_cohorts{status_suffix(args.min_status)}.md"
     write_text(manifest_path, render_manifest(results, args.min_status, args.from_pattern))
