@@ -14,8 +14,6 @@
 
         INCLUDE_SYSTEM_APPS="${INCLUDE_SYSTEM_APPS:-0}"
         INCLUDE_EXTERNAL_VOLUMES="${INCLUDE_EXTERNAL_VOLUMES:-0}"
-        WITH_SIGNATURE="${WITH_SIGNATURE:-0}"
-        WITH_PKG_RECEIPT="${WITH_PKG_RECEIPT:-0}"
         WITH_HOMEBREW="${WITH_HOMEBREW:-0}"
         WITH_CHROME_EXTENSIONS="${WITH_CHROME_EXTENSIONS:-0}"
         WITH_APP_SCAN="${WITH_APP_SCAN:-1}"
@@ -23,6 +21,13 @@
         FIND_TIMEOUT="${FIND_TIMEOUT:-30}"
         PROFILER_TIMEOUT="${PROFILER_TIMEOUT:-30}"
         WITH_NICE="${WITH_NICE:-0}"
+        QUIET="${QUIET:-1}"
+
+        # Compact inventory defaults. PATH_DENYLIST_EXTRA can append one
+        # glob pattern per line without modifying the script.
+        PATH_DENYLIST_DEFAULT="
+"
+        PATH_DENYLIST_EXTRA="${PATH_DENYLIST_EXTRA:-}"
 
         # ── Command helpers ───────────────────────────────────────────────────
 
@@ -64,8 +69,62 @@
           /usr/libexec/PlistBuddy -c "Print :$2" "$1" 2>/dev/null || true
         }
 
+        plist_status() {
+          local plist="$1"
+          [ -e "$plist" ] || { printf 'M'; return 0; }
+          [ -f "$plist" ] || { printf 'E'; return 0; }
+          [ -r "$plist" ] || { printf 'R'; return 0; }
+          /usr/bin/plutil -lint "$plist" >/dev/null 2>&1 || { printf 'P'; return 0; }
+          printf ''
+        }
+
         canonical_dir() {
           ( cd "$1" 2>/dev/null && /bin/pwd -P ) || true
+        }
+
+        join_lines() {
+          local first="${1:-}" second="${2:-}"
+          if [ -n "$first" ] && [ -n "$second" ]; then
+            printf '%s\n%s\n' "$first" "$second"
+          elif [ -n "$first" ]; then
+            printf '%s\n' "$first"
+          elif [ -n "$second" ]; then
+            printf '%s\n' "$second"
+          fi
+        }
+
+        path_matches_patterns() {
+          local path="$1" patterns="$2" pattern
+          [ -n "$path" ] || return 1
+          while IFS= read -r pattern; do
+            [ -n "$pattern" ] || continue
+            case "$path" in
+              $pattern) return 0 ;;
+            esac
+          done <<EOF
+$patterns
+EOF
+          return 1
+        }
+
+        path_is_denylisted() {
+          local patterns
+          patterns="$(join_lines "$PATH_DENYLIST_DEFAULT" "$PATH_DENYLIST_EXTRA")"
+          [ -n "$patterns" ] || return 1
+          path_matches_patterns "$1" "$patterns"
+        }
+
+        to_epoch() {
+          local raw="${1:-}" epoch=""
+          [ -n "$raw" ] || return 0
+          case "$raw" in
+            "(null)"|*"could not find"*) return 0 ;;
+          esac
+
+          epoch="$(/bin/date -j -f '%Y-%m-%d %H:%M:%S %z' "$raw" '+%s' 2>/dev/null || true)"
+          [ -n "$epoch" ] || epoch="$(/bin/date -j -f '%Y-%m-%d %H:%M:%S %Z' "$raw" '+%s' 2>/dev/null || true)"
+          [ -n "$epoch" ] || epoch="$(/bin/date -d "$raw" '+%s' 2>/dev/null || true)"
+          printf '%s' "$epoch"
         }
 
         # ── Bundle validation ────────────────────────────────────────────────
@@ -112,16 +171,17 @@
         }
 
         should_emit_app() {
-          local app="$1" plist bundle_id
+          local discovered_app="$1" app="$2" plist bundle_id
           is_nested_app "$app" && return 1
-          is_noisy_path "$app" && return 1
+          is_noisy_path "$discovered_app" && return 1
+          path_is_denylisted "$discovered_app" && return 1
+          plist="$app/Contents/Info.plist"
+          bundle_id="$(plist_get "$plist" CFBundleIdentifier)"
 
           if [ "$INCLUDE_SYSTEM_APPS" != "1" ]; then
-            case "$app" in
+            case "$discovered_app" in
               /System/Applications/*|/System/Library/*) return 1 ;;
             esac
-            plist="$app/Contents/Info.plist"
-            bundle_id="$(plist_get "$plist" CFBundleIdentifier)"
             case "$bundle_id" in com.apple.*) return 1 ;; esac
           fi
           return 0
@@ -189,36 +249,6 @@
           done
         }
 
-        # ── Optional enrichment ──────────────────────────────────────────────
-
-        signature_summary() {
-          local app="$1" out signed team_id authority gatekeeper
-          signed="no"; team_id=""; authority=""; gatekeeper=""
-
-          out="$(/usr/bin/codesign -dv --verbose=4 "$app" 2>&1 || true)"
-          if printf '%s\n' "$out" | /usr/bin/grep -q '^TeamIdentifier='; then
-            signed="yes"
-            team_id="$(printf '%s\n' "$out" | /usr/bin/awk -F= '/^TeamIdentifier=/{print $2; exit}')"
-            authority="$(printf '%s\n' "$out" | /usr/bin/awk -F= '/^Authority=/{print $2; exit}')"
-          fi
-          gatekeeper="$(/usr/sbin/spctl -a -vv --type execute "$app" 2>&1 | /usr/bin/tail -n 1 || true)"
-          printf '%s|%s|%s|%s' "$signed" "$team_id" "$authority" "$gatekeeper"
-        }
-
-        pkg_receipt_summary() {
-          local app="$1" probe_path file_info pkgid install_info install_time
-          probe_path="$app/Contents/Info.plist"
-          [ -f "$probe_path" ] || probe_path="$app"
-
-          file_info="$(/usr/sbin/pkgutil --file-info "$probe_path" 2>/dev/null || true)"
-          pkgid="$(printf '%s\n' "$file_info" | /usr/bin/awk -F': ' '/pkgid:/{print $2; exit}')"
-          [ -n "$pkgid" ] || { printf '|'; return 0; }
-
-          install_info="$(/usr/sbin/pkgutil --pkg-info "$pkgid" 2>/dev/null || true)"
-          install_time="$(printf '%s\n' "$install_info" | /usr/bin/awk -F': ' '/install-time:/{print $2; exit}')"
-          printf '%s|%s' "$pkgid" "$install_time"
-        }
-
         # ── Main: collect → dedup → validate → emit ─────────────────────────
 
         # ── Homebrew inventory ──────────────────────────────────────────────
@@ -240,11 +270,7 @@
               local name version
               name="${line%% *}"
               version="${line#* }"
-              csv_row \
-                "homebrew/formula/$name" "$name" "" "$version" "" \
-                "" "" "" \
-                "" "" \
-                "" "" "homebrew_formula"
+              csv_row "homebrew/formula/$name" "" "$version" "" "" "HF" ""
             done <<< "$formula"
           fi
 
@@ -254,11 +280,7 @@
               local name version
               name="${line%% *}"
               version="${line#* }"
-              csv_row \
-                "homebrew/cask/$name" "$name" "" "$version" "" \
-                "" "" "" \
-                "" "" \
-                "" "" "homebrew_cask"
+              csv_row "homebrew/cask/$name" "" "$version" "" "" "HC" ""
             done <<< "$cask"
           fi
         }
@@ -309,40 +331,9 @@
                   done
                   [ -n "$manifest_file" ] || continue
 
-                  local ext_version ext_name
+                  local ext_version
                   ext_version="${manifest_file%/manifest.json}" && ext_version="${ext_version##*/}"
-
-                  # Extract name via python3 (handles __MSG_ i18n placeholders)
-                  ext_name=$(/usr/bin/python3 -c "
-import json, sys, os
-try:
-    mf = sys.argv[1]
-    with open(mf) as f: m = json.load(f)
-    name = m.get('name', '')
-    if name.startswith('__MSG_') and name.endswith('__'):
-        key = name[6:-2]
-        ld = os.path.join(os.path.dirname(mf), '_locales')
-        for lang in ['en', 'en_US', 'en_GB']:
-            p = os.path.join(ld, lang, 'messages.json')
-            if os.path.isfile(p):
-                with open(p) as lf: msgs = json.load(lf)
-                for k, v in msgs.items():
-                    if k.lower() == key.lower():
-                        name = v.get('message', name); break
-                break
-    print(name)
-except Exception: pass
-" "$manifest_file" 2>/dev/null || true)
-                  [ -n "$ext_name" ] || ext_name="$ext_id"
-
-                  local profile_name
-                  profile_name="${profile_dir%/}" && profile_name="${profile_name##*/}"
-
-                  csv_row \
-                    "$ext_dir" "$ext_name" "$ext_id" "$ext_version" "" \
-                    "" "" "" \
-                    "" "" \
-                    "" "" "chrome_ext/$browser_name/$profile_name"
+                  csv_row "$ext_dir" "$ext_id" "$ext_version" "" "" "X" ""
                 done
               done
             done
@@ -357,11 +348,7 @@ except Exception: pass
           fi
 
           # CSV header
-          csv_row \
-            path display_name bundle_id version build \
-            team_id signed gatekeeper \
-            last_used_date bundle_birth_time \
-            receipt_pkgid receipt_install_time source_hint
+          csv_row p b v lu bt s pe
 
           if [ "$WITH_APP_SCAN" != "1" ]; then
             # Skip .app scanning entirely; only homebrew/extensions if enabled
@@ -379,63 +366,30 @@ except Exception: pass
             [ -n "$canonical" ] || canonical="$app"
 
             is_valid_app_bundle "$canonical" || continue
-            should_emit_app "$canonical" || continue
+            should_emit_app "$app" "$canonical" || continue
 
-            local plist bundle_id bundle_name display_name version build
-            local last_used birth_time source_hint
+            local plist bundle_id version last_used birth_time source_hint plist_error
             plist="$canonical/Contents/Info.plist"
+            plist_error="$(plist_status "$plist")"
 
             bundle_id="$(plist_get "$plist" CFBundleIdentifier)"
-            bundle_name="$(plist_get "$plist" CFBundleName)"
-            display_name="$(plist_get "$plist" CFBundleDisplayName)"
             version="$(plist_get "$plist" CFBundleShortVersionString)"
-            build="$(plist_get "$plist" CFBundleVersion)"
-
-            if [ -z "$display_name" ]; then
-              if [ -n "$bundle_name" ]; then
-                display_name="$bundle_name"
-              else
-                display_name="$(/usr/bin/basename "$canonical" .app)"
-              fi
-            fi
 
             # kMDItemLastUsedDate: maintained by LaunchServices, only updated
             # on user-initiated launch — not by Spotlight or filesystem scans
             last_used="$(/usr/bin/mdls -name kMDItemLastUsedDate -raw "$canonical" 2>/dev/null || true)"
-            case "$last_used" in "(null)"|*"could not find"*) last_used="" ;; esac
+            last_used="$(to_epoch "$last_used")"
 
-            birth_time="$(/usr/bin/stat -f '%SB' -t '%Y-%m-%d %H:%M:%S' "$canonical" 2>/dev/null || true)"
+            birth_time="$(/usr/bin/stat -f '%B' "$canonical" 2>/dev/null || true)"
 
-            source_hint="off_standard_path"
-            case "$canonical" in
+            source_hint="O"
+            case "$app" in
               /Applications/*|/Users/*/Applications/*)
-                source_hint="standard_app_dir" ;;
-              /Volumes/*) source_hint="external_volume" ;;
+                source_hint="A" ;;
+              /Volumes/*) source_hint="V" ;;
             esac
 
-            local signed="" team_id="" authority="" gatekeeper=""
-            if [ "$WITH_SIGNATURE" = "1" ]; then
-              local sig
-              sig="$(signature_summary "$canonical")"
-              signed="$(printf '%s' "$sig" | /usr/bin/awk -F'|' '{print $1}')"
-              team_id="$(printf '%s' "$sig" | /usr/bin/awk -F'|' '{print $2}')"
-              authority="$(printf '%s' "$sig" | /usr/bin/awk -F'|' '{print $3}')"
-              gatekeeper="$(printf '%s' "$sig" | /usr/bin/awk -F'|' '{print $4}')"
-            fi
-
-            local pkgid="" install_time=""
-            if [ "$WITH_PKG_RECEIPT" = "1" ]; then
-              local pkg
-              pkg="$(pkg_receipt_summary "$canonical")"
-              pkgid="$(printf '%s' "$pkg" | /usr/bin/awk -F'|' '{print $1}')"
-              install_time="$(printf '%s' "$pkg" | /usr/bin/awk -F'|' '{print $2}')"
-            fi
-
-            csv_row \
-              "$canonical" "$display_name" "$bundle_id" "$version" "$build" \
-              "$team_id" "$signed" "$gatekeeper" \
-              "$last_used" "$birth_time" \
-              "$pkgid" "$install_time" "$source_hint"
+            csv_row "$canonical" "$bundle_id" "$version" "$last_used" "$birth_time" "$source_hint" "$plist_error"
           done
 
           # Homebrew packages (formula + cask)
@@ -456,6 +410,9 @@ except Exception: pass
         }
 
         main() {
+          if [ "$QUIET" = "1" ]; then
+            exec 2>/dev/null
+          fi
           emit_base64_result
         }
 
