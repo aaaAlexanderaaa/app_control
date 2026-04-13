@@ -23,11 +23,14 @@
         WITH_NICE="${WITH_NICE:-0}"
         QUIET="${QUIET:-1}"
 
-        # Compact inventory defaults. PATH_DENYLIST_EXTRA can append one
-        # glob pattern per line without modifying the script.
+        # Compact inventory defaults. *_EXTRA can append one glob pattern
+        # per line without modifying the script.
         PATH_DENYLIST_DEFAULT="
 "
         PATH_DENYLIST_EXTRA="${PATH_DENYLIST_EXTRA:-}"
+        BUNDLE_DENYLIST_DEFAULT="
+"
+        BUNDLE_DENYLIST_EXTRA="${BUNDLE_DENYLIST_EXTRA:-}"
 
         # ── Command helpers ───────────────────────────────────────────────────
 
@@ -114,6 +117,13 @@ EOF
           path_matches_patterns "$1" "$patterns"
         }
 
+        bundle_id_is_denylisted() {
+          local patterns
+          patterns="$(join_lines "$BUNDLE_DENYLIST_DEFAULT" "$BUNDLE_DENYLIST_EXTRA")"
+          [ -n "$patterns" ] || return 1
+          path_matches_patterns "$1" "$patterns"
+        }
+
         to_epoch() {
           local raw="${1:-}" epoch=""
           [ -n "$raw" ] || return 0
@@ -177,6 +187,7 @@ EOF
           path_is_denylisted "$discovered_app" && return 1
           plist="$app/Contents/Info.plist"
           bundle_id="$(plist_get "$plist" CFBundleIdentifier)"
+          bundle_id_is_denylisted "$bundle_id" && return 1
 
           if [ "$INCLUDE_SYSTEM_APPS" != "1" ]; then
             case "$discovered_app" in
