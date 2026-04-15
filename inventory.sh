@@ -18,10 +18,13 @@
         WITH_CHROME_EXTENSIONS="${WITH_CHROME_EXTENSIONS:-0}"
         WITH_APP_SCAN="${WITH_APP_SCAN:-1}"
         WITH_FIND_SCAN="${WITH_FIND_SCAN:-1}"
+        WITH_NESTED_APP_SCAN="${WITH_NESTED_APP_SCAN:-0}"
         FIND_TIMEOUT="${FIND_TIMEOUT:-30}"
         PROFILER_TIMEOUT="${PROFILER_TIMEOUT:-30}"
         WITH_NICE="${WITH_NICE:-0}"
         QUIET="${QUIET:-1}"
+        RESULT_LENGTH_LIMIT="${RESULT_LENGTH_LIMIT:-25000}"
+        RESULT_TAG_OVERHEAD=18
 
         # Compact inventory defaults. *_EXTRA can append one glob pattern
         # per line without modifying the script.
@@ -66,10 +69,29 @@
           printf '\n'
         }
 
+        string_bytes() {
+          LC_ALL=C printf '%s' "${1:-}" | /usr/bin/wc -c | /usr/bin/tr -d '[:space:]'
+        }
+
+        encoded_result_length() {
+          local raw_bytes="${1:-0}"
+          printf '%s' $(( (((raw_bytes + 2) / 3) * 4) + RESULT_TAG_OVERHEAD ))
+        }
+
+        csv_mark_not_end() {
+          local row="${1:-}"
+          case "$row" in
+            *,*) printf '%s,"not_end"' "${row%,*}" ;;
+            *) printf '%s' "$row" ;;
+          esac
+        }
+
         # ── Plist / path helpers ─────────────────────────────────────────────
 
         plist_get() {
-          /usr/libexec/PlistBuddy -c "Print :$2" "$1" 2>/dev/null || true
+          local value=""
+          value="$(/usr/libexec/PlistBuddy -c "Print :$2" "$1" 2>/dev/null)" || return 0
+          printf '%s' "$value"
         }
 
         plist_status() {
@@ -155,6 +177,7 @@ EOF
         }
 
         is_nested_app() {
+          [ "${WITH_NESTED_APP_SCAN:-0}" = "1" ] && return 1
           case "$1" in
             *.app/Contents/*) return 0 ;;
             *.app/Versions/*) return 0 ;;
@@ -208,6 +231,14 @@ EOF
         # prompts, but mdfind and system_profiler cover them anyway.
 
         collect_candidates() {
+          local app_find_expr=(
+            \( -type d -name '*.app' -exec /usr/bin/test -f '{}/Contents/Info.plist' \; -print
+          )
+          if [ "$WITH_NESTED_APP_SCAN" != "1" ]; then
+            app_find_expr+=( -prune )
+          fi
+          app_find_expr+=( \) )
+
           # Source 1: Spotlight index (no TCC required, covers entire indexed FS)
           if /usr/bin/command -v /usr/bin/mdfind >/dev/null 2>&1; then
             timeout_run "$PROFILER_TIMEOUT" /usr/bin/mdfind \
@@ -240,7 +271,10 @@ EOF
 
           for root in "${roots[@]}"; do
             [ -d "$root" ] || continue
-            timeout_run "$FIND_TIMEOUT" /usr/bin/find "$root" -xdev -maxdepth 5 -type d -name '*.app' -prune 2>/dev/null || true
+            timeout_run "$FIND_TIMEOUT" /usr/bin/find "$root" -xdev -maxdepth 5 \
+              "${app_find_expr[@]}" -o \
+              \( -type d -name '*.app' \) \
+              2>/dev/null || true
           done
 
           # Per-user home scan: sweep everything EXCEPT TCC-protected dirs
@@ -249,14 +283,16 @@ EOF
           for user_home in /Users/*/; do
             [ -d "$user_home" ] || continue
             case "$user_home" in /Users/Shared/|/Users/Guest/) continue ;; esac
-            timeout_run "$FIND_TIMEOUT" /usr/bin/find "$user_home" -xdev -maxdepth 6 -type d \
-              \( -name Desktop -o -name Downloads -o -name Documents \
-                 -o -name Photos -o -name Movies -o -name Music \
-                 -o -name .Trash -o -name DerivedData \
-                 -o -name node_modules -o -name '.git' \
-                 -o -name CoreSimulator \
-              \) -prune -o \
-              -type d -name '*.app' -print 2>/dev/null || true
+            timeout_run "$FIND_TIMEOUT" /usr/bin/find "$user_home" -xdev -maxdepth 6 \
+              \( -type d \( -name Desktop -o -name Downloads -o -name Documents \
+                   -o -name Photos -o -name Movies -o -name Music \
+                   -o -name .Trash -o -name DerivedData \
+                   -o -name node_modules -o -name '.git' \
+                   -o -name CoreSimulator \
+                \) -prune \) -o \
+              "${app_find_expr[@]}" -o \
+              \( -type d -name '*.app' \) \
+              2>/dev/null || true
           done
         }
 
@@ -415,8 +451,49 @@ EOF
         }
 
         emit_base64_result() {
-          local payload=""
-          payload="$(generate_csv | /usr/bin/base64 | /usr/bin/tr -d '\n')"
+          local payload="" line raw_bytes=0 result_length=0 truncated=0
+          local -a csv_lines=() line_bytes=()
+
+          while IFS= read -r line; do
+            csv_lines+=("$line")
+            line_bytes+=("$(string_bytes "$line")")
+            raw_bytes=$(( raw_bytes + line_bytes[${#line_bytes[@]} - 1] + 1 ))
+          done < <(generate_csv)
+
+          result_length="$(encoded_result_length "$raw_bytes")"
+
+          while [ "$result_length" -ge "$RESULT_LENGTH_LIMIT" ] && [ "${#csv_lines[@]}" -gt 1 ]; do
+            local last_index
+            last_index=$((${#csv_lines[@]} - 1))
+            raw_bytes=$(( raw_bytes - line_bytes[last_index] - 1 ))
+            unset 'csv_lines[last_index]'
+            unset 'line_bytes[last_index]'
+            truncated=1
+            result_length="$(encoded_result_length "$raw_bytes")"
+          done
+
+          if [ "$truncated" -eq 1 ] && [ "${#csv_lines[@]}" -gt 1 ]; then
+            while [ "${#csv_lines[@]}" -gt 1 ]; do
+              local last_index marked_line marked_bytes candidate_bytes
+              last_index=$((${#csv_lines[@]} - 1))
+              marked_line="$(csv_mark_not_end "${csv_lines[last_index]}")"
+              marked_bytes="$(string_bytes "$marked_line")"
+              candidate_bytes=$(( raw_bytes - line_bytes[last_index] + marked_bytes ))
+
+              if [ "$(encoded_result_length "$candidate_bytes")" -lt "$RESULT_LENGTH_LIMIT" ]; then
+                csv_lines[last_index]="$marked_line"
+                line_bytes[last_index]="$marked_bytes"
+                raw_bytes="$candidate_bytes"
+                break
+              fi
+
+              raw_bytes=$(( raw_bytes - line_bytes[last_index] - 1 ))
+              unset 'csv_lines[last_index]'
+              unset 'line_bytes[last_index]'
+            done
+          fi
+
+          payload="$(printf '%s\n' "${csv_lines[@]}" | /usr/bin/base64 | /usr/bin/tr -d '\n')"
           printf '<result>%s</result>\n' "$payload"
         }
 
